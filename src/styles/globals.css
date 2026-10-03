@@ -1,0 +1,9 @@
+@import "tailwindcss";
+
+@theme {
+  --color-primary:   #0F4A2E;   /* Vert forêt profond */
+  --color-secondary: #16A34A;   /* Vert vif */
+  --color-accent:    #E8A020;   /* Or chaud */
+  --color-surface:   #F0FAF5;   /* Fond vert très pâle */
+  --font-display:    'Outfit', sans-serif;
+}
