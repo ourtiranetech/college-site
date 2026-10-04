@@ -20,8 +20,8 @@ export default defineSchema({
     auteurNom: v.string(),
     categorie: v.string(),
     epingle:   v.boolean(),
-    // Nouveau Convex 1.43.0 : timestamp de commit précis
     createdAt: v.number(),
+    images:    v.optional(v.array(v.string())),
   })
     .index("by_categorie", ["categorie"])
     .index("by_date", ["createdAt"]),
@@ -32,6 +32,7 @@ export default defineSchema({
     auteurId:  v.string(),
     auteurNom: v.string(),
     createdAt: v.number(),
+    images:    v.optional(v.array(v.string())),
   }).index("by_post", ["postId"]),
 
   // ── PERSONNEL ──────────────────────────────────

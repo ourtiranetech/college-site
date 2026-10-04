@@ -48,3 +48,14 @@ export const repondre = mutation({
     });
   },
 });
+
+export const getReponses = query({
+  args: { postId: v.id("posts") },
+  handler: async (ctx, args) => {
+    return await ctx.db
+      .query("reponses")
+      .withIndex("by_post", (q) => q.eq("postId", args.postId))
+      .order("desc")
+      .collect();
+  },
+});
