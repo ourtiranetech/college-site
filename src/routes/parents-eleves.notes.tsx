@@ -1,10 +1,15 @@
 import { createFileRoute } from '@tanstack/react-router'
+import { useEffect } from 'react'
 
 export const Route = createFileRoute('/parents-eleves/notes')({
   component: NotesPage,
 })
 
 function NotesPage() {
+  useEffect(() => {
+    window.location.href = 'https://awlyaa.education.dz/login'
+  }, [])
+
   return (
     <main className="page-wrap px-4 py-12">
       <section className="island-shell rounded-2xl p-6 sm:p-8">
@@ -13,7 +18,7 @@ function NotesPage() {
           Notes & Résultats
         </h1>
         <p className="m-0 max-w-3xl text-base leading-8 text-[var(--sea-ink-soft)]">
-          (À compléter) Consultation des bulletins et résultats.
+          Redirection vers <a href="https://awlyaa.education.dz/login" className="text-[var(--sea-accent)] underline">awlyaa.education.dz</a>…
         </p>
       </section>
     </main>

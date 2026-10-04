@@ -135,7 +135,7 @@ function ReplyForm({ postId, onReplied }: { postId: Id<'posts'>; onReplied: () =
       )}
       <div className="flex items-end gap-2">
         <div className="relative">
-          <button type="button" onClick={() => setEmojiOpen(o => !o)} className="p-1.5 text-slate-400 hover:text-[#E8A020] transition"><Smile size={18} /></button>
+          <button type="button" onClick={() => setEmojiOpen(o => !o)} className="p-1.5 text-slate-400 hover:text-accent transition"><Smile size={18} /></button>
           {emojiOpen && (
             <div className="absolute bottom-full left-0 mb-1 rounded-lg border border-slate-200 bg-white p-2 shadow-lg grid grid-cols-8 gap-0.5 w-56 z-10 max-h-36 overflow-y-auto">
               {EMOJIS.map(e => (
@@ -285,7 +285,7 @@ function ForumPage() {
             )}
             <div className="flex items-end gap-2">
               <div className="relative">
-                <button type="button" onClick={() => setEmojiOpen(o => !o)} className="p-1.5 text-slate-400 hover:text-[#E8A020] transition"><Smile size={18} /></button>
+                <button type="button" onClick={() => setEmojiOpen(o => !o)} className="p-1.5 text-slate-400 hover:text-accent transition"><Smile size={18} /></button>
                 {emojiOpen && (
                   <div className="absolute bottom-full left-0 mb-1 rounded-lg border border-slate-200 bg-white p-2 shadow-lg grid grid-cols-8 gap-0.5 w-56 z-10 max-h-36 overflow-y-auto">
                     {EMOJIS.map(e => (
