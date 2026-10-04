@@ -104,10 +104,10 @@ export default function Navbar() {
 
               <div className="leading-tight">
                 <p className="text-[13px] font-semibold text-primary tracking-tight">
-                  Collège Ibn Khaldoun
+                  Collège Azouaou Amrane
                 </p>
                 <p className="text-[11px] text-slate-400 font-normal">
-                  Sétif — Algérie
+                  TAZMALT — Algérie
                 </p>
               </div>
             </Link>

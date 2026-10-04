@@ -10,7 +10,6 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as AboutRouteImport } from './routes/about'
 import { Route as ChatRouteImport } from './routes/chat'
 import { Route as ForumRouteImport } from './routes/forum'
 import { Route as ParentsElevesRouteImport } from './routes/parents-eleves'
@@ -33,11 +32,6 @@ import { Route as PresentationInfrastructuresRouteImport } from './routes/presen
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AboutRoute = AboutRouteImport.update({
-  id: '/about',
-  path: '/about',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ChatRoute = ChatRouteImport.update({
@@ -136,7 +130,6 @@ const PresentationInfrastructuresRoute =
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/about': typeof AboutRoute
   '/chat': typeof ChatRoute
   '/forum': typeof ForumRoute
   '/parents-eleves': typeof ParentsElevesRouteWithChildren
@@ -158,7 +151,6 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/about': typeof AboutRoute
   '/chat': typeof ChatRoute
   '/forum': typeof ForumRoute
   '/parents-eleves': typeof ParentsElevesRouteWithChildren
@@ -181,7 +173,6 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/about': typeof AboutRoute
   '/chat': typeof ChatRoute
   '/forum': typeof ForumRoute
   '/parents-eleves': typeof ParentsElevesRouteWithChildren
@@ -205,7 +196,6 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
-    | '/about'
     | '/chat'
     | '/forum'
     | '/parents-eleves'
@@ -227,7 +217,6 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
-    | '/about'
     | '/chat'
     | '/forum'
     | '/parents-eleves'
@@ -249,7 +238,6 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
-    | '/about'
     | '/chat'
     | '/forum'
     | '/parents-eleves'
@@ -272,7 +260,6 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  AboutRoute: typeof AboutRoute
   ChatRoute: typeof ChatRoute
   ForumRoute: typeof ForumRoute
   ParentsElevesRoute: typeof ParentsElevesRouteWithChildren
@@ -288,13 +275,6 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/about': {
-      id: '/about'
-      path: '/about'
-      fullPath: '/about'
-      preLoaderRoute: typeof AboutRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/chat': {
@@ -482,7 +462,6 @@ const PresentationRouteWithChildren = PresentationRoute._addFileChildren(
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  AboutRoute: AboutRoute,
   ChatRoute: ChatRoute,
   ForumRoute: ForumRoute,
   ParentsElevesRoute: ParentsElevesRouteWithChildren,

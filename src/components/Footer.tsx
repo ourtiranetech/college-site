@@ -46,7 +46,7 @@ const CONTACT_INFO = [
         <circle cx="10" cy="8" r="2" stroke="#E8A020" strokeWidth="1.5" />
       </svg>
     ),
-    text: 'Rue Ibn Khaldoun, Sétif 19000, Algérie',
+    text: 'Rue Titouah Salem, Tazmalt 06006, Algérie',
   },
   {
     icon: (
@@ -64,8 +64,8 @@ const CONTACT_INFO = [
         />
       </svg>
     ),
-    text: 'contact@college-ibnkhaldoun.dz',
-    href: 'mailto:contact@college-ibnkhaldoun.dz',
+    text: 'cemazouaouamrane@gmail.com',
+    href: 'mailto:cemazouaouamrane@gmail.com',
   },
   {
     icon: (
@@ -135,9 +135,9 @@ export default function Footer() {
               </div>
               <div>
                 <p className="text-sm font-semibold text-white leading-tight">
-                  Collège Ibn Khaldoun
+                  CEM Azouaou Amarane
                 </p>
-                <p className="text-xs text-blue-200/70">Sétif — Algérie</p>
+                <p className="text-xs text-blue-200/70">TAZMALT — Algérie</p>
               </div>
             </Link>
 
@@ -191,7 +191,7 @@ export default function Footer() {
         {/* ── Bande inférieure ── */}
         <div className="mt-12 pt-6 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-[12px] text-blue-200/50 text-center sm:text-left">
-            © {currentYear} Collège Ibn Khaldoun — Sétif.
+            © {currentYear} CEM Azouaou Amrane — TAZMALT.
             Tous droits réservés.
           </p>
 

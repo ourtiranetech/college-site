@@ -16,13 +16,42 @@ function PresentationPage() {
       <section className="island-shell rounded-2xl p-6 sm:p-8">
         <p className="island-kicker mb-2">Présentation</p>
         <h1 className="display-title mb-3 text-4xl font-bold text-[var(--sea-ink)] sm:text-5xl">
-          Collège Ibn Khaldoun
+          CEM AZOUAOU AMRANE
         </h1>
         <p className="m-0 max-w-3xl text-base leading-8 text-[var(--sea-ink-soft)]">
-          Le collège Ibn Khaldoun, situé à Sétif en Algérie, forme ses élèves
-          depuis 1975 dans un cadre d'excellence éducative et d'épanouissement
+          Le CEM Azouaou Amrane, situé à Tazmalt en Algérie, forme ses élèves
+          depuis 1980 dans un cadre d'excellence éducative et d'épanouissement
           de chaque élève.
         </p>
+      </section>
+
+      {/* Vidéos */}
+      <section className="mt-10">
+        <h2 className="mb-4 font-serif text-2xl font-bold text-[var(--sea-ink)]">
+          Vidéos
+        </h2>
+        <div className="grid gap-6 sm:grid-cols-2">
+          <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
+            <p className="mb-2 text-sm font-medium text-slate-700">
+              CEM Azouaou Tazmalt — Avril 2017
+            </p>
+            <video
+              src="/videos/cem-azouaou-tazmal.mp4"
+              controls
+              className="w-full rounded-lg bg-black aspect-video"
+            />
+          </div>
+          <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
+            <p className="mb-2 text-sm font-medium text-slate-700">
+              Hommage à nos héros
+            </p>
+            <video
+              src="/videos/homage.mp4"
+              controls
+              className="w-full rounded-lg bg-black aspect-video"
+            />
+          </div>
+        </div>
       </section>
 
       <section className="mt-10 grid gap-6 sm:grid-cols-3">
