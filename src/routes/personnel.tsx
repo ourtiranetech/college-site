@@ -1,21 +1,25 @@
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute, Outlet } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/personnel')({
-  component: PersonnelPage,
+  component: PersonnelLayout,
 })
 
-function PersonnelPage() {
+function PersonnelLayout() {
   return (
     <main className="page-wrap px-4 py-12">
-      <section className="island-shell rounded-2xl p-6 sm:p-8">
-        <p className="island-kicker mb-2">Personnel</p>
-        <h1 className="display-title mb-3 text-4xl font-bold text-[var(--sea-ink)] sm:text-5xl">
-          Équipe pédagogique
+      {/* En-tête générique pour toute la section personnel */}
+      <section className="island-shell rounded-2xl p-6 sm:p-8 mb-6">
+        <p className="island-kicker text-center mb-2">Personnel</p>
+        <h1 className="display-title text-center mb-3 text-4xl font-bold text-(--sea-ink) sm:text-5xl">
+          Notre Équipe
         </h1>
-        <p className="m-0 max-w-3xl text-base leading-8 text-[var(--sea-ink-soft)]">
-          (À compléter) Liste du personnel pédagogique et d'entretien du collège.
+        <p className="m-0 text-center text-base leading-8 text-(--sea-ink-soft)">
+          Découvrez le personnel pédagogique et d'entretien du collège Azouaou Amrane.
         </p>
       </section>
+
+      {/* C'est ici que les sous-pages (pedagogique.tsx et entretien.tsx) vont s'afficher */}
+      <Outlet />
     </main>
   )
 }

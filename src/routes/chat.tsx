@@ -52,8 +52,8 @@ function ChatPage() {
     <div className="max-w-6xl mx-auto p-6 space-y-6">
       {/* En-tête */}
       <header className="mb-6">
-        <h1 className="text-3xl font-bold text-gray-900">Chat en Direct</h1>
-        <p className="text-gray-600">
+        <h1 className="text-3xl text-center font-bold text-gray-900">Chat en Direct</h1>
+        <p className="text-gray-600 text-center">
           Posez vos questions en temps réel à la communauté du collège.
         </p>
       </header>
@@ -61,7 +61,7 @@ function ChatPage() {
       {/* Formulaire de pseudo au premier accès */}
       {!estConnecte ? (
         <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm max-w-md mx-auto text-center">
-          <h2 className="text-xl font-semibold mb-2">Bienvenue sur le chat</h2>
+          <h2 className="text-xl text-center font-semibold mb-2">Bienvenue sur le chat</h2>
           <p className="text-sm text-gray-500 mb-4">
             Veuillez entrer un nom ou pseudo pour participer aux conversations.
           </p>

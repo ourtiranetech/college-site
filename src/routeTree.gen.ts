@@ -27,7 +27,12 @@ import { Route as ParentsElevesRessourcesRouteImport } from './routes/parents-el
 import { Route as PersonnelEntretienRouteImport } from './routes/personnel.entretien'
 import { Route as PersonnelPedagogiqueRouteImport } from './routes/personnel.pedagogique'
 import { Route as PresentationGalerieRouteImport } from './routes/presentation.galerie'
+import { Route as PresentationHistoireRouteImport } from './routes/presentation.histoire'
 import { Route as PresentationInfrastructuresRouteImport } from './routes/presentation.infrastructures'
+import { Route as PresentationMissionsRouteImport } from './routes/presentation.missions'
+import { Route as PresentationVideoRouteImport } from './routes/presentation.video'
+import { Route as PersonnelPersonnelEntretienRouteImport } from './routes/personnel/personnel.entretien'
+import { Route as PersonnelPersonnelPedagogiqueRouteImport } from './routes/personnel/personnel.pedagogique'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -121,11 +126,38 @@ const PresentationGalerieRoute = PresentationGalerieRouteImport.update({
   path: '/galerie',
   getParentRoute: () => PresentationRoute,
 } as any)
+const PresentationHistoireRoute = PresentationHistoireRouteImport.update({
+  id: '/histoire',
+  path: '/histoire',
+  getParentRoute: () => PresentationRoute,
+} as any)
 const PresentationInfrastructuresRoute =
   PresentationInfrastructuresRouteImport.update({
     id: '/infrastructures',
     path: '/infrastructures',
     getParentRoute: () => PresentationRoute,
+  } as any)
+const PresentationMissionsRoute = PresentationMissionsRouteImport.update({
+  id: '/missions',
+  path: '/missions',
+  getParentRoute: () => PresentationRoute,
+} as any)
+const PresentationVideoRoute = PresentationVideoRouteImport.update({
+  id: '/video',
+  path: '/video',
+  getParentRoute: () => PresentationRoute,
+} as any)
+const PersonnelPersonnelEntretienRoute =
+  PersonnelPersonnelEntretienRouteImport.update({
+    id: '/personnel/entretien',
+    path: '/personnel/entretien',
+    getParentRoute: () => PersonnelRoute,
+  } as any)
+const PersonnelPersonnelPedagogiqueRoute =
+  PersonnelPersonnelPedagogiqueRouteImport.update({
+    id: '/personnel/pedagogique',
+    path: '/personnel/pedagogique',
+    getParentRoute: () => PersonnelRoute,
   } as any)
 
 export interface FileRoutesByFullPath {
@@ -147,7 +179,12 @@ export interface FileRoutesByFullPath {
   '/personnel/entretien': typeof PersonnelEntretienRoute
   '/personnel/pedagogique': typeof PersonnelPedagogiqueRoute
   '/presentation/galerie': typeof PresentationGalerieRoute
+  '/presentation/histoire': typeof PresentationHistoireRoute
   '/presentation/infrastructures': typeof PresentationInfrastructuresRoute
+  '/presentation/missions': typeof PresentationMissionsRoute
+  '/presentation/video': typeof PresentationVideoRoute
+  '/personnel/personnel/entretien': typeof PersonnelPersonnelEntretienRoute
+  '/personnel/personnel/pedagogique': typeof PersonnelPersonnelPedagogiqueRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -168,7 +205,12 @@ export interface FileRoutesByTo {
   '/personnel/entretien': typeof PersonnelEntretienRoute
   '/personnel/pedagogique': typeof PersonnelPedagogiqueRoute
   '/presentation/galerie': typeof PresentationGalerieRoute
+  '/presentation/histoire': typeof PresentationHistoireRoute
   '/presentation/infrastructures': typeof PresentationInfrastructuresRoute
+  '/presentation/missions': typeof PresentationMissionsRoute
+  '/presentation/video': typeof PresentationVideoRoute
+  '/personnel/personnel/entretien': typeof PersonnelPersonnelEntretienRoute
+  '/personnel/personnel/pedagogique': typeof PersonnelPersonnelPedagogiqueRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -190,7 +232,12 @@ export interface FileRoutesById {
   '/personnel/entretien': typeof PersonnelEntretienRoute
   '/personnel/pedagogique': typeof PersonnelPedagogiqueRoute
   '/presentation/galerie': typeof PresentationGalerieRoute
+  '/presentation/histoire': typeof PresentationHistoireRoute
   '/presentation/infrastructures': typeof PresentationInfrastructuresRoute
+  '/presentation/missions': typeof PresentationMissionsRoute
+  '/presentation/video': typeof PresentationVideoRoute
+  '/personnel/personnel/entretien': typeof PersonnelPersonnelEntretienRoute
+  '/personnel/personnel/pedagogique': typeof PersonnelPersonnelPedagogiqueRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -213,7 +260,12 @@ export interface FileRouteTypes {
     | '/personnel/entretien'
     | '/personnel/pedagogique'
     | '/presentation/galerie'
+    | '/presentation/histoire'
     | '/presentation/infrastructures'
+    | '/presentation/missions'
+    | '/presentation/video'
+    | '/personnel/personnel/entretien'
+    | '/personnel/personnel/pedagogique'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -234,7 +286,12 @@ export interface FileRouteTypes {
     | '/personnel/entretien'
     | '/personnel/pedagogique'
     | '/presentation/galerie'
+    | '/presentation/histoire'
     | '/presentation/infrastructures'
+    | '/presentation/missions'
+    | '/presentation/video'
+    | '/personnel/personnel/entretien'
+    | '/personnel/personnel/pedagogique'
   id:
     | '__root__'
     | '/'
@@ -255,7 +312,12 @@ export interface FileRouteTypes {
     | '/personnel/entretien'
     | '/personnel/pedagogique'
     | '/presentation/galerie'
+    | '/presentation/histoire'
     | '/presentation/infrastructures'
+    | '/presentation/missions'
+    | '/presentation/video'
+    | '/personnel/personnel/entretien'
+    | '/personnel/personnel/pedagogique'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -396,12 +458,47 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PresentationGalerieRouteImport
       parentRoute: typeof PresentationRoute
     }
+    '/presentation/histoire': {
+      id: '/presentation/histoire'
+      path: '/histoire'
+      fullPath: '/presentation/histoire'
+      preLoaderRoute: typeof PresentationHistoireRouteImport
+      parentRoute: typeof PresentationRoute
+    }
     '/presentation/infrastructures': {
       id: '/presentation/infrastructures'
       path: '/infrastructures'
       fullPath: '/presentation/infrastructures'
       preLoaderRoute: typeof PresentationInfrastructuresRouteImport
       parentRoute: typeof PresentationRoute
+    }
+    '/presentation/missions': {
+      id: '/presentation/missions'
+      path: '/missions'
+      fullPath: '/presentation/missions'
+      preLoaderRoute: typeof PresentationMissionsRouteImport
+      parentRoute: typeof PresentationRoute
+    }
+    '/presentation/video': {
+      id: '/presentation/video'
+      path: '/video'
+      fullPath: '/presentation/video'
+      preLoaderRoute: typeof PresentationVideoRouteImport
+      parentRoute: typeof PresentationRoute
+    }
+    '/personnel/personnel/entretien': {
+      id: '/personnel/personnel/entretien'
+      path: '/personnel/entretien'
+      fullPath: '/personnel/personnel/entretien'
+      preLoaderRoute: typeof PersonnelPersonnelEntretienRouteImport
+      parentRoute: typeof PersonnelRoute
+    }
+    '/personnel/personnel/pedagogique': {
+      id: '/personnel/personnel/pedagogique'
+      path: '/personnel/pedagogique'
+      fullPath: '/personnel/personnel/pedagogique'
+      preLoaderRoute: typeof PersonnelPersonnelPedagogiqueRouteImport
+      parentRoute: typeof PersonnelRoute
     }
   }
 }
@@ -435,11 +532,15 @@ const ParentsElevesRouteWithChildren = ParentsElevesRoute._addFileChildren(
 interface PersonnelRouteChildren {
   PersonnelEntretienRoute: typeof PersonnelEntretienRoute
   PersonnelPedagogiqueRoute: typeof PersonnelPedagogiqueRoute
+  PersonnelPersonnelEntretienRoute: typeof PersonnelPersonnelEntretienRoute
+  PersonnelPersonnelPedagogiqueRoute: typeof PersonnelPersonnelPedagogiqueRoute
 }
 
 const PersonnelRouteChildren: PersonnelRouteChildren = {
   PersonnelEntretienRoute: PersonnelEntretienRoute,
   PersonnelPedagogiqueRoute: PersonnelPedagogiqueRoute,
+  PersonnelPersonnelEntretienRoute: PersonnelPersonnelEntretienRoute,
+  PersonnelPersonnelPedagogiqueRoute: PersonnelPersonnelPedagogiqueRoute,
 }
 
 const PersonnelRouteWithChildren = PersonnelRoute._addFileChildren(
@@ -448,12 +549,18 @@ const PersonnelRouteWithChildren = PersonnelRoute._addFileChildren(
 
 interface PresentationRouteChildren {
   PresentationGalerieRoute: typeof PresentationGalerieRoute
+  PresentationHistoireRoute: typeof PresentationHistoireRoute
   PresentationInfrastructuresRoute: typeof PresentationInfrastructuresRoute
+  PresentationMissionsRoute: typeof PresentationMissionsRoute
+  PresentationVideoRoute: typeof PresentationVideoRoute
 }
 
 const PresentationRouteChildren: PresentationRouteChildren = {
   PresentationGalerieRoute: PresentationGalerieRoute,
+  PresentationHistoireRoute: PresentationHistoireRoute,
   PresentationInfrastructuresRoute: PresentationInfrastructuresRoute,
+  PresentationMissionsRoute: PresentationMissionsRoute,
+  PresentationVideoRoute: PresentationVideoRoute,
 }
 
 const PresentationRouteWithChildren = PresentationRoute._addFileChildren(
