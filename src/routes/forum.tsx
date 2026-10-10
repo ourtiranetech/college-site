@@ -255,8 +255,8 @@ function ForumPage() {
     <div className="min-h-[calc(100vh-64px)] bg-slate-50 font-sans">
       <header className="bg-[#0F2147] px-6 py-10">
         <div className="mx-auto max-w-3xl">
-          <h1 className="font-serif text-center text-2xl font-bold text-white sm:text-3xl">Forum de la communauté</h1>
-          <p className="mt-1 text-sm text-center text-white/60">Échangez avec les parents, élèves et personnels du collège Ibn Khaldoun.</p>
+          <h1 className="font-serif text-2xl font-bold text-white sm:text-3xl">Forum de la communauté</h1>
+          <p className="mt-1 text-sm text-white/60">Échangez avec les parents, élèves et personnels du collège Ibn Khaldoun.</p>
         </div>
       </header>
       <main className="mx-auto max-w-3xl px-4 py-8">

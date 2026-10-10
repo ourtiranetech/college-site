@@ -10,7 +10,7 @@ const LINKS = [
   { label: 'Suivi des absences', href: 'https://awlyaa.education.dz/login', external: true },
   { label: 'Actualités', href: '/parents-eleves/actualites' },
   { label: 'Calendrier', href: '/parents-eleves/calendrier' },
-  { label: 'Ressources', href: 'https://www.examdz.com/moyen/', external: true },
+  { label: 'Ressources', href: '/parents-eleves/ressources' },
   { label: 'Inscriptions', href: '/parents-eleves/inscriptions' },
   { label: 'Nous contacter', href: '/parents-eleves/contact' },
 ]
@@ -19,11 +19,11 @@ function ParentsElevesPage() {
   return (
     <main className="page-wrap px-4 py-12">
       <section className="island-shell rounded-2xl p-6 sm:p-8 mb-8">
-        <p className="island-kicker text-center mb-2">Parents & Élèves</p>
-        <h1 className="display-title mb-3 text-center text-4xl font-bold text-(--sea-ink) sm:text-5xl">
+        <p className="island-kicker mb-2">Parents & Élèves</p>
+        <h1 className="display-title mb-3 text-4xl font-bold text-(--sea-ink) sm:text-5xl">
           Espace parents et élèves
         </h1>
-        <p className="m-0 text-center text-base leading-8 text-(--sea-ink-soft)">
+        <p className="m-0 max-w-3xl text-base leading-8 text-(--sea-ink-soft)">
           Accédez aux services dédiés aux familles et aux élèves : emploi du
           temps, notes, absences, actualités, calendrier et ressources.
         </p>
