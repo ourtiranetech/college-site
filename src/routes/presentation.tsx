@@ -26,21 +26,11 @@ function PresentationPage() {
       </section>
 
       {/* Vidéos */}
-      <section className="mt-10">
+      {/* <section className="mt-10">
         <h2 className="mb-4 font-serif text-2xl font-bold text-(--sea-ink)">
           Vidéos
         </h2>
         <div className="grid gap-6 sm:grid-cols-2">
-          <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
-            <p className="mb-2 text-sm font-medium text-slate-700">
-              CEM Azouaou Tazmalt — Avril 2017
-            </p>
-            <video
-              src="/videos/cem-azouaou-tazmal.mp4"
-              controls
-              className="w-full rounded-lg bg-black aspect-video"
-            />
-          </div>
           <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
             <p className="mb-2 text-sm font-medium text-slate-700">
               Hommage à nos héros
@@ -51,8 +41,18 @@ function PresentationPage() {
               className="w-full rounded-lg bg-black aspect-video"
             />
           </div>
+          <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
+            <p className="mb-2 text-sm font-medium text-slate-700">
+              CEM Azouaou Tazmalt — Avril 2017
+            </p>
+            <video
+              src="/videos/cem-azouaou-tazmal.mp4"
+              controls
+              className="w-full rounded-lg bg-black aspect-video"
+            />
+          </div>
         </div>
-      </section>
+      </section> */}
 
       <section className="mt-10 grid gap-6 sm:grid-cols-3">
         {SECTIONS.map((s) => (

@@ -8,6 +8,7 @@
  * @module
  */
 
+import type * as contact from "../contact.js";
 import type * as forum from "../forum.js";
 import type * as messages from "../messages.js";
 
@@ -18,6 +19,7 @@ import type {
 } from "convex/server";
 
 declare const fullApi: ApiFromModules<{
+  contact: typeof contact;
   forum: typeof forum;
   messages: typeof messages;
 }>;

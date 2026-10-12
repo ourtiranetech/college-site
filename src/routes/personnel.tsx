@@ -1,4 +1,4 @@
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute, Outlet } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/personnel')({
   component: PersonnelPage,
@@ -13,9 +13,10 @@ function PersonnelPage() {
           Équipe pédagogique
         </h1>
         <p className="m-0 max-w-3xl text-base leading-8 text-[var(--sea-ink-soft)]">
-          (À compléter) Liste du personnel pédagogique et d'entretien du collège.
+          Accédez aux différents services de l'équipe de l'établissement.
         </p>
       </section>
+      <Outlet />
     </main>
   )
 }

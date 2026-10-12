@@ -27,6 +27,7 @@ import { Route as ParentsElevesRessourcesRouteImport } from './routes/parents-el
 import { Route as PersonnelEntretienRouteImport } from './routes/personnel.entretien'
 import { Route as PersonnelPedagogiqueRouteImport } from './routes/personnel.pedagogique'
 import { Route as PresentationGalerieRouteImport } from './routes/presentation.galerie'
+import { Route as PresentationHistoireRouteImport } from './routes/presentation.histoire'
 import { Route as PresentationInfrastructuresRouteImport } from './routes/presentation.infrastructures'
 
 const IndexRoute = IndexRouteImport.update({
@@ -121,6 +122,11 @@ const PresentationGalerieRoute = PresentationGalerieRouteImport.update({
   path: '/galerie',
   getParentRoute: () => PresentationRoute,
 } as any)
+const PresentationHistoireRoute = PresentationHistoireRouteImport.update({
+  id: '/histoire',
+  path: '/histoire',
+  getParentRoute: () => PresentationRoute,
+} as any)
 const PresentationInfrastructuresRoute =
   PresentationInfrastructuresRouteImport.update({
     id: '/infrastructures',
@@ -147,6 +153,7 @@ export interface FileRoutesByFullPath {
   '/personnel/entretien': typeof PersonnelEntretienRoute
   '/personnel/pedagogique': typeof PersonnelPedagogiqueRoute
   '/presentation/galerie': typeof PresentationGalerieRoute
+  '/presentation/histoire': typeof PresentationHistoireRoute
   '/presentation/infrastructures': typeof PresentationInfrastructuresRoute
 }
 export interface FileRoutesByTo {
@@ -168,6 +175,7 @@ export interface FileRoutesByTo {
   '/personnel/entretien': typeof PersonnelEntretienRoute
   '/personnel/pedagogique': typeof PersonnelPedagogiqueRoute
   '/presentation/galerie': typeof PresentationGalerieRoute
+  '/presentation/histoire': typeof PresentationHistoireRoute
   '/presentation/infrastructures': typeof PresentationInfrastructuresRoute
 }
 export interface FileRoutesById {
@@ -190,6 +198,7 @@ export interface FileRoutesById {
   '/personnel/entretien': typeof PersonnelEntretienRoute
   '/personnel/pedagogique': typeof PersonnelPedagogiqueRoute
   '/presentation/galerie': typeof PresentationGalerieRoute
+  '/presentation/histoire': typeof PresentationHistoireRoute
   '/presentation/infrastructures': typeof PresentationInfrastructuresRoute
 }
 export interface FileRouteTypes {
@@ -213,6 +222,7 @@ export interface FileRouteTypes {
     | '/personnel/entretien'
     | '/personnel/pedagogique'
     | '/presentation/galerie'
+    | '/presentation/histoire'
     | '/presentation/infrastructures'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -234,6 +244,7 @@ export interface FileRouteTypes {
     | '/personnel/entretien'
     | '/personnel/pedagogique'
     | '/presentation/galerie'
+    | '/presentation/histoire'
     | '/presentation/infrastructures'
   id:
     | '__root__'
@@ -255,6 +266,7 @@ export interface FileRouteTypes {
     | '/personnel/entretien'
     | '/personnel/pedagogique'
     | '/presentation/galerie'
+    | '/presentation/histoire'
     | '/presentation/infrastructures'
   fileRoutesById: FileRoutesById
 }
@@ -396,6 +408,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PresentationGalerieRouteImport
       parentRoute: typeof PresentationRoute
     }
+    '/presentation/histoire': {
+      id: '/presentation/histoire'
+      path: '/histoire'
+      fullPath: '/presentation/histoire'
+      preLoaderRoute: typeof PresentationHistoireRouteImport
+      parentRoute: typeof PresentationRoute
+    }
     '/presentation/infrastructures': {
       id: '/presentation/infrastructures'
       path: '/infrastructures'
@@ -448,11 +467,13 @@ const PersonnelRouteWithChildren = PersonnelRoute._addFileChildren(
 
 interface PresentationRouteChildren {
   PresentationGalerieRoute: typeof PresentationGalerieRoute
+  PresentationHistoireRoute: typeof PresentationHistoireRoute
   PresentationInfrastructuresRoute: typeof PresentationInfrastructuresRoute
 }
 
 const PresentationRouteChildren: PresentationRouteChildren = {
   PresentationGalerieRoute: PresentationGalerieRoute,
+  PresentationHistoireRoute: PresentationHistoireRoute,
   PresentationInfrastructuresRoute: PresentationInfrastructuresRoute,
 }
 

@@ -12,6 +12,15 @@ export default defineSchema({
     createdAt: v.number(),
   }).index("by_salle", ["salle", "createdAt"]),
 
+  // ── CONTACT ─────────────────────────────────────
+  contactMessages: defineTable({
+    nom:       v.string(),
+    prenom:    v.string(),
+    email:     v.string(),
+    contenu:   v.string(),
+    createdAt: v.number(),
+  }).index("by_date", ["createdAt"]),
+
   // ── FORUM ──────────────────────────────────────
   posts: defineTable({
     titre:     v.string(),
