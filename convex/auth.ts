@@ -1,20 +1,17 @@
-import Google from "@auth/core/providers/google";
-import GitHub from "@auth/core/providers/github";
+// convex/auth.ts
 import { convexAuth } from "@convex-dev/auth/server";
-import { query } from "./_generated/server";
+import { Password } from "@convex-dev/auth/providers/Password";
 
-export const { auth, signIn, signOut, store, isAuthenticated } = convexAuth({
-  providers: [Google, GitHub],
-});
-
-// Query pour récupérer l'identité de l'utilisateur connecté
-export const getCurrentUser = query({
-  args: {},
-  handler: async (ctx) => {
-    const identity = await ctx.auth.getUserIdentity();
-    if (!identity) {
-      return null;
-    }
-    return identity;
-  },
+export const { auth, signIn, signOut, store } = convexAuth({
+  providers: [
+    Password({
+      // Optionnel : permet de définir des champs personnalisés dans la table users à l'inscription
+      profile(params) {
+        return {
+          email: params.email as string,
+          name: params.name as string,
+        };
+      },
+    }),
+  ],
 });

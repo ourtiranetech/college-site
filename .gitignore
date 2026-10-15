@@ -4,6 +4,12 @@ dist
 dist-ssr
 *.local
 .env
+# .env.local is covered by *.local, but editor/agent backups ("*.bak", "*.bak2")
+# are NOT. That is how .env.local.bak leaked real credentials into the index.
+.env*
+*.env
+*.bak
+*.bak2
 .nitro
 .tanstack
 .wrangler

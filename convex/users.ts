@@ -1,16 +1,14 @@
+// convex/users.ts
 import { query } from "./_generated/server";
 import { getAuthUserId } from "@convex-dev/auth/server";
 
-export const currentUser = query({
+export const getCurrentUser = query({
   args: {},
   handler: async (ctx) => {
     const userId = await getAuthUserId(ctx);
-    
-    if (userId === null) {
+    if (!userId) {
       return null;
     }
-    
-    // Spécifiez explicitement la table "users" en premier argument si requis par votre version
     return await ctx.db.get(userId);
   },
-}); 
+});

@@ -2,23 +2,68 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { useQuery, useMutation } from 'convex/react'
 import { api } from '../../convex/_generated/api'
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import type { FormEvent } from 'react'
-import { MessageSquare, Pin, Clock, Plus, ChevronRight, Smile, Image as ImageIcon, X, Loader2 } from 'lucide-react'
+import { MessageSquare, Pin, Clock, Plus, ChevronRight, Smile, Image as ImageIcon, X, Loader2, Users } from 'lucide-react'
 import type { Id } from '../../convex/_generated/dataModel'
+import { LoginButton, useCurrentUser } from '../components/LoginButton'
+import { MAX_IMAGES_PAR_MESSAGE } from '../../convex/schema'
 
 export const Route = createFileRoute('/forum')({
   component: ForumPage,
 })
 
 const CATEGORIES = [
-  { id: 'general',      label: 'Général',      dot: 'bg-slate-400' },
-  { id: 'enseignement', label: 'Enseignement', dot: 'bg-blue-400' },
-  { id: 'vie-scolaire', label: 'Vie scolaire',  dot: 'bg-green-400' },
-  { id: 'parents',      label: 'Parents',      dot: 'bg-amber-400' },
+  { id: 'general',      label: 'Général' },
+  { id: 'enseignement', label: 'Enseignement' },
+  { id: 'vie-scolaire', label: 'Vie scolaire' },
+  { id: 'parents',      label: 'Parents' },
 ]
 
 const EMOJIS = '😀 😃 😄 😁 😆 😅 🤣 😂 🙃 😉 😊 😇 🙂 🤔 🙄 😐 😑 😶 😏 😮 💨 😌 😴 😟 😣 😖 😫 😤 💪 🎉 🔥 ⭐ 💯 👍 👎 👏 ✨ 💡 ✅ ❌ 📚 📝 🏆 🎓 🏫 📖 ✏️ 🎨 📸 🖼️ 📎 🔗 💬 📺 🎵 🎮 ❤️ 🧡 💛 💚 💙 💜 🤍 🤎 ⚽ 🏀 🎯 🎸'.split(' ')
+
+// Limite partagée avec convex/schema.ts : une seule source de vérité.
+const MAX_IMAGES = MAX_IMAGES_PAR_MESSAGE
+
+const CLE_INVITE = 'forum-invite-key'
+
+/**
+ * Enregistre le visiteur courant comme « invité » puis renvoie le nombre
+ * d'invités distincts du forum.
+ *
+ * La clé est conservée dans le navigateur : un même visiteur ne compte qu'une
+ * fois, même après plusieurs rechargements. Un utilisateur connecté n'est pas
+ * compté comme invité (le backend l'ignore également).
+ */
+function useInviteCounter(estConnecte: boolean) {
+  const nombre = useQuery(api.forum.getInviteCount)
+  const enregistrer = useMutation(api.forum.registerInvite)
+
+  useEffect(() => {
+    if (estConnecte) return
+    let cle: string
+    try {
+      const existante = window.localStorage.getItem(CLE_INVITE)
+      if (existante) {
+        cle = existante
+      } else {
+        cle =
+          typeof crypto !== 'undefined' && 'randomUUID' in crypto
+            ? crypto.randomUUID()
+            : `inv-${Date.now()}-${Math.random().toString(36).slice(2)}`
+        window.localStorage.setItem(CLE_INVITE, cle)
+      }
+    } catch {
+      // Navigation privée ou stockage bloqué : on n'incrémente pas le compteur.
+      return
+    }
+    enregistrer({ inviteKey: cle }).catch(() => {
+      // Le compteur est décoratif : un échec ne doit pas gêner la navigation.
+    })
+  }, [estConnecte, enregistrer])
+
+  return nombre
+}
 
 interface Post {
   _id: Id<'posts'>
@@ -64,14 +109,61 @@ function insertEmoji(el: HTMLTextAreaElement, emoji: string, value: string, setV
   })
 }
 
+/**
+ * Extrait l'identifiant de stockage de la réponse de Convex.
+ *
+ * Convex renvoie `{"storageId":"..."}` : on n'accepte donc qu'un objet portant
+ * un `storageId`, pour ne jamais transmettre une chaîne vide au serveur.
+ */
+function lireStorageId(texte: string): string {
+  let donnees: unknown
+  try {
+    donnees = JSON.parse(texte)
+  } catch {
+    throw new Error("Réponse de téléversement illisible.")
+  }
+  const storageId =
+    typeof donnees === 'object' && donnees !== null
+      ? (donnees as { storageId?: unknown }).storageId
+      : undefined
+  if (typeof storageId !== 'string' || storageId.length === 0) {
+    throw new Error("Le téléversement n'a renvoyé aucun identifiant.")
+  }
+  return storageId
+}
+
+/**
+ * Téléverse les fichiers puis renvoie leurs identifiants de stockage.
+ *
+ * Les images sont attachées directement par `creerPost` / `repondre` : il n'y a
+ * plus de mutation séparée capable d'attacher une image au message d'autrui.
+ * L'URL de téléversement est demandée une fois puis réutilisée pour le lot.
+ */
+async function televerserImages(
+  files: File[],
+  getUploadUrl: () => Promise<string>,
+): Promise<string[]> {
+  if (files.length === 0) return []
+
+  const uploadUrl = await getUploadUrl()
+  const ids: string[] = []
+  for (const file of files) {
+    const reponse = await fetch(uploadUrl, { method: 'POST', body: file })
+    if (!reponse.ok) {
+      throw new Error(`Échec du téléversement de « ${file.name} ».`)
+    }
+    ids.push(lireStorageId(await reponse.text()))
+  }
+  return ids
+}
+
 function ImageGallery({ storageIds }: { storageIds: string[] }) {
   if (storageIds.length === 0) return null
   const urls = useQuery(api.forum.getImageUrls, { storageIds }) ?? []
-  const visible = urls.filter(Boolean) as string[]
-  if (visible.length === 0) return null
+  if (urls.length === 0) return null
   return (
     <div className="mt-2 grid grid-cols-2 gap-2">
-      {visible.map((url, i) => (
+      {urls.map((url, i) => (
         <img key={i} src={url} alt={`Pièce jointe ${i + 1}`} className="rounded-lg object-cover max-h-48 w-full" />
       ))}
     </div>
@@ -86,8 +178,7 @@ function ReplyForm({ postId, onReplied }: { postId: Id<'posts'>; onReplied: () =
   const ref = useRef<HTMLTextAreaElement>(null)
   const repondre = useMutation(api.forum.repondre)
   const getUploadUrl = useMutation(api.forum.getUploadUrl)
-  const uploadImage = useMutation(api.forum.uploadImage)
-  const identity = useQuery(api.auth.getCurrentUser)
+  const identity = useCurrentUser()
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault()
@@ -97,30 +188,42 @@ function ReplyForm({ postId, onReplied }: { postId: Id<'posts'>; onReplied: () =
     }
     const trimmed = contenu.trim()
     if (!trimmed && files.length === 0) return
-    const result = await repondre({ postId, contenu: trimmed, auteurId: identity.subject, auteurNom: identity.name ?? identity.email ?? 'Utilisateur' })
-    if (files.length > 0) {
-      setUploading(true)
-      try {
-        for (const file of files) {
-          const url = await getUploadUrl({})
-          const res = await fetch(url, { method: 'PUT', body: file })
-          const text = await res.text()
-          const storageId = text.startsWith('"') ? JSON.parse(text) : text
-          await uploadImage({ storageId, reponseId: result })
-        }
-      } finally {
-        setUploading(false)
-        setFiles([])
-      }
+
+    setUploading(true)
+    try {
+      const images = await televerserImages(files, () => getUploadUrl({}))
+
+      // L'identité est dérivée du jeton côté serveur : rien à transmettre ici.
+      await repondre({
+        postId,
+        contenu: trimmed || '(pièce jointe)',
+        ...(images.length > 0 ? { images } : {}),
+      })
+
+      setContenu('')
+      setFiles([])
+      ref.current?.focus()
+      onReplied()
+    } catch (err) {
+      alert(err instanceof Error ? err.message : "Erreur lors de l'envoi.")
+    } finally {
+      setUploading(false)
     }
-    setContenu('')
-    ref.current?.focus()
-    onReplied()
   }
 
   const pickImages = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = e.target.files
-    if (files) setFiles(prev => [...prev, ...Array.from(files)])
+    const choisis = e.target.files
+    if (choisis) {
+      const ajoutes = Array.from(choisis)
+      setFiles(prev => {
+        const total = [...prev, ...ajoutes]
+        if (total.length > MAX_IMAGES) {
+          alert(`Maximum ${MAX_IMAGES} images par message.`)
+          return total.slice(0, MAX_IMAGES)
+        }
+        return total
+      })
+    }
     e.target.value = ''
   }
 
@@ -159,7 +262,7 @@ function ReplyForm({ postId, onReplied }: { postId: Id<'posts'>; onReplied: () =
   )
 }
 
-function PostCard({ post }: { post: Post }) {
+function PostCard({ post, onReplied }: { post: Post; onReplied: () => void }) {
   const reponsesQuery = useQuery(api.forum.getReponses, { postId: post._id })
   const [showReplies, setShowReplies] = useState(false)
   const reponses: Reponse[] = reponsesQuery ?? []
@@ -195,7 +298,7 @@ function PostCard({ post }: { post: Post }) {
                 <ImageGallery storageIds={r.images ?? []} />
               </div>
             ))}
-            <ReplyForm postId={post._id} onReplied={() => {}} />
+            <ReplyForm postId={post._id} onReplied={onReplied} />
           </div>
         )}
       </div>
@@ -211,18 +314,19 @@ function ForumPage() {
   const [emojiOpen, setEmojiOpen] = useState(false)
   const [files, setFiles] = useState<File[]>([])
   const [uploading, setUploading] = useState(false)
+  // Les queries Convex sont réactives : ce compteur force simplement un
+  // rafraîchissement immédiat après une publication ou une réponse.
+  const [refreshKey, setRefreshKey] = useState(0)
   const mainRef = useRef<HTMLTextAreaElement>(null)
 
-  const identity = useQuery(api.auth.getCurrentUser)
+  const identity = useCurrentUser()
   const isAuthenticated = identity !== null
-  const isAuthorized = identity?.email === "cemazouaouamrane@gmail.com" || 
-                        identity?.email_verified === true
 
-  const postsResult = useQuery(api.forum.getPosts, {})
+  const postsResult = useQuery(api.forum.getPosts, { categorie: undefined })
   const posts: Post[] = postsResult ?? []
   const creerPost = useMutation(api.forum.creerPost)
   const getUploadUrl = useMutation(api.forum.getUploadUrl)
-  const uploadImage = useMutation(api.forum.uploadImage)
+  const nombreInvites = useInviteCounter(isAuthenticated)
 
   const filteredPosts = catActive === '/' ? posts : posts.filter(p => p.categorie === catActive)
   const epingles = filteredPosts.filter(p => p.epingle)
@@ -234,56 +338,84 @@ function ForumPage() {
       alert("Vous devez être connecté pour publier un sujet.")
       return
     }
-    if (!isAuthorized) {
-      alert("Seuls les utilisateurs autorisés peuvent publier sur le forum.")
-      return
-    }
     const t = titre.trim()
     const c = contenu.trim()
     if (!t && !c && files.length === 0) return
-    const result = await creerPost({ 
-      titre: t || 'Sans titre', 
-      contenu: c || '(pas de texte)', 
-      auteurId: identity.subject, 
-      auteurNom: identity.name ?? identity.email ?? 'Utilisateur', 
-      categorie 
-    })
-    if (files.length > 0) {
-      setUploading(true)
-      try {
-        for (const file of files) {
-          const url = await getUploadUrl({})
-          const res = await fetch(url, { method: 'PUT', body: file })
-          const text = await res.text()
-          const storageId = text.startsWith('"') ? JSON.parse(text) : text
-          await uploadImage({ storageId, postId: result })
-        }
-      } finally {
-        setUploading(false)
-        setFiles([])
-      }
+
+    setUploading(true)
+    try {
+      const images = await televerserImages(files, () => getUploadUrl({}))
+
+      // L'auteur est dérivé du jeton côté serveur : il n'est plus transmis.
+      await creerPost({
+        titre: t || 'Sans titre',
+        contenu: c || '(pas de texte)',
+        categorie,
+        ...(images.length > 0 ? { images } : {}),
+      })
+
+      setTitre('')
+      setContenu('')
+      setFiles([])
+      setRefreshKey(k => k + 1)
+    } catch (err) {
+      alert(err instanceof Error ? err.message : "Erreur lors de la publication.")
+    } finally {
+      setUploading(false)
     }
-    setTitre('')
-    setContenu('')
   }
 
   const canPublish = titre.trim() || contenu.trim() || files.length > 0
 
   const pickImages = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = e.target.files
-    if (files) setFiles(prev => [...prev, ...Array.from(files)])
+    const choisis = e.target.files
+    if (choisis) {
+      const ajoutes = Array.from(choisis)
+      setFiles(prev => {
+        const total = [...prev, ...ajoutes]
+        if (total.length > MAX_IMAGES) {
+          alert(`Maximum ${MAX_IMAGES} images par message.`)
+          return total.slice(0, MAX_IMAGES)
+        }
+        return total
+      })
+    }
     e.target.value = ''
   }
 
   return (
     <div className="min-h-[calc(100vh-64px)] bg-slate-50 font-sans">
       <header className="bg-[#0F2147] px-6 py-10">
-        <div className="mx-auto max-w-3xl">
-          <h1 className="font-serif text-2xl font-bold text-white sm:text-3xl">Forum de la communauté</h1>
-          <p className="mt-1 text-sm text-white/60">Échangez avec les parents, élèves et personnels du collège Ibn Khaldoun.</p>
+        <div className="mx-auto flex max-w-3xl flex-wrap items-center justify-between gap-4">
+          <div>
+            <h1 className="font-serif text-2xl font-bold text-white sm:text-3xl">Forum de la communauté</h1>
+            <p className="mt-1 text-sm text-white/60">Échangez avec les parents, élèves et personnels du collège Ibn Khaldoun.</p>
+          </div>
+          {/* Compteur d'invités : visiteurs non connectés, dédupliqués par navigateur */}
+          <div
+            className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-3.5 py-1.5"
+            title="Nombre de visiteurs non connectés ayant découvert le forum"
+          >
+            <Users size={14} className="text-[#E8A020]" aria-hidden="true" />
+            <span className="text-sm font-semibold text-white">
+              {nombreInvites === undefined ? '—' : nombreInvites}
+            </span>
+            <span className="text-xs text-white/60">
+              {nombreInvites === 1 ? 'invité' : 'invités'}
+            </span>
+          </div>
         </div>
       </header>
       <main className="mx-auto max-w-3xl px-4 py-8">
+        {!isAuthenticated && (
+          <section className="mb-8 rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
+            <h2 className="mb-3 text-sm font-semibold text-slate-800">Connexion requise</h2>
+            <p className="mb-4 text-sm text-slate-600">Vous devez être connecté pour publier ou répondre sur le forum.</p>
+            <div className="flex justify-start">
+              <LoginButton />
+            </div>
+          </section>
+        )}
         <div className="mb-6 flex flex-wrap items-center gap-2">
           <button onClick={() => setCatActive('/')} className={`rounded-full px-3.5 py-1.5 text-xs font-medium ${catActive === '/' ? 'bg-[#0F2147] text-white' : 'bg-white text-slate-600 hover:bg-slate-100'}`}>Toutes</button>
           {CATEGORIES.map(c => (
@@ -320,7 +452,7 @@ function ForumPage() {
               </div>
               <label className="cursor-pointer p-1.5 text-slate-400 hover:text-[#0F2147] transition"><ImageIcon size={18} /><input type="file" accept="image/*" multiple className="hidden" onChange={pickImages} /></label>
               <textarea ref={mainRef} value={contenu} onChange={e => setContenu(e.target.value)} placeholder="Décrivez votre question ou sujet…" rows={3} className="flex-1 resize-y rounded-lg border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-[#0F2147]/10" />
-              <button type="submit" disabled={!canPublish || uploading} className="inline-flex items-center gap-1.5 rounded-lg bg-[#0F2147] px-4 py-1.5 text-xs font-semibold text-accent disabled:opacity-50 disabled:cursor-not-allowed">
+              <button type="submit" disabled={!canPublish || uploading || !isAuthenticated} className="inline-flex items-center gap-1.5 rounded-lg bg-[#0F2147] px-4 py-1.5 text-xs font-semibold text-accent disabled:opacity-50 disabled:cursor-not-allowed">
                 {uploading ? <Loader2 size={14} className="animate-spin" /> : <Plus size={14} />} Publier
               </button>
             </div>
@@ -329,17 +461,16 @@ function ForumPage() {
         {epingles.length > 0 && (
           <>
             <div className="mb-3 flex items-center gap-1.5"><Pin size={14} color="#E8A020" /><h2 className="text-sm font-semibold text-slate-800">Sujets épinglés</h2></div>
-            <div className="space-y-4 pb-6">{epingles.map(p => <PostCard key={p._id} post={p} />)}</div>
+            <div key={`e-${refreshKey}`} className="space-y-4 pb-6">{epingles.map(p => <PostCard key={p._id} post={p} onReplied={() => setRefreshKey(k => k + 1)} />)}</div>
           </>
         )}
         <div className="mb-3 flex items-center gap-1.5"><MessageSquare size={14} color="#475569" /><h2 className="text-sm font-semibold text-slate-800">Discussions</h2></div>
         {autres.length === 0 ? (
           <div className="flex flex-col items-center gap-2 py-10 text-center text-slate-400"><MessageSquare size={32} /><p className="text-sm">Aucun sujet pour le moment. Soyez le premier à créer un sujet !</p></div>
         ) : (
-          <div className="space-y-4">{autres.map(p => <PostCard key={p._id} post={p} />)}</div>
+          <div key={`a-${refreshKey}`} className="space-y-4">{autres.map(p => <PostCard key={p._id} post={p} onReplied={() => setRefreshKey(k => k + 1)} />)}</div>
         )}
       </main>
     </div>
   )
 }
-

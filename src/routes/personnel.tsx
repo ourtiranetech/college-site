@@ -7,7 +7,7 @@ export const Route = createFileRoute('/personnel')({
 function PersonnelPage() {
   return (
     <main className="page-wrap px-4 py-12">
-      <section className="island-shell rounded-2xl p-6 sm:p-8">
+      {/* <section className="island-shell rounded-2xl p-6 sm:p-8">
         <p className="island-kicker mb-2">Personnel</p>
         <h1 className="display-title mb-3 text-4xl font-bold text-(--sea-ink) sm:text-5xl">
           Équipe pédagogique et d'entretien 
@@ -15,7 +15,7 @@ function PersonnelPage() {
         <p className="m-0 max-w-3xl text-base leading-8 text-(--sea-ink-soft)">
           Accédez aux différents services de l'équipe de l'établissement.
         </p>
-      </section>
+      </section> */}
       <Outlet />
     </main>
   )

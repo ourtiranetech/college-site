@@ -2,6 +2,12 @@ import { authTables } from "@convex-dev/auth/server";
 import { defineSchema, defineTable } from "convex/server";
 import { v } from "convex/values";
 
+/**
+ * Limite partagée entre le backend et l'interface : le front l'importe pour
+ * bloquer la sélection au-delà du maximum autorisé par `validerImages`.
+ */
+export const MAX_IMAGES_PAR_MESSAGE = 5;
+
 export default defineSchema({
   ...authTables,
 
@@ -31,7 +37,10 @@ export default defineSchema({
     email:     v.string(),
     contenu:   v.string(),
     createdAt: v.number(),
-  }).index("by_date", ["createdAt"]),
+  })
+    .index("by_date", ["createdAt"])
+    // Utilisé par la limitation de débit du formulaire de contact.
+    .index("by_email", ["email"]),
 
   // ── FORUM ──────────────────────────────────────
   posts: defineTable({
@@ -89,4 +98,15 @@ export default defineSchema({
     classeId:    v.optional(v.string()),
     createdAt:   v.number(),
   }),
+
+  // ── FORUM : INVITÉS ────────────────────────────
+  // Un « invité » est un visiteur non connecté. Une ligne par visiteur : la
+  // déduplication se fait sur une clé conservée dans le navigateur, pour que le
+  // compteur ne gonfle pas à chaque rechargement de page.
+  forumInvites: defineTable({
+    inviteKey: v.string(),
+    premierVu: v.number(),
+    dernierVu:  v.number(),
+    visites:    v.number(),
+  }).index("by_inviteKey", ["inviteKey"]),
 });

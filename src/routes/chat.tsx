@@ -2,6 +2,9 @@ import { createFileRoute } from '@tanstack/react-router'
 import { useQuery, useMutation } from 'convex/react'
 import { api } from '../../convex/_generated/api'
 import { useState, useRef, useEffect } from 'react'
+import type { FormEvent } from 'react'
+import { LogIn, MessageSquare, Send } from 'lucide-react'
+import { LoginButton, useCurrentUser } from '../components/LoginButton'
 
 export const Route = createFileRoute('/chat')({
   component: ChatPage,
@@ -16,8 +19,9 @@ const SALLES = [
 function ChatPage() {
   const [salle, setSalle] = useState('general')
   const [message, setMessage] = useState('')
-  const [pseudo, setPseudo] = useState('')
-  const [estConnecte, setEstConnecte] = useState(false)
+
+  const identity = useCurrentUser()
+  const estConnecte = identity !== null
 
   const messages = useQuery(api.messages.getMessages, { salle })
   const envoyer = useMutation(api.messages.envoyerMessage)
@@ -30,23 +34,21 @@ function ChatPage() {
     chatEndRef.current?.scrollIntoView({ behavior: 'smooth' })
   }, [messages])
 
-  const handleConnexion = (e: React.FormEvent) => {
+  const handleEnvoi = async (e: FormEvent) => {
     e.preventDefault()
-    if (pseudo.trim()) setEstConnecte(true)
+    const contenu = message.trim()
+    if (!contenu || !estConnecte) return
+
+    try {
+      // L'auteur est dérivé du jeton de session côté serveur.
+      await envoyer({ contenu, salle })
+      setMessage('')
+    } catch (err) {
+      alert(err instanceof Error ? err.message : "Le message n'a pas pu être envoyé.")
+    }
   }
 
-  const handleEnvoi = async (e: React.FormEvent) => {
-    e.preventDefault()
-    if (!message.trim() || !estConnecte) return
-
-    await envoyer({
-      auteur: pseudo,
-      auteurId: `user-${pseudo.toLowerCase().replace(/\s+/g, '-')}`,
-      contenu: message,
-      salle,
-    })
-    setMessage('')
-  }
+  const nomAffiche = (identity?.name ?? identity?.email ?? 'Utilisateur') as string
 
   return (
     <div className="max-w-6xl mx-auto p-6 space-y-6">
@@ -58,29 +60,21 @@ function ChatPage() {
         </p>
       </header>
 
-      {/* Formulaire de pseudo au premier accès */}
+      {/* Connexion requise : même authentification que le forum */}
       {!estConnecte ? (
         <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm max-w-md mx-auto text-center">
-          <h2 className="text-xl font-semibold mb-2">Bienvenue sur le chat</h2>
-          <p className="text-sm text-gray-500 mb-4">
-            Veuillez entrer un nom ou pseudo pour participer aux conversations.
+          <div className="mx-auto mb-3 flex h-11 w-11 items-center justify-center rounded-full bg-[#0F2147]">
+            <LogIn size={18} className="text-white" aria-hidden="true" />
+          </div>
+          <h2 className="text-xl font-semibold mb-2">Connexion requise</h2>
+          <p className="text-sm text-gray-500 mb-5">
+            Connectez-vous avec votre adresse email pour rejoindre les salons de
+            discussion. Votre nom s'affichera automatiquement auprès des autres
+            participants.
           </p>
-          <form onSubmit={handleConnexion} className="space-y-4">
-            <input
-              type="text"
-              placeholder="Votre nom ou prénom (ex: Parent-M.Martin)"
-              value={pseudo}
-              onChange={(e) => setPseudo(e.target.value)}
-              className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-600 outline-none"
-              required
-            />
-            <button
-              type="submit"
-              className="w-full bg-blue-700 text-white font-medium py-2 rounded-lg hover:bg-blue-800 transition"
-            >
-              Rejoindre le chat
-            </button>
-          </form>
+          <div className="flex justify-center">
+            <LoginButton />
+          </div>
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
@@ -105,7 +99,7 @@ function ChatPage() {
             ))}
 
             <div className="pt-4 border-t mt-4 text-xs text-gray-500">
-              Connecté en tant que : <strong className="text-gray-800">{pseudo}</strong>
+              Connecté en tant que : <strong className="text-gray-800">{nomAffiche}</strong>
             </div>
           </div>
 
@@ -126,15 +120,18 @@ function ChatPage() {
               {messages === undefined ? (
                 <div className="text-center text-gray-400 py-10">Chargement des messages...</div>
               ) : messages.length === 0 ? (
-                <div className="text-center text-gray-400 py-10">
-                  Aucun message dans ce salon. Soyez le premier à écrire !
+                <div className="flex flex-col items-center gap-2 text-center text-gray-400 py-10">
+                  <MessageSquare size={28} aria-hidden="true" />
+                  <p className="text-sm">
+                    Aucun message dans ce salon. Soyez le premier à écrire !
+                  </p>
                 </div>
               ) : (
                 messages
                   .slice()
                   .reverse()
                   .map((msg) => {
-                    const estMoi = msg.auteur === pseudo
+                    const estMoi = msg.auteur === nomAffiche
                     return (
                       <div
                         key={msg._id}
@@ -152,7 +149,7 @@ function ChatPage() {
                           </span>
                         </div>
                         <div
-                          className={`max-w-md px-4 py-2 rounded-2xl text-sm ${
+                          className={`max-w-md px-4 py-2 rounded-2xl text-sm whitespace-pre-wrap break-words ${
                             estMoi
                               ? 'bg-blue-600 text-white rounded-br-none'
                               : 'bg-gray-100 text-gray-800 rounded-bl-none'
@@ -173,13 +170,16 @@ function ChatPage() {
                 type="text"
                 placeholder="Écrivez votre message..."
                 value={message}
+                maxLength={2000}
                 onChange={(e) => setMessage(e.target.value)}
                 className="flex-1 border rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-600"
               />
               <button
                 type="submit"
-                className="bg-blue-700 text-white text-sm font-medium px-5 py-2 rounded-lg hover:bg-blue-800 transition"
+                disabled={!message.trim()}
+                className="inline-flex items-center gap-1.5 bg-blue-700 text-white text-sm font-medium px-5 py-2 rounded-lg hover:bg-blue-800 transition disabled:opacity-50 disabled:cursor-not-allowed"
               >
+                <Send size={14} aria-hidden="true" />
                 Envoyer
               </button>
             </form>
