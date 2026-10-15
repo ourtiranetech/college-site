@@ -16,18 +16,36 @@ const SALLES = [
   { id: 'eleves', label: '🎓 Élèves', desc: 'Entraide devoirs et vie scolaire' },
 ]
 
-/** 50 émoticônes proposées dans le chat. */
+/** 100 émoticônes proposées dans le chat. */
 const EMOTICONS = [
+  // Humeurs
   '😀', '😃', '😄', '😁', '😆',
   '😅', '😂', '🙂', '😉', '😊',
-  '😍', '😘', '🤔', '🙄', '😐',
-  '😴', '😢', '😭', '😡', '😱',
+  '😍', '😘', '😎', '🤗', '🤔',
+  '🙄', '😐', '😴', '🥳', '🤩',
+  // Émotions
+  '😢', '😭', '😞', '😟', '😰',
+  '😱', '😡', '😤', '😬', '🙃',
+  // Gestes
   '👍', '👎', '👏', '🙏', '💪',
+  '👋', '🤝', '✌️', '👌', '🤞',
+  // Réactions
   '🎉', '🔥', '⭐', '💯', '✨',
   '❤️', '💚', '💙', '💛', '🤍',
-  '📚', '📝', '✏️', '🎓', '🏫',
-  '⚽', '🏀', '🎨', '🎵', '📸',
+  // École
+  '📚', '📝', '✏️', '📖', '📐',
+  '🔬', '🧪', '🧮', '🖊️', '📌',
+  '📎', '🗂️', '📅', '📊', '🖥️',
+  '🎓', '🏫', '🎒', '🗺️', '🌍',
+  // Sport & arts
+  '⚽', '🏀', '🏐', '🏃', '🏆',
+  '🎨', '🎵', '🎸', '🎭', '📸',
+  // Symboles
   '✅', '❌', '💡', '⏰', '❓',
+  '❗', '🔔', '🔒', '➕', '➡️',
+  // Divers
+  '🌈', '☀️', '🌟', '🎁', '🎈',
+  '☕', '🍎', '🚌', '🏠', '💬',
 ]
 
 /**
@@ -113,7 +131,7 @@ function ChatPage() {
       {/* Connexion requise : même authentification que le forum */}
       {!estConnecte ? (
         <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm max-w-md mx-auto text-center">
-          <div className="mx-auto mb-3 flex h-11 w-11 items-center justify-center rounded-full bg-[#0F2147]">
+          <div className="mx-auto mb-3 flex h-11 w-11 items-center justify-center rounded-full bg-primary">
             <LogIn size={18} className="text-white" aria-hidden="true" />
           </div>
           <h2 className="text-xl font-semibold mb-2">Connexion requise</h2>
@@ -199,7 +217,7 @@ function ChatPage() {
                           </span>
                         </div>
                         <div
-                          className={`max-w-md px-4 py-2 rounded-2xl text-sm whitespace-pre-wrap break-words ${
+                          className={`max-w-md px-4 py-2 rounded-2xl text-sm whitespace-pre-wrap wrap-break-word ${
                             estMoi
                               ? 'bg-blue-600 text-white rounded-br-none'
                               : 'bg-gray-100 text-gray-800 rounded-bl-none'
@@ -250,8 +268,7 @@ function ChatPage() {
                         <p className="px-1 pb-1.5 text-[11px] font-medium uppercase tracking-wide text-gray-400">
                           {EMOTICONS.length} émoticônes
                         </p>
-                        <div className="grid max-h-44 grid-cols-10 gap-0.5 overflow-y-auto">
-                          {EMOTICONS.map((e, i) => (
+                        <div className="grid max-h-44 grid-cols-10 gap-0.5 overflow-y-auto">                          {EMOTICONS.map((e, i) => (
                             <button
                               key={`${e}-${i}`}
                               type="button"
