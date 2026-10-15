@@ -41,7 +41,12 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
         content: 'width=device-width, initial-scale=1',
       },
       {
-        title: 'Collège Ibn Khaldoun',
+        title: 'CEM Azouaou Amrane — Tazmalt',
+      },
+      {
+        name: 'description',
+        content:
+          "Site officiel du CEM Azouaou Amrane à Tazmalt (Algérie) : présentation de l'établissement, équipe pédagogique, emplois du temps, ressources et espace parents.",
       },
     ],
     links: [

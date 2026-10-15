@@ -135,7 +135,7 @@ export default function Footer() {
               </div>
               <div>
                 <p className="text-sm font-semibold text-white leading-tight">
-                  CEM Azouaou Amarane
+                  CEM Azouaou Amrane
                 </p>
                 <p className="text-xs text-blue-200/70">TAZMALT — Algérie</p>
               </div>

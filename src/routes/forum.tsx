@@ -389,7 +389,7 @@ function ForumPage() {
         <div className="mx-auto flex max-w-3xl flex-wrap items-center justify-between gap-4">
           <div>
             <h1 className="font-serif text-2xl font-bold text-white sm:text-3xl">Forum de la communauté</h1>
-            <p className="mt-1 text-sm text-white/60">Échangez avec les parents, élèves et personnels du collège Ibn Khaldoun.</p>
+            <p className="mt-1 text-sm text-white/60">Échangez avec les parents, élèves et personnels du CEM Azouaou Amrane.</p>
           </div>
           {/* Compteur d'invités : visiteurs non connectés, dédupliqués par navigateur */}
           <div
