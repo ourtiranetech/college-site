@@ -1,5 +1,35 @@
 # Welcome to your Convex functions directory!
 
+## ⚠️ Ce dossier ne contient QUE du code serveur
+
+Tout fichier de ce dossier est compilé et déployé par Convex. Un composant React
+(JSX, `useState`, `@tanstack/react-router`, `lucide-react`…) placé ici **casse le
+déploiement** :
+
+```
+X [ERROR] Expected ">" but found "className"
+```
+
+Les pages et composants d'interface vont dans `src/routes/` et `src/components/`.
+Ici, uniquement des `query`, `mutation`, `action` et `internalAction`.
+
+Le forum est réparti sur deux fichiers, à ne pas confondre :
+
+| Fichier | Rôle |
+|---|---|
+| `src/routes/forum.tsx` | interface React du forum |
+| `convex/forum.ts` | fonctions serveur du forum (`getPosts`, `creerPost`, `repondre`, `getUploadUrl`, invités…) |
+
+Il n'existe **pas** de `convex/posts.ts`. Ce fichier a déjà été créé deux fois par
+erreur en recopiant `src/routes/forum.tsx` ; sa suppression est volontaire.
+
+### Vérification rapide
+
+```bash
+npx tsc --noEmit          # doit ne rien afficher
+npx convex dev --once     # doit afficher « Convex functions ready! »
+```
+
 Write your Convex functions here.
 See https://docs.convex.dev/functions for more.
 
