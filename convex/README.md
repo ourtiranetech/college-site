@@ -30,6 +30,46 @@ npx tsc --noEmit          # doit ne rien afficher
 npx convex dev --once     # doit afficher « Convex functions ready! »
 ```
 
+## Authentification
+
+Deux fournisseurs sont actifs dans `convex/auth.ts` :
+
+| Fournisseur | Identifiants |
+|---|---|
+| `Password` | email + mot de passe, inscrits en base |
+| `Google` | variables d'environnement du déploiement |
+
+### Variables attendues par le fournisseur Google
+
+Convex Auth dérive les noms de variables depuis l'identifiant du fournisseur
+(`google` → `AUTH_GOOGLE_*`). Ce ne sont **pas** les noms `GOOGLE_CLIENT_*`.
+
+```
+AUTH_GOOGLE_ID
+AUTH_GOOGLE_SECRET
+```
+
+Déjà posées sur le déploiement `agile-mockingbird-7`. Pour les remettre :
+
+```bash
+npx convex env set --from-file .env.local
+```
+
+### URI de redirection à déclarer dans Google Cloud Console
+
+```
+https://agile-mockingbird-7.eu-west-1.convex.site/api/auth/callback/google
+```
+
+Format : `<CONVEX_SITE_URL>/api/auth/callback/google`.
+Si cette URI n'est pas déclarée, Google répond `redirect_uri_mismatch`.
+
+### Piège n°1 : ne pas casser `auth.config.ts`
+
+`convex/auth.config.ts` doit contenir le `domain` (l'émetteur JWT, c'est-à-dire
+l'URL `convex.site`) et l'`applicationID`. S'il est absent ou faux, l'application
+est **silencieusement toujours déconnectée** — aucune erreur n'est levée.
+
 Write your Convex functions here.
 See https://docs.convex.dev/functions for more.
 
