@@ -45,7 +45,7 @@ function PedagogiquePage() {
           <div className="overflow-x-auto">
             <table className="w-full border-collapse text-left">
               <thead>
-                <tr className="bg-[var(--sea-ink)] text-white">
+                <tr className="bg-(--sea-ink) text-white">
                   <th className="px-6 py-4 text-left font-semibold text-sm">
                     Prénom
                   </th>
@@ -66,7 +66,7 @@ function PedagogiquePage() {
                       bg-slate-50/30
                     "
                   >
-                    <td className="px-6 py-4 font-semibold text-[var(--sea-ink)] transition-colors duration-150 group-hover:text-white">
+                    <td className="px-6 py-4 font-semibold text-(--sea-ink) transition-colors duration-150 group-hover:text-white">
                       {personne.prenom}
                     </td>
                     <td className="px-6 py-4 font-medium text-slate-600 transition-colors duration-150 group-hover:text-slate-300">

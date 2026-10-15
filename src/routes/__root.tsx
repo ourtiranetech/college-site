@@ -5,7 +5,8 @@ import {
   Outlet,
   Link,
 } from '@tanstack/react-router'
-import { ConvexProvider, ConvexReactClient } from 'convex/react'
+import { ConvexAuthProvider } from '@convex-dev/auth/react'
+import { ConvexReactClient } from 'convex/react'
 import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
 import { TanStackDevtools } from '@tanstack/react-devtools'
 import Footer from '../components/Footer'
@@ -73,7 +74,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
         <HeadContent />
       </head>
       <body className="font-sans antialiased wrap-anywhere selection:bg-[rgba(79,184,178,0.24)]">
-        <ConvexProvider client={convex}>
+        <ConvexAuthProvider client={convex}>
           <div className="min-h-screen flex flex-col bg-surface">
             <Navbar />
             <main className="flex-1">
@@ -81,7 +82,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
             </main>
             <Footer />
           </div>
-        </ConvexProvider>
+        </ConvexAuthProvider>
 
         <TanStackDevtools
           config={{

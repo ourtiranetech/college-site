@@ -1,5 +1,6 @@
 import { Link, useRouterState } from '@tanstack/react-router'
-import { useState, useEffect } from 'react'
+import { useEffect, useState } from 'react'
+import { LoginButton } from './LoginButton'
 
 const NAV_LINKS = [
   {
@@ -181,6 +182,9 @@ export default function Navbar() {
               >
                 Espace élève
               </Link>
+              <div className="flex justify-center w-full">
+    <LoginButton />
+  </div>
             </div>
 
             {/* ── Burger mobile ── */}

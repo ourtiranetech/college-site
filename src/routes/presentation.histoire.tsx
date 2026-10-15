@@ -39,7 +39,7 @@ function HistoirePage() {
                 Hommage a nos héros
               </p>
               <video
-                src="/videos/cem-azouaou-tazmal.mp4"
+                src="/videos/homage.mp4"
                 controls
                 className="w-full rounded-lg bg-black aspect-video"
               />

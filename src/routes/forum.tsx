@@ -87,12 +87,17 @@ function ReplyForm({ postId, onReplied }: { postId: Id<'posts'>; onReplied: () =
   const repondre = useMutation(api.forum.repondre)
   const getUploadUrl = useMutation(api.forum.getUploadUrl)
   const uploadImage = useMutation(api.forum.uploadImage)
+  const identity = useQuery(api.auth.getCurrentUser)
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault()
+    if (!identity) {
+      alert("Vous devez être connecté pour répondre.")
+      return
+    }
     const trimmed = contenu.trim()
     if (!trimmed && files.length === 0) return
-    const result = await repondre({ postId, contenu: trimmed, auteurId: 'visitor', auteurNom: 'Visiteur' })
+    const result = await repondre({ postId, contenu: trimmed, auteurId: identity.subject, auteurNom: identity.name ?? identity.email ?? 'Utilisateur' })
     if (files.length > 0) {
       setUploading(true)
       try {
@@ -208,6 +213,11 @@ function ForumPage() {
   const [uploading, setUploading] = useState(false)
   const mainRef = useRef<HTMLTextAreaElement>(null)
 
+  const identity = useQuery(api.auth.getCurrentUser)
+  const isAuthenticated = identity !== null
+  const isAuthorized = identity?.email === "cemazouaouamrane@gmail.com" || 
+                        identity?.email_verified === true
+
   const postsResult = useQuery(api.forum.getPosts, {})
   const posts: Post[] = postsResult ?? []
   const creerPost = useMutation(api.forum.creerPost)
@@ -220,10 +230,24 @@ function ForumPage() {
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault()
+    if (!isAuthenticated) {
+      alert("Vous devez être connecté pour publier un sujet.")
+      return
+    }
+    if (!isAuthorized) {
+      alert("Seuls les utilisateurs autorisés peuvent publier sur le forum.")
+      return
+    }
     const t = titre.trim()
     const c = contenu.trim()
     if (!t && !c && files.length === 0) return
-    const result = await creerPost({ titre: t || 'Sans titre', contenu: c || '(pas de texte)', auteurId: 'visitor', auteurNom: 'Visiteur', categorie })
+    const result = await creerPost({ 
+      titre: t || 'Sans titre', 
+      contenu: c || '(pas de texte)', 
+      auteurId: identity.subject, 
+      auteurNom: identity.name ?? identity.email ?? 'Utilisateur', 
+      categorie 
+    })
     if (files.length > 0) {
       setUploading(true)
       try {

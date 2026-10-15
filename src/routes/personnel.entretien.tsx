@@ -66,7 +66,7 @@ function EntretienPage() {
                       bg-slate-50/30
                     "
                   >
-                    <td className="px-6 py-4 font-semibold text-[var(--sea-ink)] transition-colors duration-150 group-hover:text-white">
+                    <td className="px-6 py-4 font-semibold text-(--sea-ink) transition-colors duration-150 group-hover:text-white">
                       {personne.prenom}
                     </td>
                     <td className="px-6 py-4 font-medium text-slate-600 transition-colors duration-150 group-hover:text-slate-300">
