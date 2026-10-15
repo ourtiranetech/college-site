@@ -252,9 +252,9 @@ function ReplyForm({ postId, onReplied }: { postId: Id<'posts'>; onReplied: () =
             </div>
           )}
         </div>
-        <label className="cursor-pointer p-1.5 text-slate-400 hover:text-[#0F2147] transition"><ImageIcon size={18} /><input type="file" accept="image/*" multiple className="hidden" onChange={pickImages} /></label>
-        <textarea ref={ref} value={contenu} onChange={e => setContenu(e.target.value)} placeholder="Répondre…" rows={2} className="flex-1 resize-y rounded-lg border border-slate-200 px-3 py-2 text-sm outline-none focus:border-[#0F2147] focus:ring-1 focus:ring-[#0F2147]/10" />
-        <button type="submit" disabled={(!contenu.trim() && files.length === 0) || uploading} className="rounded-lg bg-[#0F2147] px-4 py-1.5 text-xs font-semibold text-accent disabled:opacity-50 disabled:cursor-not-allowed inline-flex items-center gap-1">
+        <label className="cursor-pointer p-1.5 text-slate-400 hover:text-primary transition"><ImageIcon size={18} /><input type="file" accept="image/*" multiple className="hidden" onChange={pickImages} /></label>
+        <textarea ref={ref} value={contenu} onChange={e => setContenu(e.target.value)} placeholder="Répondre…" rows={2} className="flex-1 resize-y rounded-lg border border-slate-200 px-3 py-2 text-sm outline-none focus:border-primary focus:ring-1 focus:ring-primary/10" />
+        <button type="submit" disabled={(!contenu.trim() && files.length === 0) || uploading} className="rounded-lg bg-primary px-4 py-1.5 text-xs font-semibold text-accent disabled:opacity-50 disabled:cursor-not-allowed inline-flex items-center gap-1">
           {uploading ? <Loader2 size={12} className="animate-spin" /> : null} Répondre
         </button>
       </div>
@@ -271,7 +271,7 @@ function PostCard({ post, onReplied }: { post: Post; onReplied: () => void }) {
   return (
     <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
       <div className="mb-2 flex items-center gap-2.5 text-sm">
-        <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[#0F2147] text-xs font-semibold text-white">{post.auteurNom.charAt(0).toUpperCase()}</div>
+        <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary text-xs font-semibold text-white">{post.auteurNom.charAt(0).toUpperCase()}</div>
         <span className="font-medium text-slate-800">{post.auteurNom}</span>
         <span className="text-xs text-slate-500">{cat.label}</span>
         {post.epingle && <Pin size={12} color="#E8A020" />}
@@ -385,7 +385,7 @@ function ForumPage() {
 
   return (
     <div className="min-h-[calc(100vh-64px)] bg-slate-50 font-sans">
-      <header className="bg-[#0F2147] px-6 py-10">
+      <header className="bg-primary px-6 py-10">
         <div className="mx-auto flex max-w-3xl flex-wrap items-center justify-between gap-4">
           <div>
             <h1 className="font-serif text-2xl font-bold text-white sm:text-3xl">Forum de la communauté</h1>
@@ -396,7 +396,7 @@ function ForumPage() {
             className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-3.5 py-1.5"
             title="Nombre de visiteurs non connectés ayant découvert le forum"
           >
-            <Users size={14} className="text-[#E8A020]" aria-hidden="true" />
+            <Users size={14} className="text-accent" aria-hidden="true" />
             <span className="text-sm font-semibold text-white">
               {nombreInvites === undefined ? '—' : nombreInvites}
             </span>
@@ -417,18 +417,18 @@ function ForumPage() {
           </section>
         )}
         <div className="mb-6 flex flex-wrap items-center gap-2">
-          <button onClick={() => setCatActive('/')} className={`rounded-full px-3.5 py-1.5 text-xs font-medium ${catActive === '/' ? 'bg-[#0F2147] text-white' : 'bg-white text-slate-600 hover:bg-slate-100'}`}>Toutes</button>
+          <button onClick={() => setCatActive('/')} className={`rounded-full px-3.5 py-1.5 text-xs font-medium ${catActive === '/' ? 'bg-primary text-white' : 'bg-white text-slate-600 hover:bg-slate-100'}`}>Toutes</button>
           {CATEGORIES.map(c => (
-            <button key={c.id} onClick={() => setCatActive(c.id)} className={`rounded-full px-3.5 py-1.5 text-xs font-medium ${catActive === c.id ? 'bg-[#0F2147] text-white' : 'bg-white text-slate-600 hover:bg-slate-100'}`}>{c.label}</button>
+            <button key={c.id} onClick={() => setCatActive(c.id)} className={`rounded-full px-3.5 py-1.5 text-xs font-medium ${catActive === c.id ? 'bg-primary text-white' : 'bg-white text-slate-600 hover:bg-slate-100'}`}>{c.label}</button>
           ))}
         </div>
         <section className="mb-8 rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
           <h2 className="mb-3 text-sm font-semibold text-slate-800">Nouveau sujet</h2>
           <form onSubmit={handleSubmit} className="space-y-3">
-            <select value={categorie} onChange={e => setCategorie(e.target.value)} className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-[#0F2147]/10">
+            <select value={categorie} onChange={e => setCategorie(e.target.value)} className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-primary/10">
               {CATEGORIES.map(c => <option key={c.id} value={c.id}>{c.label}</option>)}
             </select>
-            <input type="text" value={titre} onChange={e => setTitre(e.target.value)} placeholder="Titre du sujet" className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm font-medium focus:outline-none focus:ring-1 focus:ring-[#0F2147]/10" />
+            <input type="text" value={titre} onChange={e => setTitre(e.target.value)} placeholder="Titre du sujet" className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm font-medium focus:outline-none focus:ring-1 focus:ring-primary/10" />
             {files.length > 0 && (
               <div className="flex flex-wrap gap-2">
                 {files.map((f, i) => (
@@ -450,9 +450,9 @@ function ForumPage() {
                   </div>
                 )}
               </div>
-              <label className="cursor-pointer p-1.5 text-slate-400 hover:text-[#0F2147] transition"><ImageIcon size={18} /><input type="file" accept="image/*" multiple className="hidden" onChange={pickImages} /></label>
-              <textarea ref={mainRef} value={contenu} onChange={e => setContenu(e.target.value)} placeholder="Décrivez votre question ou sujet…" rows={3} className="flex-1 resize-y rounded-lg border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-[#0F2147]/10" />
-              <button type="submit" disabled={!canPublish || uploading || !isAuthenticated} className="inline-flex items-center gap-1.5 rounded-lg bg-[#0F2147] px-4 py-1.5 text-xs font-semibold text-accent disabled:opacity-50 disabled:cursor-not-allowed">
+              <label className="cursor-pointer p-1.5 text-slate-400 hover:text-primary transition"><ImageIcon size={18} /><input type="file" accept="image/*" multiple className="hidden" onChange={pickImages} /></label>
+              <textarea ref={mainRef} value={contenu} onChange={e => setContenu(e.target.value)} placeholder="Décrivez votre question ou sujet…" rows={3} className="flex-1 resize-y rounded-lg border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-primary/10" />
+              <button type="submit" disabled={!canPublish || uploading || !isAuthenticated} className="inline-flex items-center gap-1.5 rounded-lg bg-primary px-4 py-1.5 text-xs font-semibold text-accent disabled:opacity-50 disabled:cursor-not-allowed">
                 {uploading ? <Loader2 size={14} className="animate-spin" /> : <Plus size={14} />} Publier
               </button>
             </div>
