@@ -119,17 +119,36 @@ export function LoginButton() {
    *
    * Redirige vers Google puis revient sur le site. Le compte est créé
    * automatiquement dans la table `users` à la première connexion.
+   *
+   * On ne ferme PAS le panneau ici : en cas d'échec, le message d'erreur doit
+   * rester visible sous le bouton (sinon le clic semble ne rien faire).
    */
   const handleGoogle = async () => {
+    setError("");
+    setIsSubmitting(true);
     try {
-      setError("");
-      setIsSubmitting(true);
-      await signIn("google", { redirectTo: "/forum" });
+      const result: any = await signIn("google", { redirectTo: "/forum" });
+
+      // Filet de sécurité : si la redirection automatique du client n'a pas eu
+      // lieu mais que le serveur a renvoyé une URL, on y va nous-mêmes.
+      const cible = result?.redirect?.toString?.() ?? null;
+      if (cible) {
+        window.location.href = cible;
+        return;
+      }
+
+      // Pas de redirection et pas d'erreur : on l'explique au lieu de rester
+      // silencieusement bloqué.
+      setError("Google n'a pas répondu — vérifiez la console du navigateur.");
+      console.warn("[auth] signIn('google') n'a pas renvoyé de redirection :", result);
     } catch (err: any) {
-      setError(err?.message || "Connexion Google impossible");
+      const message =
+        err?.message ?? err?.data ?? err?.toString?.() ?? "erreur inconnue";
+      console.error("[auth] échec de signIn('google') :", err);
+      setError(`Connexion Google impossible : ${message}`);
+    } finally {
       setIsSubmitting(false);
     }
-    // En cas de succès la page est quittée : on ne réactive pas le bouton.
   };
 
   const handleSignOut = async () => {
