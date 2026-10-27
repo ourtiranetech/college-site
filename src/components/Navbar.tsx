@@ -1,6 +1,7 @@
   import { Link, useRouterState } from '@tanstack/react-router'
-import { useEffect, useState } from 'react'
-import { LoginButton } from './LoginButton'
+  import { useEffect, useState } from 'react'
+  import { LoginButton } from './LoginButton'
+  import { PanelLeft } from 'lucide-react'
 
 const NAV_LINKS = [
   {
@@ -43,6 +44,7 @@ export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false)
   const [openDropdown, setOpenDropdown] = useState<string | null>(null)
   const [scrolled, setScrolled] = useState(false)
+  const [navVisible, setNavVisible] = useState(true)
   const routerState = useRouterState()
 
   // Ombre navbar au scroll
@@ -114,9 +116,19 @@ export default function Navbar() {
               </div>
             </Link>
 
+            {/* ── Toggle menu ── */}
+            <button
+              onClick={() => setNavVisible(v => !v)}
+              className="hidden lg:inline-flex items-center gap-1 rounded-lg px-2 py-1.5 text-xs font-medium text-slate-600 hover:bg-slate-100 transition"
+              aria-label={navVisible ? 'Masquer le menu' : 'Afficher le menu'}
+            >
+              <PanelLeft size={16} />
+              {navVisible ? 'Masquer' : 'Menu'}
+            </button>
+
             {/* ── Navigation desktop ── */}
             <nav
-              className="hidden lg:flex items-center gap-1"
+              className={['hidden lg:flex items-center gap-1', navVisible ? '' : 'hidden'].join(' ')}
               aria-label="Navigation principale"
             >
               {NAV_LINKS.map((link) => (
@@ -210,10 +222,11 @@ export default function Navbar() {
 
         {/* ── Menu mobile ── */}
         <div
-          className={`lg:hidden overflow-hidden transition-all duration-300 ease-in-out ${
-            mobileOpen ? 'max-h-[80vh] opacity-100' : 'max-h-0 opacity-0'
-          }`}
-          aria-hidden={!mobileOpen}
+          className={[
+            'lg:hidden overflow-hidden transition-all duration-300 ease-in-out',
+            mobileOpen && navVisible ? 'max-h-[80vh] opacity-100' : 'max-h-0 opacity-0',
+          ].join(' ')}
+          aria-hidden={!mobileOpen || !navVisible}
         >
           <nav className="border-t border-slate-100 px-4 py-4 space-y-1 overflow-y-auto max-h-[75vh]">
             {NAV_LINKS.map((link) => (
