@@ -65,129 +65,68 @@ export default function Navbar() {
 
   return (
     <>
-      <header
-        className={[
-          'sticky top-0 z-50 bg-white transition-shadow duration-300',
-          scrolled ? 'shadow-[0_2px_20px_rgba(15,74,46,0.12)]' : 'border-b border-slate-100',
-        ].join(' ')}
-      >
-        {/* Barre supérieure accent */}
-        <div className="h-1 bg-linear-to-r from-primary via-[#2563EB] to-accent" />
+      {navVisible && (
+        <header
+          className={[
+            'sticky top-0 z-50 bg-white transition-shadow duration-300',
+            scrolled ? 'shadow-[0_2px_20px_rgba(15,74,46,0.12)]' : 'border-b border-slate-100',
+          ].join(' ')}
+        >
+          {/* Barre supérieure accent */}
+          <div className="h-1 bg-linear-to-r from-primary via-[#2563EB] to-accent" />
 
-        <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          <div className="flex items-center justify-between h-16">
-
-            {/* ── Logo ── */}
-            <Link
-              to="/"
-              className="flex items-center gap-3 group shrink-0"
-              aria-label="Accueil du collège"
-            >
-              {/* Icône abstraite — livre ouvert stylisé */}
-              <div className="relative w-9 h-9 shrink-0">
-                <div className="absolute inset-0 rounded-lg bg-primary flex items-center justify-center">
-                  <svg
-                    viewBox="0 0 32 32"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="w-5 h-5"
-                    aria-hidden="true"
-                  >
-                    <path
-                      d="M16 6C12 3 6 4 4 6v18c2-2 8-3 12 0 4-3 10-2 12 0V6c-2-2-8-3-12 0Z"
-                      fill="white"
-                      fillOpacity="0.15"
-                      stroke="white"
-                      strokeWidth="1.5"
-                      strokeLinejoin="round"
-                    />
-                    <line x1="16" y1="6" x2="16" y2="24" stroke="#E8A020" strokeWidth="1.5" />
-                  </svg>
+          <div className="max-w-7xl mx-auto px-4 sm:px-6">
+            <div className="flex items-center justify-between h-16">
+              {/* ── Logo ── */}
+              <Link
+                to="/"
+                className="flex items-center gap-3 group shrink-0"
+                aria-label="Accueil du collège"
+              >
+                {/* Icône abstraite — livre ouvert stylisé */}
+                <div className="relative w-9 h-9 shrink-0">
+                  <div className="absolute inset-0 rounded-lg bg-primary flex items-center justify-center">
+                    <svg
+                      viewBox="0 0 32 32"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="w-5 h-5"
+                      aria-hidden="true"
+                    >
+                      <path
+                        d="M16 6C12 3 6 4 4 6v18c2-2 8-3 12 0 4-3 10-2 12 0V6c-2-2-8-3-12 0Z"
+                        fill="white"
+                        fillOpacity="0.15"
+                        stroke="white"
+                        strokeWidth="1.5"
+                        strokeLinejoin="round"
+                      />
+                      <line x1="16" y1="6" x2="16" y2="24" stroke="#E8A020" strokeWidth="1.5" />
+                    </svg>
+                  </div>
                 </div>
-              </div>
 
-              <div className="leading-tight">
-                <p className="text-[13px] font-semibold text-primary tracking-tight">
-                  Collège Azouaou Amrane
-                </p>
-                <p className="text-[11px] text-slate-400 font-normal">
-                  TAZMALT — Algérie
-                </p>
-              </div>
-            </Link>
-
-            {/* ── Toggle menu ── */}
-            <button
-              onClick={() => setNavVisible(v => !v)}
-              className="hidden lg:inline-flex items-center gap-1 rounded-lg px-2 py-1.5 text-xs font-medium text-slate-600 hover:bg-slate-100 transition"
-              aria-label={navVisible ? 'Masquer le menu' : 'Afficher le menu'}
-            >
-              <PanelLeft size={16} />
-              {navVisible ? 'Masquer' : 'Menu'}
-            </button>
-
-            {/* ── Navigation desktop ── */}
-            <nav
-              className={['hidden lg:flex items-center gap-1', navVisible ? '' : 'hidden'].join(' ')}
-              aria-label="Navigation principale"
-            >
-              {NAV_LINKS.map((link) => (
-                <div
-                  key={link.href}
-                  className="relative"
-                  onMouseEnter={() => link.children && setOpenDropdown(link.href)}
-                  onMouseLeave={() => setOpenDropdown(null)}
-                >
-                  <Link
-                    to={link.href}
-                    className={[
-                      'flex items-center gap-1 px-3 py-2 rounded-md text-[13.5px] font-medium transition-colors duration-150',
-                      isActive(link.href)
-                        ? 'text-primary bg-[#EDFAF3]'
-                        : 'text-slate-600 hover:text-primary hover:bg-slate-50',
-                    ].join(' ')}
-                  >
-                    {link.label}
-                    {link.children && (
-                      <svg
-                        className={`w-3.5 h-3.5 transition-transform duration-200 ${openDropdown === link.href ? 'rotate-180' : ''}`}
-                        viewBox="0 0 16 16"
-                        fill="none"
-                        aria-hidden="true"
-                      >
-                        <path
-                          d="M4 6l4 4 4-4"
-                          stroke="currentColor"
-                          strokeWidth="1.5"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        />
-                      </svg>
-                    )}
-                  </Link>
-
-                  {/* Dropdown */}
-                  {link.children && openDropdown === link.href && (
-                    <div className="absolute top-full left-0 pt-1 z-50">
-                      <div className="bg-white rounded-xl shadow-[0_8px_30px_rgba(15,74,46,0.14)] border border-slate-100 py-1.5 min-w-52.5 overflow-hidden">
-                        {link.children.map((child) => (
-                          <Link
-                            key={child.href}
-                            to={child.href}
-                            className="flex items-center gap-2.5 px-4 py-2.5 text-[13px] text-slate-600 hover:text-primary hover:bg-blue-100"
-                          >
-                            <span className="w-1 h-1 rounded-full bg-accent shrink-0" />
-                            {child.label}
-                          </Link>
-                        ))}
-                      </div>
-                    </div>
-                  )}
+                <div className="leading-tight">
+                  <p className="text-[13px] font-semibold text-primary tracking-tight">
+                    Collège Azouaou Amrane
+                  </p>
+                  <p className="text-[11px] text-slate-400 font-normal">
+                    TAZMALT — Algérie
+                  </p>
                 </div>
-              ))}
-            </nav>
+              </Link>
 
-            {/* ── Bouton espace élève supprimé : Parents & Élèves est déjà dans la nav ── */}
+              {/* ── Toggle menu ── */}
+              <button
+                onClick={() => setNavVisible(v => !v)}
+                className="hidden lg:inline-flex items-center gap-1 rounded-lg px-2 py-1.5 text-xs font-medium text-slate-600 hover:bg-slate-100 transition"
+                aria-label={navVisible ? 'Masquer le menu' : 'Afficher le menu'}
+              >
+                <PanelLeft size={16} />
+                {navVisible ? 'Masquer' : 'Menu'}
+              </button>
+
+              {/* ── Bouton espace élève supprimé : Parents & Élèves est déjà dans la nav ── */}
             <div className="hidden lg:flex items-center gap-3">
               <div className="flex justify-center w-full">
     <LoginButton />
@@ -264,6 +203,23 @@ export default function Navbar() {
           </nav>
         </div>
       </header>
+      )}
+
+      {/* Barre minimale quand le menu est masqué */}
+      {!navVisible && (
+        <div className="sticky top-0 z-50 bg-white border-b border-slate-100">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 h-10 flex items-center">
+            <button
+              onClick={() => setNavVisible(true)}
+              className="inline-flex items-center gap-1 rounded-lg px-2 py-1.5 text-xs font-medium text-slate-600 hover:bg-slate-100 transition"
+              aria-label="Afficher le menu"
+            >
+              <PanelLeft size={16} />
+              Menu
+            </button>
+          </div>
+        </div>
+      )}
     </>
   )
 }
