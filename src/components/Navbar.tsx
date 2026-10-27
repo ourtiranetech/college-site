@@ -175,14 +175,8 @@ export default function Navbar() {
               ))}
             </nav>
 
-            {/* ── Bouton espace élève ── */}
+            {/* ── Bouton espace élève supprimé : Parents & Élèves est déjà dans la nav ── */}
             <div className="hidden lg:flex items-center gap-3">
-              <Link
-                to="/parents-eleves"
-                className=" w-45 px-4 py-2 rounded-lg bg-primary text-white text-[13px] font-medium transition-colors duration-150 shadow-sm hover:bg-blue-900"
-              >
-                Espace élève
-              </Link>
               <div className="flex justify-center w-full">
     <LoginButton />
   </div>
@@ -252,14 +246,8 @@ export default function Navbar() {
               </div>
             ))}
 
-            <div className="pt-3 border-t border-slate-100">
-              <Link
-                to="/parents-eleves"
-                className="flex justify-center px-4 py-2.5 rounded-lg bg-primary text-white text-sm font-medium hover:bg-[#0a3321] transition-colors"
-              >
-                Espace élève
-              </Link>
-            </div>
+            {/* Espace élève retiré du menu mobile : déjà couvert par Parents & Élèves */}
+            <div className="pt-3 border-t border-slate-100" />
           </nav>
         </div>
       </header>
