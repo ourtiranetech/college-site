@@ -1,4 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router'
+import { SchoolCard } from '../components/SchoolCard'
 import {
   Building2,
   FlaskConical,
@@ -91,11 +92,13 @@ function InfrastructuresPage() {
           </h2>
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {ESPACES.map(({ icone: Icone, titre, texte }) => (
-              <div key={titre} className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
-                <Icone size={20} className="mb-3 text-[#E8A020]" aria-hidden="true" />
-                <h3 className="mb-1.5 text-sm font-semibold text-slate-800">{titre}</h3>
-                <p className="m-0 text-[13px] leading-relaxed text-slate-600">{texte}</p>
-              </div>
+              <SchoolCard
+                key={titre}
+                title={titre}
+                description={texte}
+                chipColor="success"
+                icon={<Icone size={18} className="text-[#0F2147]" />}
+              />
             ))}
           </div>
         </section>
