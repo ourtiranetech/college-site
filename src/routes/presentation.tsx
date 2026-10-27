@@ -1,4 +1,6 @@
 import { createFileRoute, Link, Outlet } from '@tanstack/react-router'
+import { SchoolCard } from '../components/SchoolCard'
+import { BookOpen, Building2, Image as ImageIcon } from 'lucide-react'
 
 export const Route = createFileRoute('/presentation')({
   component: PresentationPage,
@@ -8,17 +10,26 @@ const SECTIONS = [
   {
     label: 'Histoire & Mission',
     href: '/presentation/histoire',
-    resume: 'La vie d\'Azouaou Amrane et la création du collège.',
+    resume: "La vie d'Azouaou Amrane et la création du collège.",
+    chip: 'Héritage',
+    chipColor: 'info' as const,
+    Icon: BookOpen,
   },
   {
     label: 'Infrastructures',
     href: '/presentation/infrastructures',
     resume: 'Présentation de l\'établissement et de ses équipements.',
+    chip: 'Équipements',
+    chipColor: 'success' as const,
+    Icon: Building2,
   },
   {
     label: 'Galerie photos',
     href: '/presentation/galerie',
     resume: 'Mosaïque des activités et de la vie du collège.',
+    chip: 'Photos',
+    chipColor: 'warning' as const,
+    Icon: ImageIcon,
   },
 ]
 
@@ -42,13 +53,14 @@ function PresentationPage() {
           la visite de l'établissement dans Infrastructures. */}
       <section className="mt-10 grid gap-6 sm:grid-cols-3">
         {SECTIONS.map((s) => (
-          <Link
-            key={s.href}
-            to={s.href}
-            className="block rounded-xl border border-slate-200 bg-white p-6 text-center shadow-sm transition hover:shadow-md"
-          >
-            <span className="block text-sm font-semibold text-slate-800">{s.label}</span>
-            <span className="mt-1 block text-xs text-slate-500">{s.resume}</span>
+          <Link key={s.href} to={s.href}>
+            <SchoolCard
+              title={s.label}
+              description={s.resume}
+              chip={s.chip}
+              chipColor={s.chipColor}
+              icon={<s.Icon size={18} className="text-[#0F2147]" />}
+            />
           </Link>
         ))}
       </section>

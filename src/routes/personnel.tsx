@@ -1,4 +1,6 @@
 import { createFileRoute,Link, Outlet } from '@tanstack/react-router'
+import { SchoolCard } from '../components/SchoolCard'
+import { SprayCan, GraduationCap } from 'lucide-react'
 
 export const Route = createFileRoute('/personnel')({
   component: PersonnelPage,
@@ -7,14 +9,20 @@ export const Route = createFileRoute('/personnel')({
 
 const SECTIONS = [
   {
-    label: 'personnel d\'entretien',
+    label: "personnel d'entretien",
     href: '/personnel/entretien',
-    resume: 'personnel d\'entretien  du collège.',
+    resume: "personnel d'entretien  du collège.",
+    chip: 'Entretien',
+    chipColor: 'warning' as const,
+    Icon: SprayCan,
   },
   {
     label: 'personnel pedagogique',
     href: '/personnel/pedagogique',
     resume: 'personnel pedagogique  du collège.',
+    chip: 'Pédagogique',
+    chipColor: 'info' as const,
+    Icon: GraduationCap,
   },
 ]
 
@@ -32,13 +40,14 @@ function PersonnelPage() {
       </section> */}
        <section className="mt-10 grid gap-6 sm:grid-cols-3">
         {SECTIONS.map((s) => (
-          <Link
-            key={s.href}
-            to={s.href}
-            className="block rounded-xl border border-slate-200 bg-white p-6 text-center shadow-sm transition hover:shadow-md"
-          >
-            <span className="block text-sm font-semibold text-slate-800">{s.label}</span>
-            <span className="mt-1 block text-xs text-slate-500">{s.resume}</span>
+          <Link key={s.href} to={s.href}>
+            <SchoolCard
+              title={s.label}
+              description={s.resume}
+              chip={s.chip}
+              chipColor={s.chipColor}
+              icon={<s.Icon size={18} className="text-[#0F2147]" />}
+            />
           </Link>
         ))}
       </section>
