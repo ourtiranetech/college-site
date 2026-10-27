@@ -36,6 +36,7 @@ const NAV_LINKS = [
   },
   { label: 'Chat en direct', href: '/chat' },
   { label: 'Forum', href: '/forum' },
+  { label: 'Map', href: '/map' },
 ]
 
 export default function Navbar() {
