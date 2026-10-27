@@ -212,7 +212,7 @@ export function LoginButton() {
     <div className="relative">
       <button
         onClick={() => setIsOpen(v => !v)}
-        className="flex items-center gap-1.5 rounded-lg bg-[#0F2147] px-3 py-1.5 text-xs font-semibold text-white hover:bg-[#0a1a33] transition shadow-sm"
+        className="flex items-center gap-1.5 rounded-lg bg-primary px-3 py-1.5 text-xs font-semibold text-white hover:bg-[#0a1a33] transition shadow-sm"
       >
         Se connecter
       </button>
@@ -226,21 +226,21 @@ export function LoginButton() {
                   placeholder="Nom"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-[#0F2147]/10"
+                  className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-primary/10"
                 />
                 <input
                   type="email"
                   placeholder="Email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-[#0F2147]/10"
+                  className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-primary/10"
                 />
                 <input
                   type="tel"
                   placeholder="Numéro de téléphone"
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
-                  className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-[#0F2147]/10"
+                  className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-primary/10"
                 />
               </div>
               <div className="mb-3">
@@ -249,20 +249,20 @@ export function LoginButton() {
                   placeholder="Mot de passe (min 8)"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-[#0F2147]/10"
+                  className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-primary/10"
                 />
               </div>
               {error && <p className="mb-2 text-xs text-red-500">{error}</p>}
               <button
                 onClick={handleRegister}
                 disabled={isSubmitting}
-                className="w-full rounded-lg bg-[#0F2147] px-3 py-2 text-xs font-semibold text-white hover:bg-[#0a1a33] transition disabled:opacity-50"
+                className="w-full rounded-lg bg-primary px-3 py-2 text-xs font-semibold text-white hover:bg-[#0a1a33] transition disabled:opacity-50"
               >
                 Créer le compte
               </button>
               <button
                 onClick={() => setShowRegister(v => !v)}
-                className="mt-2 w-full text-xs text-[#0F2147] hover:text-[#0a1a33] underline"
+                className="mt-2 w-full text-xs text-primary hover:text-[#0a1a33] underline"
               >
                 ← Retour connexion
               </button>
@@ -292,7 +292,7 @@ export function LoginButton() {
                   placeholder="Email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-[#0F2147]/10"
+                  className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-primary/10"
                 />
               </div>
               <div className="mb-3">
@@ -301,20 +301,20 @@ export function LoginButton() {
                   placeholder="Mot de passe (min 8)"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-[#0F2147]/10"
+                  className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-primary/10"
                 />
               </div>
               {error && <p className="mb-2 text-xs text-red-500">{error}</p>}
               <button
                 onClick={handleLogin}
                 disabled={isSubmitting}
-                className="w-full rounded-lg bg-[#0F2147] px-3 py-2 text-xs font-semibold text-white hover:bg-[#0a1a33] transition disabled:opacity-50"
+                className="w-full rounded-lg bg-primary px-3 py-2 text-xs font-semibold text-white hover:bg-[#0a1a33] transition disabled:opacity-50"
               >
                 Connexion
               </button>
               <button
                 onClick={() => setShowRegister(v => !v)}
-                className="mt-2 w-full text-xs text-[#0F2147] hover:text-[#0a1a33] underline"
+                className="mt-2 w-full text-xs text-primary hover:text-[#0a1a33] underline"
               >
                 Créer un compte
               </button>

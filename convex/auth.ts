@@ -26,9 +26,10 @@ export const { auth, signIn, signOut, store } = convexAuth({
         return {
           email: params.email as string,
           name: params.name as string,
+          phone: params.phone as string,
         };
       },
     }),
-    Google,
+    Google({}),
   ],
 });

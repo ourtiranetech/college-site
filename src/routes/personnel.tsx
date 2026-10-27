@@ -1,8 +1,22 @@
-import { createFileRoute, Outlet } from '@tanstack/react-router'
+import { createFileRoute,Link, Outlet } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/personnel')({
   component: PersonnelPage,
 })
+
+
+const SECTIONS = [
+  {
+    label: 'personnel d\'entretien',
+    href: '/personnel/entretien',
+    resume: 'personnel d\'entretien  du collège.',
+  },
+  {
+    label: 'personnel pedagogique',
+    href: '/personnel/pedagogique',
+    resume: 'personnel pedagogique  du collège.',
+  },
+]
 
 function PersonnelPage() {
   return (
@@ -16,6 +30,18 @@ function PersonnelPage() {
           Accédez aux différents services de l'équipe de l'établissement.
         </p>
       </section> */}
+       <section className="mt-10 grid gap-6 sm:grid-cols-3">
+        {SECTIONS.map((s) => (
+          <Link
+            key={s.href}
+            to={s.href}
+            className="block rounded-xl border border-slate-200 bg-white p-6 text-center shadow-sm transition hover:shadow-md"
+          >
+            <span className="block text-sm font-semibold text-slate-800">{s.label}</span>
+            <span className="mt-1 block text-xs text-slate-500">{s.resume}</span>
+          </Link>
+        ))}
+      </section>
       <Outlet />
     </main>
   )

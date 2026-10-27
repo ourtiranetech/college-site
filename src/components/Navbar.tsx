@@ -1,4 +1,4 @@
-import { Link, useRouterState } from '@tanstack/react-router'
+  import { Link, useRouterState } from '@tanstack/react-router'
 import { useEffect, useState } from 'react'
 import { LoginButton } from './LoginButton'
 
@@ -7,7 +7,7 @@ const NAV_LINKS = [
     label: 'Présentation',
     href: '/presentation',
     children: [
-      { label: 'Histoire & Mission', href: '/presentation' },
+      { label: 'Histoire & Mission', href: '/presentation/histoire' },
       { label: 'Infrastructures', href: '/presentation/infrastructures' },
       { label: 'Galerie photos', href: '/presentation/galerie' },
     ],
@@ -161,7 +161,7 @@ export default function Navbar() {
                           <Link
                             key={child.href}
                             to={child.href}
-                            className="flex items-center gap-2.5 px-4 py-2.5 text-[13px] text-slate-600 hover:text-primary hover:bg-surface transition-colors duration-100"
+                            className="flex items-center gap-2.5 px-4 py-2.5 text-[13px] text-slate-600 hover:text-primary hover:bg-blue-100"
                           >
                             <span className="w-1 h-1 rounded-full bg-accent shrink-0" />
                             {child.label}
@@ -178,7 +178,7 @@ export default function Navbar() {
             <div className="hidden lg:flex items-center gap-3">
               <Link
                 to="/parents-eleves"
-                className="px-4 py-2 rounded-lg bg-primary text-white text-[13px] font-medium hover:bg-[#0a3321] transition-colors duration-150 shadow-sm"
+                className=" w-45 px-4 py-2 rounded-lg bg-primary text-white text-[13px] font-medium transition-colors duration-150 shadow-sm hover:bg-blue-900"
               >
                 Espace élève
               </Link>
@@ -241,7 +241,7 @@ export default function Navbar() {
                       <Link
                         key={child.href}
                         to={child.href}
-                        className="block px-2 py-2 text-[13px] text-slate-500 hover:text-primary transition-colors rounded-md hover:bg-slate-50"
+                        className="block px-2 py-2 text-[13px] text-slate-500 hover:text-primary transition-colors rounded-md hover:bg--50"
                       >
                         {child.label}
                       </Link>

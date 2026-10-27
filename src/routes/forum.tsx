@@ -1,4 +1,4 @@
-// src/routes/forum.tsx — Forum de la communauté (Convex temps réel)
+  // src/routes/forum.tsx — Forum de la communauté (Convex temps réel)
 import { createFileRoute } from '@tanstack/react-router'
 import { useQuery, useMutation } from 'convex/react'
 import { api } from '../../convex/_generated/api'
@@ -18,10 +18,73 @@ const CATEGORIES = [
   { id: 'enseignement', label: 'Enseignement' },
   { id: 'vie-scolaire', label: 'Vie scolaire' },
   { id: 'parents',      label: 'Parents' },
+  { id: 'Entraide',      label: 'Entraide' },
+  { id: 'Tazmalt',      label: 'Tazmalt' },
 ]
 
-const EMOJIS = '😀 😃 😄 😁 😆 😅 🤣 😂 🙃 😉 😊 😇 🙂 🤔 🙄 😐 😑 😶 😏 😮 💨 😌 😴 😟 😣 😖 😫 😤 💪 🎉 🔥 ⭐ 💯 👍 👎 👏 ✨ 💡 ✅ ❌ 📚 📝 🏆 🎓 🏫 📖 ✏️ 🎨 📸 🖼️ 📎 🔗 💬 📺 🎵 🎮 ❤️ 🧡 💛 💚 💙 💜 🤍 🤎 ⚽ 🏀 🎯 🎸'.split(' ')
+const EMOJIS  = [
+  // Humeurs
+  '😀', '😃', '😄', '😁', '😆',
+  '😅', '😂', '🙂', '😉', '😊',
+  '😍', '😘', '😎', '🤗', '🤔',
+  '🙄', '😐', '😴', '🥳', '🤩',
+  
+  // Émotions
+  '😢', '😭', '😞', '😟', '😰',
+  '😱', '😡', '😤', '😬', '🙃',
+  // Gestes
+  '👍', '👎', '👏', '🙏', '💪',
+  '👋', '🤝', '✌️', '👌', '🤞',
+  // Réactions
+  '🎉', '🔥', '⭐', '💯', '✨',
+  '❤️', '💚', '💙', '💛', '🤍',
+  // École
+  '📚', '📝', '✏️', '📖', '📐',
+  '🔬', '🧪', '🧮', '🖊️', '📌',
+  '📎', '🗂️', '📅', '📊', '🖥️',
+  '🎓', '🏫', '🎒', '🗺️', '🌍',
+  // Sport & arts
+  '⚽', '🏀', '🏐', '🏃', '🏆',
+  '🎨', '🎵', '🎸', '🎭', '📸',
+  // Symboles
+  '✅', '❌', '💡', '⏰', '❓',
+  '❗', '🔔', '🔒', '➕', '➡️',
+  // Divers
+  '🌈', '☀️', '🌟', '🎁', '🎈',
+  '☕', '🍎', '🚌', '🏠', '💬',
 
+    // Émotions & Visages
+    "😀", "😃", "😄", "😁", "😆", "😅", "🤣", "😂", "🙂", "😉", "😊", "😇", "🥰", "😍", "🤩", "😘", 
+    "😗", "☺️", "😚", "😙", "🥲", "😏", "😋", "😛", "😜", "🤪", "😝", "🤑", "🤗", "🤭", "🫢", "🫣", 
+    "🤫", "🤔", "🫡", "🤤", "🤠", "🥳", "🥸", "😎", "🤓", "🧐", "🙃", "🫠", "🤐", "🤨", "😐", "😑", 
+    "😶", "🫥", "😶‍🌫️", "😒", "🙄", "😬", "😮‍💨", "🤥", "🫨", "🙂‍↔️", "🙂‍↕️", "😌", "😔", "😪", "😴", 
+    "🫩", "😷", "🤒", "🤕", "🤢", "🤮", "🤧", "🥵", "🥶", "🥴", "😵", "😵‍💫", "🤯", "🥱", "😕", "🫤", 
+    "😟", "🙁", "☹️", "😮", "😯", "😲", "😳", "🫪", "🥺", "🥹", "😦", "😧", "😨", "😰", "😥", "😢", 
+    "😭", "😱", "😖", "😣", "😞", "😓", "😩", "😫", "😤", "😡", "😠", "🤬", "👿", "💀", "☠️", "💩", 
+    "🤡", "👹", "👺", "👻", "👽", "👾", "🤖", "😺", "😸", "😹", "😻", "😼", "😽", "🙀", "😿", "😾", 
+    "🙈", "🙉", "🙊",
+  
+    // Vêtements & Accessoires
+    "🎀", "🎗️", "👓", "🕶️", "🥽", "🥼", "🦺", "👔", "👕", "👖", "🧣", "🧤", "🧥", "🧦", "👗", "👘", 
+    "🥻", "🩱", "🩲", "🩳", "👙", "👚", "🪭", "👛", "👜", "👝", "🛍️", "🎒", "🩴", "👞", "👟", "🥾", 
+    "🥿", "👠", "👡", "🩰", "👢", "🪮", "👑", "👒", "🎩", "🎓", "🧢", "🪖", "⛑️", "📿", "💄", "💍", 
+    "💎", "🦯", "🧿",
+  
+    // Bureautique, Livres & Heures
+    "📕", "📖", "📗", "📘", "📙", "📚", "📓", "📒", "📃", "📜", "📄", "📰", "🗞️", "📑", "🔖", "🏷️", 
+    "✉️", "📧", "📨", "📩", "📤", "📥", "📦", "📫", "📪", "📬", "📭", "📮", "🗳️", "✏️", "✒️", "🖋️", 
+    "🖊️", "🖌️", "🖍️", "📝", "💼", "📁", "📂", "🗂️", "📅", "📆", "🗒️", "🗓️", "📇", "📈", "📉", "📊", 
+    "⌛", "⏳", "⌚", "⏰", "⏱️", "⏲️", "🕰️", "🕛", "🕧", "🕐", "🕜", "🕑", "🕝", "🕒", "🕞", "🕓", 
+    "🕟", "🕔", "🕠", "🕕", "🕡", "🕖", "🕢", "🕗", "🕣", "🕘", "🕤", "🕙", "🕥", "🕚", "🕦", "🧮", 
+    "🪙", "💰", "🧳", "🌡️", "🧸", "🧶", "🪢", "🔍", "🔎", "🕯️", "💡", "🔦",
+  
+    // Outils, Clés, Armes & Objets divers
+    "🔒", "🔓", "🔏", "🔐", "🔑", "🗝️", "🔨", "🪓", "⛏️", "⚒️", "🛠️", "🗡️", "⚔️", "💣", "🪃", "🏹", 
+    "🛡️", "🪚", "🔧", "🪛", "🔩", "⚙️", "🗜️", "⚖️", "🔗", "⛓️‍💥", "⛓️", "🪝", "🧰", "🧲", "🪜", "🪏", 
+    "⚗️", "🧪", "🧫", "🔬", "🔭", "📡", "💉", "🩹", "🩼", "🩺", "🩻", "🚪", "🪞", "🪟", "🛏️", "🛋️", 
+    "🪑", "🚽", "🪠", "🚿", "🛁", "🪤", "🪒", "🧴", "🧷", "🧹", "🧺"
+  ];
+  console.log(`Nombre total d'émojis : ${EMOJIS.length}`);
 // Limite partagée avec convex/schema.ts : une seule source de vérité.
 const MAX_IMAGES = MAX_IMAGES_PAR_MESSAGE
 
@@ -269,7 +332,7 @@ function PostCard({ post, onReplied }: { post: Post; onReplied: () => void }) {
   const cat = CATEGORIES.find(c => c.id === post.categorie) ?? CATEGORIES[0]
 
   return (
-    <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
+    <div className="rounded-xl border border-slate-200 bg-blue-50 p-5 shadow-sm">
       <div className="mb-2 flex items-center gap-2.5 text-sm">
         <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary text-xs font-semibold text-white">{post.auteurNom.charAt(0).toUpperCase()}</div>
         <span className="font-medium text-slate-800">{post.auteurNom}</span>
@@ -384,7 +447,7 @@ function ForumPage() {
   }
 
   return (
-    <div className="min-h-[calc(100vh-64px)] bg-slate-50 font-sans">
+    <div className="min-w-3xl min-h-[calc(100vh-64px)] bg-slate-50 font-sans">
       <header className="bg-primary px-6 py-10">
         <div className="mx-auto flex max-w-3xl flex-wrap items-center justify-between gap-4">
           <div>
@@ -406,7 +469,7 @@ function ForumPage() {
           </div>
         </div>
       </header>
-      <main className="mx-auto max-w-3xl px-4 py-8">
+      <main className="mx-auto max-w-5xl px-4 py-8">
         {!isAuthenticated && (
           <section className="mb-8 rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
             <h2 className="mb-3 text-sm font-semibold text-slate-800">Connexion requise</h2>
@@ -422,7 +485,7 @@ function ForumPage() {
             <button key={c.id} onClick={() => setCatActive(c.id)} className={`rounded-full px-3.5 py-1.5 text-xs font-medium ${catActive === c.id ? 'bg-primary text-white' : 'bg-white text-slate-600 hover:bg-slate-100'}`}>{c.label}</button>
           ))}
         </div>
-        <section className="mb-8 rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
+        <section className="mb-8 rounded-xl border border-slate-400 bg-blue-50 p-5 shadow-sm">
           <h2 className="mb-3 text-sm font-semibold text-slate-800">Nouveau sujet</h2>
           <form onSubmit={handleSubmit} className="space-y-3">
             <select value={categorie} onChange={e => setCategorie(e.target.value)} className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-primary/10">
