@@ -77,44 +77,7 @@ export default function Navbar() {
 
           <div className="max-w-7xl mx-auto px-4 sm:px-6">
             <div className="flex items-center justify-between h-16">
-              {/* ── Logo ── */}
-              <Link
-                to="/"
-                className="flex items-center gap-3 group shrink-0"
-                aria-label="Accueil du collège"
-              >
-                {/* Icône abstraite — livre ouvert stylisé */}
-                <div className="relative w-9 h-9 shrink-0">
-                  <div className="absolute inset-0 rounded-lg bg-primary flex items-center justify-center">
-                    <svg
-                      viewBox="0 0 32 32"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="w-5 h-5"
-                      aria-hidden="true"
-                    >
-                      <path
-                        d="M16 6C12 3 6 4 4 6v18c2-2 8-3 12 0 4-3 10-2 12 0V6c-2-2-8-3-12 0Z"
-                        fill="white"
-                        fillOpacity="0.15"
-                        stroke="white"
-                        strokeWidth="1.5"
-                        strokeLinejoin="round"
-                      />
-                      <line x1="16" y1="6" x2="16" y2="24" stroke="#E8A020" strokeWidth="1.5" />
-                    </svg>
-                  </div>
-                </div>
-
-                <div className="leading-tight">
-                  <p className="text-[13px] font-semibold text-primary tracking-tight">
-                    Collège Azouaou Amrane
-                  </p>
-                  <p className="text-[11px] text-slate-400 font-normal">
-                    TAZMALT — Algérie
-                  </p>
-                </div>
-              </Link>
+              {/* Logo retiré du header : il apparaît dans la barre minimale quand le menu est caché */}
 
               {/* ── Toggle menu ── */}
               <button
@@ -269,7 +232,38 @@ export default function Navbar() {
       {/* Barre minimale quand le menu est masqué */}
       {!navVisible && (
         <div className="sticky top-0 z-50 bg-white border-b border-slate-100">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 h-10 flex items-center">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 h-10 flex items-center gap-3">
+            <Link
+              to="/"
+              className="flex items-center gap-2 group shrink-0"
+              aria-label="Accueil du collège"
+            >
+              <div className="relative w-6 h-6 shrink-0">
+                <div className="absolute inset-0 rounded-md bg-primary flex items-center justify-center">
+                  <svg
+                    viewBox="0 0 32 32"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="w-3.5 h-3.5"
+                    aria-hidden="true"
+                  >
+                    <path
+                      d="M16 6C12 3 6 4 4 6v18c2-2 8-3 12 0 4-3 10-2 12 0V6c-2-2-8-3-12 0Z"
+                      fill="white"
+                      fillOpacity="0.15"
+                      stroke="white"
+                      strokeWidth="1.5"
+                      strokeLinejoin="round"
+                    />
+                    <line x1="16" y1="6" x2="16" y2="24" stroke="#E8A020" strokeWidth="1.5" />
+                  </svg>
+                </div>
+              </div>
+              <span className="text-[11px] font-semibold text-primary tracking-tight">
+                Azouaou Amrane
+              </span>
+            </Link>
+
             <button
               onClick={() => setNavVisible(true)}
               className="inline-flex items-center gap-1 rounded-lg px-2 py-1.5 text-xs font-medium text-slate-600 hover:bg-slate-100 transition"
