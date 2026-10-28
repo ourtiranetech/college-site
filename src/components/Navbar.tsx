@@ -126,38 +126,99 @@ export default function Navbar() {
                 {navVisible ? 'Masquer' : 'Menu'}
               </button>
 
-              {/* ── Bouton espace élève supprimé : Parents & Élèves est déjà dans la nav ── */}
-            <div className="hidden lg:flex items-center gap-3">
-              <div className="flex justify-center w-full">
-    <LoginButton />
-  </div>
-            </div>
+              {/* ── Navigation desktop ── */}
+              <nav
+                className="hidden lg:flex items-center gap-1"
+                aria-label="Navigation principale"
+              >
+                {NAV_LINKS.map((link) => (
+                  <div
+                    key={link.href}
+                    className="relative"
+                    onMouseEnter={() => link.children && setOpenDropdown(link.href)}
+                    onMouseLeave={() => setOpenDropdown(null)}
+                  >
+                    <Link
+                      to={link.href}
+                      className={[
+                        'flex items-center gap-1 px-3 py-2 rounded-md text-[13.5px] font-medium transition-colors duration-150',
+                        isActive(link.href)
+                          ? 'text-primary bg-[#EDFAF3]'
+                          : 'text-slate-600 hover:text-primary hover:bg-slate-50',
+                      ].join(' ')}
+                    >
+                      {link.label}
+                      {link.children && (
+                        <svg
+                          className={`w-3.5 h-3.5 transition-transform duration-200 ${openDropdown === link.href ? 'rotate-180' : ''}`}
+                          viewBox="0 0 16 16"
+                          fill="none"
+                          aria-hidden="true"
+                        >
+                          <path
+                            d="M4 6l4 4 4-4"
+                            stroke="currentColor"
+                            strokeWidth="1.5"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          />
+                        </svg>
+                      )}
+                    </Link>
 
-            {/* ── Burger mobile ── */}
-            <button
-              onClick={() => setMobileOpen((v) => !v)}
-              className="lg:hidden flex flex-col justify-center items-center w-9 h-9 gap-1.5 rounded-md hover:bg-slate-100 transition-colors"
-              aria-label={mobileOpen ? 'Fermer le menu' : 'Ouvrir le menu'}
-              aria-expanded={mobileOpen}
-            >
-              <span
-                className={`block h-0.5 w-5 bg-slate-700 rounded transition-transform duration-300 origin-center ${
-                  mobileOpen ? 'translate-y-2 rotate-45' : ''
-                }`}
-              />
-              <span
-                className={`block h-0.5 w-5 bg-slate-700 rounded transition-opacity duration-300 ${
-                  mobileOpen ? 'opacity-0' : ''
-                }`}
-              />
-              <span
-                className={`block h-0.5 w-5 bg-slate-700 rounded transition-transform duration-300 origin-center ${
-                  mobileOpen ? '-translate-y-2 -rotate-45' : ''
-                }`}
-              />
-            </button>
-          </div>
-        </div>
+                    {/* Dropdown */}
+                    {link.children && openDropdown === link.href && (
+                      <div className="absolute top-full left-0 pt-1 z-50">
+                        <div className="bg-white rounded-xl shadow-[0_8px_30px_rgba(15,74,46,0.14)] border border-slate-100 py-1.5 min-w-52.5 overflow-hidden">
+                          {link.children.map((child) => (
+                            <Link
+                              key={child.href}
+                              to={child.href}
+                              className="flex items-center gap-2.5 px-4 py-2.5 text-[13px] text-slate-600 hover:text-primary hover:bg-blue-100"
+                            >
+                              <span className="w-1 h-1 rounded-full bg-accent shrink-0" />
+                              {child.label}
+                            </Link>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </nav>
+
+              {/* ── Bouton espace élève supprimé : Parents & Élèves est déjà dans la nav ── */}
+              <div className="hidden lg:flex items-center gap-3">
+                <div className="flex justify-center w-full">
+              <LoginButton />
+              </div>
+              </div>
+
+              {/* ── Burger mobile ── */}
+              <button
+                onClick={() => setMobileOpen((v) => !v)}
+                className="lg:hidden flex flex-col justify-center items-center w-9 h-9 gap-1.5 rounded-md hover:bg-slate-100 transition-colors"
+                aria-label={mobileOpen ? 'Fermer le menu' : 'Ouvrir le menu'}
+                aria-expanded={mobileOpen}
+              >
+                <span
+                  className={`block h-0.5 w-5 bg-slate-700 rounded transition-transform duration-300 origin-center ${
+                    mobileOpen ? 'translate-y-2 rotate-45' : ''
+                  }`}
+                />
+                <span
+                  className={`block h-0.5 w-5 bg-slate-700 rounded transition-opacity duration-300 ${
+                    mobileOpen ? 'opacity-0' : ''
+                  }`}
+                />
+                <span
+                  className={`block h-0.5 w-5 bg-slate-700 rounded transition-transform duration-300 origin-center ${
+                    mobileOpen ? '-translate-y-2 -rotate-45' : ''
+                  }`}
+                />
+              </button>
+              </div>
+              </div>
 
         {/* ── Menu mobile ── */}
         <div
