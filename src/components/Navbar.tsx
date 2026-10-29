@@ -232,23 +232,14 @@ export default function Navbar() {
       {/* Barre minimale quand le menu est masqué */}
       {!navVisible && (
         <div className="sticky top-0 z-50 bg-white border-b border-slate-100">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 h-10 flex items-center justify-between">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 h-10 flex items-center justify-center">
             <Link
               to="/"
-              className="text-sm font-semibold text-primary tracking-tight"
+              className="w-full text-center text-sm font-bold text-primary tracking-tight uppercase"
               aria-label="Accueil du collège"
             >
               CEM Azouaou Amrane
             </Link>
-
-            <button
-              onClick={() => setNavVisible(true)}
-              className="inline-flex items-center gap-1 rounded-lg px-2 py-1.5 text-xs font-medium text-slate-600 hover:bg-slate-100 transition"
-              aria-label="Afficher le menu"
-            >
-              <PanelLeft size={16} />
-              Menu
-            </button>
           </div>
         </div>
       )}
