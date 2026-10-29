@@ -232,7 +232,7 @@ export default function Navbar() {
       {/* Barre minimale quand le menu est masqué */}
       {!navVisible && (
         <div className="sticky top-0 z-50 bg-white border-b border-slate-100">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 h-10 flex items-center justify-center">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 h-10 flex items-center relative">
             <Link
               to="/"
               className="w-full text-center text-sm font-bold text-primary tracking-tight uppercase"
@@ -240,6 +240,15 @@ export default function Navbar() {
             >
               CEM Azouaou Amrane
             </Link>
+
+            <button
+              onClick={() => setNavVisible(true)}
+              className="absolute right-4 top-1/2 -translate-y-1/2 inline-flex items-center gap-1 rounded-lg px-2 py-1.5 text-xs font-medium text-slate-600 hover:bg-slate-100 transition"
+              aria-label="Afficher le menu"
+            >
+              <PanelLeft size={16} />
+              Menu
+            </button>
           </div>
         </div>
       )}
