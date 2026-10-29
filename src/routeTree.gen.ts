@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ChatRouteImport } from './routes/chat'
 import { Route as ForumRouteImport } from './routes/forum'
+import { Route as MapRouteImport } from './routes/map'
 import { Route as ParentsElevesRouteImport } from './routes/parents-eleves'
 import { Route as PersonnelRouteImport } from './routes/personnel'
 import { Route as PresentationRouteImport } from './routes/presentation'
@@ -43,6 +44,11 @@ const ChatRoute = ChatRouteImport.update({
 const ForumRoute = ForumRouteImport.update({
   id: '/forum',
   path: '/forum',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MapRoute = MapRouteImport.update({
+  id: '/map',
+  path: '/map',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ParentsElevesRoute = ParentsElevesRouteImport.update({
@@ -138,6 +144,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/chat': typeof ChatRoute
   '/forum': typeof ForumRoute
+  '/map': typeof MapRoute
   '/parents-eleves': typeof ParentsElevesRouteWithChildren
   '/personnel': typeof PersonnelRouteWithChildren
   '/presentation': typeof PresentationRouteWithChildren
@@ -160,6 +167,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/chat': typeof ChatRoute
   '/forum': typeof ForumRoute
+  '/map': typeof MapRoute
   '/parents-eleves': typeof ParentsElevesRouteWithChildren
   '/personnel': typeof PersonnelRouteWithChildren
   '/presentation': typeof PresentationRouteWithChildren
@@ -183,6 +191,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/chat': typeof ChatRoute
   '/forum': typeof ForumRoute
+  '/map': typeof MapRoute
   '/parents-eleves': typeof ParentsElevesRouteWithChildren
   '/personnel': typeof PersonnelRouteWithChildren
   '/presentation': typeof PresentationRouteWithChildren
@@ -207,6 +216,7 @@ export interface FileRouteTypes {
     | '/'
     | '/chat'
     | '/forum'
+    | '/map'
     | '/parents-eleves'
     | '/personnel'
     | '/presentation'
@@ -229,6 +239,7 @@ export interface FileRouteTypes {
     | '/'
     | '/chat'
     | '/forum'
+    | '/map'
     | '/parents-eleves'
     | '/personnel'
     | '/presentation'
@@ -251,6 +262,7 @@ export interface FileRouteTypes {
     | '/'
     | '/chat'
     | '/forum'
+    | '/map'
     | '/parents-eleves'
     | '/personnel'
     | '/presentation'
@@ -274,6 +286,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   ChatRoute: typeof ChatRoute
   ForumRoute: typeof ForumRoute
+  MapRoute: typeof MapRoute
   ParentsElevesRoute: typeof ParentsElevesRouteWithChildren
   PersonnelRoute: typeof PersonnelRouteWithChildren
   PresentationRoute: typeof PresentationRouteWithChildren
@@ -301,6 +314,13 @@ declare module '@tanstack/react-router' {
       path: '/forum'
       fullPath: '/forum'
       preLoaderRoute: typeof ForumRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/map': {
+      id: '/map'
+      path: '/map'
+      fullPath: '/map'
+      preLoaderRoute: typeof MapRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/parents-eleves': {
@@ -485,6 +505,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ChatRoute: ChatRoute,
   ForumRoute: ForumRoute,
+  MapRoute: MapRoute,
   ParentsElevesRoute: ParentsElevesRouteWithChildren,
   PersonnelRoute: PersonnelRouteWithChildren,
   PresentationRoute: PresentationRouteWithChildren,

@@ -1,7 +1,9 @@
 // convex/auth.ts
-import { convexAuth } from "@convex-dev/auth/server";
+import { convexAuth, getAuthUserId } from "@convex-dev/auth/server";
 import { Password } from "@convex-dev/auth/providers/Password";
 import Google from "@auth/core/providers/google";
+import { mutation, query } from "./_generated/server";
+import { v } from "convex/values";
 
 /**
  * Fournisseurs d'authentification.
@@ -32,4 +34,35 @@ export const { auth, signIn, signOut, store } = convexAuth({
     }),
     Google({}),
   ],
+});
+
+/**
+ * Vérifie qu'un email n'est pas déjà utilisé.
+ *
+ * La création de compte password est gérée par Convex Auth via `signIn`
+ * avec `flow: "signUp"` ; cette query sert seulement à vérifier la
+ * disponibilité côté client avant de tenter l'inscription.
+ */
+export const checkEmailAvailable = query({
+  args: { email: v.string() },
+  handler: async (ctx, args) => {
+    const normalizedEmail = args.email.trim().toLowerCase();
+    const existing = await ctx.db
+      .query("users")
+      .withIndex("email", (q) => q.eq("email", normalizedEmail))
+      .first();
+
+    return existing === null;
+  },
+});
+
+export const getCurrentUser = query({
+  args: {},
+  handler: async (ctx) => {
+    const userId = await getAuthUserId(ctx);
+    if (!userId) {
+      return null;
+    }
+    return await ctx.db.get(userId);
+  },
 });

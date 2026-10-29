@@ -41,6 +41,24 @@ async function requireUtilisateur(ctx: QueryCtx | MutationCtx) {
   return { userId, nom };
 }
 
+const EMAIL_AUTORISE_FORUM = "cemazouaouamrane@gmail.com";
+
+async function requireAuteurForumAutorise(
+  ctx: QueryCtx | MutationCtx,
+): Promise<{ userId: GenericId<"users">; nom: string }> {
+  const { userId, nom } = await requireUtilisateur(ctx);
+
+  const utilisateur = await ctx.db.get(userId);
+  const email = utilisateur?.email?.trim().toLowerCase();
+  if (!email || email !== EMAIL_AUTORISE_FORUM) {
+    throw new Error(
+      "Seul le compte autorisé peut publier sur le forum pour le moment."
+    );
+  }
+
+  return { userId, nom };
+}
+
 /**
  * Vérifie que chaque identifiant de stockage correspond bien à une image
  * réellement téléversée, dans la limite de taille et de type autorisés.
@@ -140,7 +158,7 @@ export const creerPost = mutation({
     images: v.optional(v.array(v.string())),
   },
   handler: async (ctx, args) => {
-    const { userId, nom } = await requireUtilisateur(ctx);
+    const { userId, nom } = await requireAuteurForumAutorise(ctx);
 
     // Validation avant toute écriture.
     const images = await validerImages(ctx, args.images);
@@ -165,7 +183,7 @@ export const repondre = mutation({
     images: v.optional(v.array(v.string())),
   },
   handler: async (ctx, args) => {
-    const { userId, nom } = await requireUtilisateur(ctx);
+    const { userId, nom } = await requireAuteurForumAutorise(ctx);
 
     const post = await ctx.db.get(args.postId);
     if (!post) {

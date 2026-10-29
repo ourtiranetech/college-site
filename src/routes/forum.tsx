@@ -7,6 +7,7 @@ import type { FormEvent } from 'react'
 import { MessageSquare, Pin, Clock, Plus, ChevronRight, Smile, Image as ImageIcon, X, Loader2, Users } from 'lucide-react'
 import type { Id } from '../../convex/_generated/dataModel'
 import { LoginButton, useCurrentUser } from '../components/LoginButton'
+import { SchoolCard } from '../components/SchoolCard'
 import { MAX_IMAGES_PAR_MESSAGE } from '../../convex/schema'
 
 export const Route = createFileRoute('/forum')({
@@ -14,12 +15,12 @@ export const Route = createFileRoute('/forum')({
 })
 
 const CATEGORIES = [
-  { id: 'general',      label: 'Général' },
-  { id: 'enseignement', label: 'Enseignement' },
-  { id: 'vie-scolaire', label: 'Vie scolaire' },
-  { id: 'parents',      label: 'Parents' },
-  { id: 'Entraide',      label: 'Entraide' },
-  { id: 'Tazmalt',      label: 'Tazmalt' },
+  { id: 'general',      label: 'Général', chip: 'Général', chipColor: 'info' as const },
+  { id: 'enseignement', label: 'Enseignement', chip: 'Études', chipColor: 'info' as const },
+  { id: 'vie-scolaire', label: 'Vie scolaire', chip: 'Vie', chipColor: 'success' as const },
+  { id: 'parents',      label: 'Parents', chip: 'Famille', chipColor: 'warning' as const },
+  { id: 'Entraide',      label: 'Entraide', chip: 'Aide', chipColor: 'success' as const },
+  { id: 'Tazmalt',      label: 'Tazmalt', chip: 'Local', chipColor: 'info' as const },
 ]
 
 const EMOJIS  = [
@@ -482,7 +483,7 @@ function ForumPage() {
         <div className="mb-6 flex flex-wrap items-center gap-2">
           <button onClick={() => setCatActive('/')} className={`rounded-full px-3.5 py-1.5 text-xs font-medium ${catActive === '/' ? 'bg-primary text-white' : 'bg-white text-slate-600 hover:bg-slate-100'}`}>Toutes</button>
           {CATEGORIES.map(c => (
-            <button key={c.id} onClick={() => setCatActive(c.id)} className={`rounded-full px-3.5 py-1.5 text-xs font-medium ${catActive === c.id ? 'bg-primary text-white' : 'bg-white text-slate-600 hover:bg-slate-100'}`}>{c.label}</button>
+            <button key={c.id} onClick={() => setCatActive(c.id)} className={`rounded-full px-3.5 py-1.5 text-xs font-medium ${catActive === c.id ? 'bg-primary text-white' : 'bg-white text-slate-600 hover:bg-slate-100'}`}>{c.label} {c.chip ? <span className="ml-1 text-[10px] opacity-75">({c.chip})</span> : null}</button>
           ))}
         </div>
         <section className="mb-8 rounded-xl border border-slate-400 bg-blue-50 p-5 shadow-sm">

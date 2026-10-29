@@ -3,18 +3,19 @@ import { useQuery, useMutation } from 'convex/react'
 import { api } from '../../convex/_generated/api'
 import { useState, useRef, useEffect } from 'react'
 import type { FormEvent } from 'react'
-import { LogIn, MessageSquare, Send, Smile } from 'lucide-react'
+import { LogIn, MessageSquare, Send, Smile, MessageCircle } from 'lucide-react'
 import { LoginButton, useCurrentUser } from '../components/LoginButton'
+import { SchoolCard } from '../components/SchoolCard'
 
 export const Route = createFileRoute('/chat')({
   component: ChatPage,
 })
 
 const SALLES = [
-  { id: 'general', label: '💬 Général', desc: 'Questions diverses sur le collège' },
-  { id: 'parents', label: '👨‍👩‍👧 Parents', desc: 'Échanges entre parents et administration' },
-  { id: 'eleves', label: '🎓 Élèves', desc: 'Entraide devoirs et vie scolaire' },
-  { id: 'aide', label: '🧮 aide', desc: 'Entraide devoirs et vie scolaire' },
+  { id: 'general', label: '💬 Général', desc: 'Questions diverses sur le collège', chip: 'Général', chipColor: 'info' as const },
+  { id: 'parents', label: '👨‍👩‍👧 Parents', desc: 'Échanges entre parents et administration', chip: 'Famille', chipColor: 'warning' as const },
+  { id: 'eleves', label: '🎓 Élèves', desc: 'Entraide devoirs et vie scolaire', chip: 'Élèves', chipColor: 'success' as const },
+  { id: 'aide', label: '🧮 aide', desc: 'Entraide devoirs et vie scolaire', chip: 'Aide', chipColor: 'info' as const },
 ]
 
 /** 100 émoticônes proposées dans le chat. */

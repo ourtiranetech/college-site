@@ -6,6 +6,8 @@ import { useAuthActions } from "@convex-dev/auth/react";
 import { LogOut, ChevronDown, Loader2 } from "lucide-react";
 import { useState } from "react";
 
+const PHONE_REGEX = /^(\+33|0)[1-9][0-9]{8}$/;
+
 // Logo Google officiel (4 couleurs), en SVG inline pour éviter une dépendance.
 function LogoGoogle({ size = 16 }: { size?: number }) {
   return (
@@ -52,16 +54,28 @@ export function LoginButton() {
   const [showRegister, setShowRegister] = useState(false);
   const [error, setError] = useState("");
 
+  const emailAvailable = useQuery(
+    api.auth.checkEmailAvailable,
+    email ? { email } : "skip"
+  );
+
   const validate = () => {
     if (!email.includes("@") || !email.includes(".")) {
       setError("Email invalide");
       return false;
     }
+
+    if (!PHONE_REGEX.test(phone.replace(/\s/g, ""))) {
+      setError("Numéro de téléphone invalide (ex: 0551234567 ou +33612345678)");
+      return false;
+    }
+
     // Convex Auth default minimum password length is 8 characters
     if (password.length < 8) {
       setError("Mot de passe trop court (min 8 caractères)");
       return false;
     }
+
     setError("");
     return true;
   };
@@ -95,6 +109,12 @@ export function LoginButton() {
 
   const handleRegister = async () => {
     if (!validate()) return;
+
+    if (emailAvailable === false) {
+      setError("Ce compte existe déjà.");
+      return;
+    }
+
     try {
       setError("");
       setIsSubmitting(true);

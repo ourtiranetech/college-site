@@ -157,25 +157,7 @@ export const notifierParEmail = internalAction({
   },
 });
 
-/**
- * Variante « à la demande » : permet de tester l'envoi depuis l'interface
- * Convex sans passer par le formulaire public.
- *
- * Le type de retour est annoté explicitement : sans cela, TypeScript ne peut pas
- * résoudre `internal.contact.notifierParEmail` référencé depuis le même fichier
- * (circularité de typage, TS7022/TS7023).
- */
-export const testerEmail = action({
-  args: { email: v.string() },
-  handler: async (
-    ctx,
-    args,
-  ): Promise<{ envoye: boolean; raison?: string }> => {
-    return await ctx.runAction(internal.contact.notifierParEmail, {
-      nom: "Test",
-      prenom: "Test",
-      email: args.email,
-      commentaire: "Message de test depuis le tableau de bord Convex.",
-    });
-  },
-});
+/** Suppression de `testerEmail` : c'était une action publique qui permettait
+ * d'envoyer des emails depuis n'importe quel client, sans authentification.
+ * L'envoi reste possible via le formulaire de contact, avec les protections
+ * anti-bot et limite de débit existantes. */
