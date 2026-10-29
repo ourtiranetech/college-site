@@ -232,36 +232,13 @@ export default function Navbar() {
       {/* Barre minimale quand le menu est masqué */}
       {!navVisible && (
         <div className="sticky top-0 z-50 bg-white border-b border-slate-100">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 h-10 flex items-center gap-3">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 h-10 flex items-center justify-between">
             <Link
               to="/"
-              className="flex items-center gap-2 group shrink-0"
+              className="text-sm font-semibold text-primary tracking-tight"
               aria-label="Accueil du collège"
             >
-              <div className="relative w-6 h-6 shrink-0">
-                <div className="absolute inset-0 rounded-md bg-primary flex items-center justify-center">
-                  <svg
-                    viewBox="0 0 32 32"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="w-3.5 h-3.5"
-                    aria-hidden="true"
-                  >
-                    <path
-                      d="M16 6C12 3 6 4 4 6v18c2-2 8-3 12 0 4-3 10-2 12 0V6c-2-2-8-3-12 0Z"
-                      fill="white"
-                      fillOpacity="0.15"
-                      stroke="white"
-                      strokeWidth="1.5"
-                      strokeLinejoin="round"
-                    />
-                    <line x1="16" y1="6" x2="16" y2="24" stroke="#E8A020" strokeWidth="1.5" />
-                  </svg>
-                </div>
-              </div>
-              <span className="text-[11px] font-semibold text-primary tracking-tight">
-                Azouaou Amrane
-              </span>
+              CEM Azouaou Amrane
             </Link>
 
             <button
