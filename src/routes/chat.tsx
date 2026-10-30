@@ -3,9 +3,8 @@ import { useQuery, useMutation } from 'convex/react'
 import { api } from '../../convex/_generated/api'
 import { useState, useRef, useEffect } from 'react'
 import type { FormEvent } from 'react'
-import { LogIn, MessageSquare, Send, Smile, MessageCircle } from 'lucide-react'
+import { LogIn, MessageSquare, Send, Smile } from 'lucide-react'
 import { LoginButton, useCurrentUser } from '../components/LoginButton'
-import { SchoolCard } from '../components/SchoolCard'
 
 export const Route = createFileRoute('/chat')({
   component: ChatPage,

@@ -7,7 +7,6 @@ import type { FormEvent } from 'react'
 import { MessageSquare, Pin, Clock, Plus, ChevronRight, Smile, Image as ImageIcon, X, Loader2, Users } from 'lucide-react'
 import type { Id } from '../../convex/_generated/dataModel'
 import { LoginButton, useCurrentUser } from '../components/LoginButton'
-import { SchoolCard } from '../components/SchoolCard'
 import { MAX_IMAGES_PAR_MESSAGE } from '../../convex/schema'
 
 export const Route = createFileRoute('/forum')({
