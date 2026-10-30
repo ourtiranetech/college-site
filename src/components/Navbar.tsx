@@ -235,7 +235,7 @@ export default function Navbar() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 h-10 flex items-center relative">
             <Link
               to="/"
-              className="w-full text-center text-sm font-bold text-primary tracking-tight uppercase"
+              className="w-full text-center text-xl font-bold text-primary tracking-tight uppercase"
               aria-label="Accueil du collège"
             >
               CEM Azouaou Amrane  TAZMALT

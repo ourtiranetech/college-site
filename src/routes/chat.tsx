@@ -1,6 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { useQuery, useMutation } from 'convex/react'
-import { api } from '../../convex/_generated/api'
 import { useState, useRef, useEffect } from 'react'
 import type { FormEvent } from 'react'
 import { LogIn, MessageSquare, Send, Smile } from 'lucide-react'
@@ -115,8 +114,8 @@ function ChatPage() {
   const identity = useCurrentUser()
   const estConnecte = identity !== null
 
-  const messages = useQuery(api.messages.getMessages, { salle })
-  const envoyer = useMutation(api.messages.envoyerMessage)
+  const messages = useQuery("messages:getMessages" as any, { salle })
+  const envoyer = useMutation("messages:envoyerMessage" as any)
 
   // Typage explicite du useRef pour corriger la propriété scrollIntoView
   const chatEndRef = useRef<HTMLDivElement>(null)
@@ -234,7 +233,7 @@ function ChatPage() {
                 messages
                   .slice()
                   .reverse()
-                  .map((msg) => {
+                  .map((msg: any) => {
                     const estMoi = msg.auteur === nomAffiche
                     return (
                       <div

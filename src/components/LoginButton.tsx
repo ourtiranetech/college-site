@@ -1,7 +1,6 @@
 // LoginButton.tsx
 
 import { useQuery } from "convex/react";
-import { api } from "../../convex/_generated/api";
 import { useAuthActions } from "@convex-dev/auth/react";
 import { LogOut, ChevronDown, Loader2 } from "lucide-react";
 import { useState } from "react";
@@ -34,7 +33,7 @@ function LogoGoogle({ size = 16 }: { size?: number }) {
 
 // Hook pour récupérer l'utilisateur connecté via Convex auth
 export function useCurrentUser() {
-  return useQuery(api.users.getCurrentUser);
+  return useQuery("users:getCurrentUser" as any);
 }
 
 export function useIsAuthenticated() {
@@ -55,7 +54,7 @@ export function LoginButton() {
   const [error, setError] = useState("");
 
   const emailAvailable = useQuery(
-    api.auth.checkEmailAvailable,
+    "auth:checkEmailAvailable" as any,
     email ? { email } : "skip"
   );
 

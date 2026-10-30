@@ -1,6 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { useMutation } from 'convex/react'
-import { api } from '../../convex/_generated/api'
 import { useState } from 'react'
 import type { FormEvent } from 'react'
 import { Mail, MapPin, Phone, Clock, Send, Loader2, CheckCircle2, AlertCircle } from 'lucide-react'
@@ -30,7 +29,7 @@ function ContactPage() {
   const [siteWeb, setSiteWeb] = useState('')
   const [etat, setEtat] = useState<Etat>({ type: 'repos' })
 
-  const envoyer = useMutation(api.contact.envoyerMessage)
+  const envoyer = useMutation("contact:envoyerMessage" as any)
 
   const maj =
     (cle: keyof typeof CHAMP_VIDE) =>

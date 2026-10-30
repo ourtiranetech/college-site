@@ -1,7 +1,6 @@
   // src/routes/forum.tsx — Forum de la communauté (Convex temps réel)
 import { createFileRoute } from '@tanstack/react-router'
 import { useQuery, useMutation } from 'convex/react'
-import { api } from '../../convex/_generated/api'
 import { useState, useRef, useEffect } from 'react'
 import type { FormEvent } from 'react'
 import { MessageSquare, Pin, Clock, Plus, ChevronRight, Smile, Image as ImageIcon, X, Loader2, Users } from 'lucide-react'
@@ -99,8 +98,8 @@ const CLE_INVITE = 'forum-invite-key'
  * compté comme invité (le backend l'ignore également).
  */
 function useInviteCounter(estConnecte: boolean) {
-  const nombre = useQuery(api.forum.getInviteCount)
-  const enregistrer = useMutation(api.forum.registerInvite)
+  const nombre = useQuery("forum:getInviteCount" as any)
+  const enregistrer = useMutation("forum:registerInvite" as any)
 
   useEffect(() => {
     if (estConnecte) return
@@ -222,11 +221,11 @@ async function televerserImages(
 
 function ImageGallery({ storageIds }: { storageIds: string[] }) {
   if (storageIds.length === 0) return null
-  const urls = useQuery(api.forum.getImageUrls, { storageIds }) ?? []
+  const urls = useQuery("forum:getImageUrls" as any, { storageIds }) ?? []
   if (urls.length === 0) return null
   return (
     <div className="mt-2 grid grid-cols-2 gap-2">
-      {urls.map((url, i) => (
+      {urls.map((url: string, i: number) => (
         <img key={i} src={url} alt={`Pièce jointe ${i + 1}`} className="rounded-lg object-cover max-h-48 w-full" />
       ))}
     </div>
@@ -239,8 +238,8 @@ function ReplyForm({ postId, onReplied }: { postId: Id<'posts'>; onReplied: () =
   const [files, setFiles] = useState<File[]>([])
   const [uploading, setUploading] = useState(false)
   const ref = useRef<HTMLTextAreaElement>(null)
-  const repondre = useMutation(api.forum.repondre)
-  const getUploadUrl = useMutation(api.forum.getUploadUrl)
+  const repondre = useMutation("forum:repondre" as any)
+  const getUploadUrl = useMutation("forum:getUploadUrl" as any)
   const identity = useCurrentUser()
 
   const handleSubmit = async (e: FormEvent) => {
@@ -326,7 +325,7 @@ function ReplyForm({ postId, onReplied }: { postId: Id<'posts'>; onReplied: () =
 }
 
 function PostCard({ post, onReplied }: { post: Post; onReplied: () => void }) {
-  const reponsesQuery = useQuery(api.forum.getReponses, { postId: post._id })
+  const reponsesQuery = useQuery("forum:getReponses" as any, { postId: post._id })
   const [showReplies, setShowReplies] = useState(false)
   const reponses: Reponse[] = reponsesQuery ?? []
   const cat = CATEGORIES.find(c => c.id === post.categorie) ?? CATEGORIES[0]
@@ -385,10 +384,10 @@ function ForumPage() {
   const identity = useCurrentUser()
   const isAuthenticated = identity !== null
 
-  const postsResult = useQuery(api.forum.getPosts, { categorie: undefined })
+  const postsResult = useQuery("forum:getPosts" as any, { categorie: undefined })
   const posts: Post[] = postsResult ?? []
-  const creerPost = useMutation(api.forum.creerPost)
-  const getUploadUrl = useMutation(api.forum.getUploadUrl)
+  const creerPost = useMutation("forum:creerPost" as any)
+  const getUploadUrl = useMutation("forum:getUploadUrl" as any)
   const nombreInvites = useInviteCounter(isAuthenticated)
 
   const filteredPosts = catActive === '/' ? posts : posts.filter(p => p.categorie === catActive)
