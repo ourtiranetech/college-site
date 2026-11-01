@@ -231,7 +231,7 @@ export default function Navbar() {
 
       {/* Barre minimale quand le menu est masqué */}
       {!navVisible && (
-        <div className="sticky top-0 z-50 bg-white border-b border-slate-100">
+        <div className="sticky top-0 z-50 bg-blue-100 border-b border-slate-100">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 h-10 flex items-center relative">
             <Link
               to="/"

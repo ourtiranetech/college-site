@@ -41,20 +41,10 @@ async function requireUtilisateur(ctx: QueryCtx | MutationCtx) {
   return { userId, nom };
 }
 
-const EMAIL_AUTORISE_FORUM = "cemazouaouamrane@gmail.com";
-
 async function requireAuteurForumAutorise(
   ctx: QueryCtx | MutationCtx,
 ): Promise<{ userId: GenericId<"users">; nom: string }> {
   const { userId, nom } = await requireUtilisateur(ctx);
-
-  const utilisateur = await ctx.db.get(userId);
-  const email = utilisateur?.email?.trim().toLowerCase();
-  if (!email || email !== EMAIL_AUTORISE_FORUM) {
-    throw new Error(
-      "Seul le compte autorisé peut publier sur le forum pour le moment."
-    );
-  }
 
   return { userId, nom };
 }
