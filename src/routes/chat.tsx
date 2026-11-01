@@ -2,7 +2,7 @@ import { createFileRoute } from '@tanstack/react-router'
 import { useQuery, useMutation } from 'convex/react'
 import { useState, useRef, useEffect } from 'react'
 import type { FormEvent } from 'react'
-import { LogIn, MessageSquare, Send, Smile } from 'lucide-react'
+import { LogIn, MessageSquare, Send, Smile, Image as ImageIcon, Loader2 } from 'lucide-react'
 import { LoginButton, useCurrentUser } from '../components/LoginButton'
 
 export const Route = createFileRoute('/chat')({
@@ -139,19 +139,88 @@ function ChatPage() {
   const handleEnvoi = async (e: FormEvent) => {
     e.preventDefault()
     const contenu = message.trim()
-    if (!contenu || !estConnecte) return
+    if (!contenu && !files.length) return
 
+    if (!estConnecte) {
+      alert("Vous devez être connecté pour envoyer un message.")
+      return
+    }
+
+    setUploading(true)
     try {
-      // L'auteur est dérivé du jeton de session côté serveur.
-      await envoyer({ contenu, salle })
+      const images = await televerserImages(files, () => getUploadUrl({}))
+      await envoyer({ contenu, salle, images })
       setMessage('')
+      setFiles([])
       setSelecteurOuvert(false)
     } catch (err) {
       alert(err instanceof Error ? err.message : "Le message n'a pas pu être envoyé.")
+    } finally {
+      setUploading(false)
     }
   }
 
+  const getUploadUrl = useMutation("messages:getUploadUrl" as any)
+
+  const [files, setFiles] = useState<File[]>([])
+  const [uploading, setUploading] = useState(false)
+
+  const televerserImages = async (
+    fichiers: File[],
+    getUploadUrl: () => Promise<string>,
+  ): Promise<string[]> => {
+    if (fichiers.length === 0) return []
+    const url = await getUploadUrl()
+    const ids: string[] = []
+    for (const fichier of fichiers) {
+      const reponse = await fetch(url, { method: 'POST', body: fichier })
+      if (!reponse.ok) throw new Error(`Échec du téléversement de ${fichier.name}.`)
+      ids.push(await reponse.text())
+    }
+    return ids
+  }
+
+  const pickImages = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const choisis = e.target.files
+    if (choisis) {
+      const ajoutes = Array.from(choisis)
+      setFiles(prev => {
+        const total = [...prev, ...ajoutes]
+        if (total.length > 5) {
+          alert("Maximum 5 images par message.")
+          return total.slice(0, 5)
+        }
+        return total
+      })
+    }
+    e.target.value = ''
+  }
+
   const nomAffiche = (identity?.name ?? identity?.email ?? 'Utilisateur') as string
+
+  const ImageGallery = ({ storageIds }: { storageIds: string[] }) => {
+    if (storageIds.length === 0) return null
+    const [urls, setUrls] = useState<string[]>([])
+    useEffect(() => {
+      const charger = async () => {
+        const resultats = await Promise.all(
+          storageIds.map(async (id) => {
+            const reponse = await fetch(`/api/messages/getImageUrl?id=${id}`)
+            return reponse.text()
+          })
+        )
+        setUrls(resultats.filter((u): u is string => u !== ''))
+      }
+      charger()
+    }, [storageIds])
+    return (
+      <div className="flex flex-wrap gap-2 mt-4">
+        {urls.map((url, i) => (
+          <img key={i} src={url} alt={`Pièce jointe ${i + 1}`} className="h-24 w-24 rounded-lg object-cover" />
+        ))}
+      </div>
+    )
+  }
 
   return (
     <div className="max-w-6xl mx-auto p-6 space-y-6">
@@ -253,12 +322,16 @@ function ChatPage() {
                         </div>
                         <div
                           className={`max-w-md px-4 py-2 rounded-2xl text-sm whitespace-pre-wrap wrap-break-word ${
+
                             estMoi
                               ? 'bg-blue-600 text-white rounded-br-none'
                               : 'bg-gray-100 text-gray-800 rounded-bl-none'
                           }`}
                         >
                           {msg.contenu}
+                          {msg.images && msg.images.length > 0 && (
+                            <ImageGallery storageIds={msg.images} />
+                          )}
                         </div>
                       </div>
                     )
@@ -339,13 +412,37 @@ function ChatPage() {
                   className="flex-1 resize-y rounded-lg border px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-600"
                 />
 
+                <label className="flex cursor-pointer items-center gap-1.5 px-3 py-1.5 min-w-0 text-xs font-medium text-slate-600 rounded-lg border border-dashed border-slate-300 bg-slate-50 hover:bg-slate-100 hover:text-slate-800 transition">
+                  <ImageIcon size={14} />
+                  <input type="file" accept="image/*" multiple className="hidden" onChange={pickImages} />
+                  <span className="whitespace-nowrap">Image</span>
+                </label>
+
+                <div className="flex-1 min-w-0">
+                  <textarea
+                    ref={champRef}
+                    placeholder="Écrivez votre message..."
+                    value={message}
+                    maxLength={2000}
+                    rows={1}
+                    onChange={(e) => setMessage(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' && !e.shiftKey) {
+                        e.preventDefault()
+                        e.currentTarget.form?.requestSubmit()
+                      }
+                    }}
+                    className="flex-1 resize-y rounded-lg border px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-600"
+                  />
+                </div>
+
                 <button
                   type="submit"
-                  disabled={!message.trim()}
+                  disabled={!message.trim() && !files.length || uploading}
                   className="inline-flex items-center gap-1.5 bg-blue-700 text-white text-sm font-medium px-5 py-2 rounded-lg hover:bg-blue-800 transition disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  <Send size={14} aria-hidden="true" />
-                  Envoyer
+                  {uploading ? <Loader2 size={14} className="animate-spin" /> : <Send size={14} aria-hidden="true" />}
+                  {uploading ? 'Envoi...' : 'Envoyer'}
                 </button>
               </div>
 

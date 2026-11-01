@@ -1,10 +1,13 @@
 import { query, mutation } from "./_generated/server";
 import type { MutationCtx, QueryCtx } from "./_generated/server";
 import { getAuthUserId } from "@convex-dev/auth/server";
-import { v } from "convex/values";
+import { v, type GenericId } from "convex/values";
 
 const MAX_CONTENU = 2000;
 export const MAX_MESSAGES_AFFICHES = 100;
+export const MAX_TAILLE_IMAGE = 5 * 1024 * 1024; // 5 Mo
+export const MAX_IMAGES_PAR_MESSAGE = 5;
+const TYPES_IMAGE_AUTORISES = ["image/jpeg", "image/png", "image/webp", "image/gif"];
 
 /**
  * Récupère l'utilisateur connecté côté serveur.
@@ -31,6 +34,40 @@ async function requireUtilisateur(ctx: QueryCtx | MutationCtx) {
   return { userId, nom };
 }
 
+/**
+ * Vérifie que chaque identifiant de stockage correspond bien à une image
+ * réellement téléversée, dans la limite de taille et de type autorisés.
+ * Aucune écriture n'a lieu avant la fin de toutes les vérifications : si une
+ * seule image est invalide, rien n'est créé.
+ */
+async function validerImages(
+  ctx: MutationCtx,
+  storageIds: string[] | undefined,
+): Promise<string[]> {
+  if (!storageIds || storageIds.length === 0) return [];
+
+  if (storageIds.length > MAX_IMAGES_PAR_MESSAGE) {
+    throw new Error(`Maximum ${MAX_IMAGES_PAR_MESSAGE} images par message.`);
+  }
+
+  for (const storageId of storageIds) {
+    const fichier = await ctx.storage.getMetadata(
+      storageId as GenericId<"_storage">,
+    );
+    if (!fichier) {
+      throw new Error("Image introuvable dans le stockage.");
+    }
+    if (fichier.size > MAX_TAILLE_IMAGE) {
+      throw new Error("Image trop volumineuse (maximum 5 Mo).");
+    }
+    if (!TYPES_IMAGE_AUTORISES.includes(fichier.contentType ?? "")) {
+      throw new Error(`Type non autorisé : ${(fichier.contentType ?? "inconnu").substring(0, 50)}.`);
+    }
+  }
+
+  return storageIds;
+}
+
 export const getMessages = query({
   args: { salle: v.string() },
   handler: async (ctx, args) => {
@@ -47,6 +84,7 @@ export const envoyerMessage = mutation({
     // `auteur` et `auteurId` ne sont plus acceptés : ils venaient du client.
     contenu: v.string(),
     salle: v.string(),
+    images: v.optional(v.array(v.string())),
   },
   handler: async (ctx, args) => {
     const { userId, nom } = await requireUtilisateur(ctx);
@@ -61,12 +99,15 @@ export const envoyerMessage = mutation({
       throw new Error("Salon invalide.");
     }
 
+    const images = await validerImages(ctx, args.images);
+
     return await ctx.db.insert("messages", {
       auteur: nom,
       auteurId: userId,
       contenu,
       salle,
       createdAt: Date.now(),
+      ...(images.length > 0 ? { images } : {}),
     });
   },
 });
