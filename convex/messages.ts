@@ -111,3 +111,14 @@ export const envoyerMessage = mutation({
     });
   },
 });
+
+/**
+ * Renvoie une URL de téléversement, réservée aux utilisateurs connectés.
+ */
+export const getUploadUrl = mutation({
+  args: {},
+  handler: async (ctx) => {
+    await requireUtilisateur(ctx);
+    return await ctx.storage.generateUploadUrl();
+  },
+});
