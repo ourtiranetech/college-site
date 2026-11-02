@@ -7,10 +7,10 @@ const MAX_NOM = 80;
 const MAX_PRENOM = 80;
 const MAX_EMAIL = 200;
 const MAX_COMMENTAIRE = 5000;
-const MAX_MESSAGES_PAR_HEURE = 3;
+const MAX_MESSAGES_PAR_HEURE = 20;
 const FENETRE_MS = 60 * 60 * 1000; // 1 heure
 
-const ADRESSE_DESTINATAIRE = "cemazouaouamrane@gmail.com";
+const ADRESSE_DESTINATAIRE = "ourtiranetech@gmail.com";
 
 // Volontairement permissif : on ne rejette que ce qui n'est manifestement pas
 // une adresse, pour ne pas bloquer un parent au clavier.

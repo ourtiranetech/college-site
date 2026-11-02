@@ -69,7 +69,7 @@ export default function Navbar() {
       {navVisible && (
         <header
           className={[
-            'sticky top-0 z-50 bg-white transition-shadow duration-300',
+            'sticky top-0 z-50 bg-blue-50 transition-shadow duration-300',
             scrolled ? 'shadow-[0_2px_20px_rgba(15,74,46,0.12)]' : 'border-b border-slate-100',
           ].join(' ')}
         >
