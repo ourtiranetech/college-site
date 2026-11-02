@@ -19,6 +19,7 @@ const NAV_LINKS = [
     children: [
       { label: 'Équipe pédagogique', href: '/personnel/pedagogique' },
       { label: 'Personnel d\'entretien', href: '/personnel/entretien' },
+        { label: 'Personnel administratif', href: '/personnel/administratif' },
     ],
   },
   {

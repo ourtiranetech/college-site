@@ -23,6 +23,13 @@ const SECTIONS = [
     chip: 'Pédagogique',
     chipColor: 'info' as const,
     Icon: GraduationCap,
+  },  {
+    label: "personnel administratif",
+    href: '/personnel/administratif',
+    resume: "personnel administratif  du collège.",
+    chip: 'Administration',
+    chipColor: 'warning' as const,
+    Icon: SprayCan,
   },
 ]
 

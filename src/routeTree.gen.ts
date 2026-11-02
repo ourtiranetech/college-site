@@ -25,6 +25,7 @@ import { Route as ParentsElevesEmploiDuTempsRouteImport } from './routes/parents
 import { Route as ParentsElevesInscriptionsRouteImport } from './routes/parents-eleves.inscriptions'
 import { Route as ParentsElevesNotesRouteImport } from './routes/parents-eleves.notes'
 import { Route as ParentsElevesRessourcesRouteImport } from './routes/parents-eleves.ressources'
+import { Route as PersonnelAdministratifRouteImport } from './routes/personnel.administratif'
 import { Route as PersonnelEntretienRouteImport } from './routes/personnel.entretien'
 import { Route as PersonnelPedagogiqueRouteImport } from './routes/personnel.pedagogique'
 import { Route as PresentationGalerieRouteImport } from './routes/presentation.galerie'
@@ -113,6 +114,11 @@ const ParentsElevesRessourcesRoute = ParentsElevesRessourcesRouteImport.update({
   path: '/ressources',
   getParentRoute: () => ParentsElevesRoute,
 } as any)
+const PersonnelAdministratifRoute = PersonnelAdministratifRouteImport.update({
+  id: '/administratif',
+  path: '/administratif',
+  getParentRoute: () => PersonnelRoute,
+} as any)
 const PersonnelEntretienRoute = PersonnelEntretienRouteImport.update({
   id: '/entretien',
   path: '/entretien',
@@ -157,6 +163,7 @@ export interface FileRoutesByFullPath {
   '/parents-eleves/inscriptions': typeof ParentsElevesInscriptionsRoute
   '/parents-eleves/notes': typeof ParentsElevesNotesRoute
   '/parents-eleves/ressources': typeof ParentsElevesRessourcesRoute
+  '/personnel/administratif': typeof PersonnelAdministratifRoute
   '/personnel/entretien': typeof PersonnelEntretienRoute
   '/personnel/pedagogique': typeof PersonnelPedagogiqueRoute
   '/presentation/galerie': typeof PresentationGalerieRoute
@@ -180,6 +187,7 @@ export interface FileRoutesByTo {
   '/parents-eleves/inscriptions': typeof ParentsElevesInscriptionsRoute
   '/parents-eleves/notes': typeof ParentsElevesNotesRoute
   '/parents-eleves/ressources': typeof ParentsElevesRessourcesRoute
+  '/personnel/administratif': typeof PersonnelAdministratifRoute
   '/personnel/entretien': typeof PersonnelEntretienRoute
   '/personnel/pedagogique': typeof PersonnelPedagogiqueRoute
   '/presentation/galerie': typeof PresentationGalerieRoute
@@ -204,6 +212,7 @@ export interface FileRoutesById {
   '/parents-eleves/inscriptions': typeof ParentsElevesInscriptionsRoute
   '/parents-eleves/notes': typeof ParentsElevesNotesRoute
   '/parents-eleves/ressources': typeof ParentsElevesRessourcesRoute
+  '/personnel/administratif': typeof PersonnelAdministratifRoute
   '/personnel/entretien': typeof PersonnelEntretienRoute
   '/personnel/pedagogique': typeof PersonnelPedagogiqueRoute
   '/presentation/galerie': typeof PresentationGalerieRoute
@@ -229,6 +238,7 @@ export interface FileRouteTypes {
     | '/parents-eleves/inscriptions'
     | '/parents-eleves/notes'
     | '/parents-eleves/ressources'
+    | '/personnel/administratif'
     | '/personnel/entretien'
     | '/personnel/pedagogique'
     | '/presentation/galerie'
@@ -252,6 +262,7 @@ export interface FileRouteTypes {
     | '/parents-eleves/inscriptions'
     | '/parents-eleves/notes'
     | '/parents-eleves/ressources'
+    | '/personnel/administratif'
     | '/personnel/entretien'
     | '/personnel/pedagogique'
     | '/presentation/galerie'
@@ -275,6 +286,7 @@ export interface FileRouteTypes {
     | '/parents-eleves/inscriptions'
     | '/parents-eleves/notes'
     | '/parents-eleves/ressources'
+    | '/personnel/administratif'
     | '/personnel/entretien'
     | '/personnel/pedagogique'
     | '/presentation/galerie'
@@ -407,6 +419,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ParentsElevesRessourcesRouteImport
       parentRoute: typeof ParentsElevesRoute
     }
+    '/personnel/administratif': {
+      id: '/personnel/administratif'
+      path: '/administratif'
+      fullPath: '/personnel/administratif'
+      preLoaderRoute: typeof PersonnelAdministratifRouteImport
+      parentRoute: typeof PersonnelRoute
+    }
     '/personnel/entretien': {
       id: '/personnel/entretien'
       path: '/entretien'
@@ -472,11 +491,13 @@ const ParentsElevesRouteWithChildren = ParentsElevesRoute._addFileChildren(
 )
 
 interface PersonnelRouteChildren {
+  PersonnelAdministratifRoute: typeof PersonnelAdministratifRoute
   PersonnelEntretienRoute: typeof PersonnelEntretienRoute
   PersonnelPedagogiqueRoute: typeof PersonnelPedagogiqueRoute
 }
 
 const PersonnelRouteChildren: PersonnelRouteChildren = {
+  PersonnelAdministratifRoute: PersonnelAdministratifRoute,
   PersonnelEntretienRoute: PersonnelEntretienRoute,
   PersonnelPedagogiqueRoute: PersonnelPedagogiqueRoute,
 }
