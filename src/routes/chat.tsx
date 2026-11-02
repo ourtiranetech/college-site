@@ -398,23 +398,7 @@ function ChatPage() {
                   </>
                 )}
 
-                <textarea
-                    ref={champRef}
-                    placeholder="Écrivez votre message..."
-                    value={message}
-                    maxLength={2000}
-                    rows={1}
-                    onChange={(e) => setMessage(e.target.value)}
-                    onKeyDown={(e) => {
-                      if (e.key === 'Enter' && !e.shiftKey) {
-                        e.preventDefault()
-                        e.currentTarget.form?.requestSubmit()
-                      }
-                    }}
-                    className="flex-1 resize-y rounded-lg border px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-600"
-                    />
-
-                    <button
+                <button
                   type="submit"
                   disabled={!message.trim() && !files.length || uploading}
                   className="inline-flex items-center gap-1.5 bg-blue-700 text-white text-sm font-medium px-5 py-2 rounded-lg hover:bg-blue-800 transition disabled:opacity-50 disabled:cursor-not-allowed"
