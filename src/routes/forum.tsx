@@ -7,6 +7,7 @@ import { MessageSquare, Pin, Clock, Plus, ChevronRight, Smile, Image as ImageIco
 import type { Id } from '../../convex/_generated/dataModel'
 import { LoginButton, useCurrentUser } from '../components/LoginButton'
 import { MAX_IMAGES_PAR_MESSAGE } from '../../convex/schema'
+import { Lightbox } from '../components/Lightbox'
 
 export const Route = createFileRoute('/forum')({
   component: ForumPage,
@@ -219,14 +220,14 @@ async function televerserImages(
   return ids
 }
 
-function ImageGallery({ storageIds }: { storageIds: string[] }) {
+function ImageGallery({ storageIds, onSelect }: { storageIds: string[]; onSelect?: (src: string) => void }) {
   if (storageIds.length === 0) return null
   const urls = useQuery("forum:getImageUrls" as any, { storageIds }) ?? []
   if (urls.length === 0) return null
   return (
     <div className="mt-2 grid grid-cols-2 gap-2">
       {urls.map((url: string, i: number) => (
-        <img key={i} src={url} alt={`Pièce jointe ${i + 1}`} className="rounded-lg object-cover max-h-48 w-full" />
+        <img key={i} src={url} alt={`Pièce jointe ${i + 1}`} className="cursor-pointer rounded-lg object-cover max-h-48 w-full" onClick={() => onSelect?.(url)} />
       ))}
     </div>
   )
@@ -394,6 +395,7 @@ function ForumPage() {
   // Les queries Convex sont réactives : ce compteur force simplement un
   // rafraîchissement immédiat après une publication ou une réponse.
   const [refreshKey, setRefreshKey] = useState(0)
+  const [selectedImage, setSelectedImage] = useState<string | null>(null)
   const mainRef = useRef<HTMLTextAreaElement>(null)
 
   const identity = useCurrentUser()

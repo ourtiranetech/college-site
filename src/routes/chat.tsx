@@ -4,6 +4,7 @@ import { useState, useRef, useEffect } from 'react'
 import type { FormEvent } from 'react'
 import { LogIn, MessageSquare, Send, Smile, Image as ImageIcon, Loader2 } from 'lucide-react'
 import { LoginButton, useCurrentUser } from '../components/LoginButton'
+import { Lightbox } from '../components/Lightbox'
 
 export const Route = createFileRoute('/chat')({
   component: ChatPage,
@@ -107,6 +108,7 @@ function ChatPage() {
   const [salle, setSalle] = useState('general')
   const [message, setMessage] = useState('')
   const [selecteurOuvert, setSelecteurOuvert] = useState(false)
+  const [selectedImage, setSelectedImage] = useState<string | null>(null)
 
   const identity = useCurrentUser()
   const estConnecte = identity !== null
@@ -203,7 +205,13 @@ function ChatPage() {
     return (
       <div className="flex flex-wrap gap-2 mt-4">
         {urls.map((url: string, i: number) => (
-          <img key={i} src={url} alt={`Pièce jointe ${i + 1}`} className="h-24 w-24 rounded-lg object-cover" />
+          <img
+            key={i}
+            src={url}
+            alt={`Pièce jointe ${i + 1}`}
+            className="h-24 w-24 cursor-pointer rounded-lg object-cover"
+            onClick={() => setSelectedImage(url)}
+          />
         ))}
       </div>
     )
@@ -415,6 +423,11 @@ function ChatPage() {
           </div>
         </div>
       )}
+      <Lightbox
+        open={selectedImage !== null}
+        onClose={() => setSelectedImage(null)}
+        src={selectedImage ?? ''}
+      />
     </div>
   )
 }
