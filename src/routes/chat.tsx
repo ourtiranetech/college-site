@@ -2,7 +2,7 @@ import { createFileRoute } from '@tanstack/react-router'
 import { useQuery, useMutation } from 'convex/react'
 import { useState, useRef, useEffect } from 'react'
 import type { FormEvent } from 'react'
-import { LogIn, MessageSquare, Send, Image as ImageIcon, Loader2 } from 'lucide-react'
+import { LogIn, MessageSquare, Send, Smile, Image as ImageIcon, Loader2 } from 'lucide-react'
 import { LoginButton, useCurrentUser } from '../components/LoginButton'
 
 export const Route = createFileRoute('/chat')({
@@ -17,6 +17,40 @@ const SALLES = [
 ]
 
 /** 100 émoticônes proposées dans le chat. */
+const EMOTICONS = [
+  // Humeurs
+  '😀', '😃', '😄', '😁', '😆',
+  '😅', '😂', '🙂', '😉', '😊',
+  '😍', '😘', '😎', '🤗', '🤔',
+  '🙄', '😐', '😴', '🥳', '🤩',
+  
+  // Émotions
+  '😢', '😭', '😞', '😟', '😰',
+  '😱', '😡', '😤', '😬', '🙃',
+  // Gestes
+  '👍', '👎', '👏', '🙏', '💪',
+  '👋', '🤝', '✌️', '👌', '🤞',
+  // Réactions
+  '🎉', '🔥', '⭐', '💯', '✨',
+  '❤️', '💚', '💙', '💛', '🤍',
+  // École
+  '📚', '📝', '✏️', '📖', '📐',
+  '🔬', '🧪', '🧮', '🖊️', '📌',
+  '📎', '🗂️', '📅', '📊', '🖥️',
+  '🎓', '🏫', '🎒', '🗺️', '🌍',
+  // Sport & arts
+  '⚽', '🏀', '🏐', '🏃', '🏆',
+  '🎨', '🎵', '🎸', '🎭', '📸',
+  // Symboles
+  '✅', '❌', '💡', '⏰', '❓',
+  '❗', '🔔', '🔒', '➕', '➡️',
+  // Divers
+  '🌈', '☀️', '🌟', '🎁', '🎈',
+  '☕', '🍎', '🚌', '🏠', '💬',
+]
+
+
+/** 100 émoticônes proposées dans le chat. */
 
 
 
@@ -29,6 +63,29 @@ const SALLES = [
 /**
  * Extrait l'identifiant de stockage de la réponse de Convex.
  */
+/**
+ * Insère une émoticône à la position du curseur puis replace celui-ci après.
+ * Même comportement que le sélecteur du forum, pour rester cohérent.
+ */
+function insererEmoticone(
+  el: HTMLTextAreaElement | null,
+  emoticone: string,
+  valeur: string,
+  setValeur: (v: string) => void,
+) {
+  if (!el) {
+    setValeur(valeur + emoticone)
+    return
+  }
+  const debut = el.selectionStart
+  const fin = el.selectionEnd
+  setValeur(valeur.slice(0, debut) + emoticone + valeur.slice(fin))
+  requestAnimationFrame(() => {
+    el.selectionStart = el.selectionEnd = debut + emoticone.length
+    el.focus()
+  })
+}
+
 function lireStorageId(texte: string): string {
   let donnees: unknown
   try {
@@ -49,6 +106,7 @@ function lireStorageId(texte: string): string {
 function ChatPage() {
   const [salle, setSalle] = useState('general')
   const [message, setMessage] = useState('')
+  const [selecteurOuvert, setSelecteurOuvert] = useState(false)
 
   const identity = useCurrentUser()
   const estConnecte = identity !== null
@@ -64,6 +122,16 @@ function ChatPage() {
   useEffect(() => {
     chatEndRef.current?.scrollIntoView({ behavior: 'smooth' })
   }, [messages])
+
+  // Fermeture du sélecteur avec la touche Échap
+  useEffect(() => {
+    if (!selecteurOuvert) return
+    const surTouche = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setSelecteurOuvert(false)
+    }
+    window.addEventListener('keydown', surTouche)
+    return () => window.removeEventListener('keydown', surTouche)
+  }, [selecteurOuvert])
 
 
 
@@ -285,8 +353,52 @@ function ChatPage() {
                   <span className="whitespace-nowrap">Image</span>
                 </label>
 
-                <div className="flex-1 min-w-0">
-                  <textarea
+                <button
+                  type="button"
+                  onClick={() => setSelecteurOuvert(o => !o)}
+                  className={`rounded-lg p-2 transition hover:bg-gray-100 ${selecteurOuvert ? 'text-blue-700' : 'text-gray-400'}`}
+                  title="Émoticônes"
+                >
+                  <Smile size={20} />
+                </button>
+
+                {selecteurOuvert && (
+                  <>
+                    <button
+                      type="button"
+                      tabIndex={-1}
+                      aria-hidden="true"
+                      onClick={() => setSelecteurOuvert(false)}
+                      className="fixed inset-0 z-10 cursor-default"
+                    />
+                    <div
+                      className="absolute bottom-full left-0 z-20 mb-2 w-64 rounded-xl border border-gray-200 bg-white p-2 shadow-lg"
+                      role="group"
+                      aria-label="Émoticônes disponibles"
+                    >
+                      <p className="px-1 pb-1.5 text-[11px] font-medium uppercase tracking-wide text-gray-400">
+                        {EMOTICONS.length} émoticônes
+                      </p>
+                      <div className="grid max-h-44 grid-cols-10 gap-0.5 overflow-y-auto">
+                        {EMOTICONS.map((e, i) => (
+                          <button
+                            key={`${e}-${i}`}
+                            type="button"
+                            onClick={() => {
+                              insererEmoticone(champRef.current, e, message, setMessage)
+                            }}
+                            className="rounded p-0.5 text-lg leading-none transition hover:bg-gray-100"
+                            aria-label={`Insérer ${e}`}
+                          >
+                            {e}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  </>
+                )}
+
+                <textarea
                     ref={champRef}
                     placeholder="Écrivez votre message..."
                     value={message}
@@ -300,10 +412,9 @@ function ChatPage() {
                       }
                     }}
                     className="flex-1 resize-y rounded-lg border px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-600"
-                  />
-                </div>
+                    />
 
-                <button
+                    <button
                   type="submit"
                   disabled={!message.trim() && !files.length || uploading}
                   className="inline-flex items-center gap-1.5 bg-blue-700 text-white text-sm font-medium px-5 py-2 rounded-lg hover:bg-blue-800 transition disabled:opacity-50 disabled:cursor-not-allowed"
