@@ -226,14 +226,18 @@ function ImageGallery({ storageIds, onSelect }: { storageIds: string[]; onSelect
   if (urls.length === 0) return null
   return (
     <div className="mt-2 grid grid-cols-2 gap-2">
-      {urls.map((url: string, i: number) => (
-        <img key={i} src={url} alt={`Pièce jointe ${i + 1}`} className="cursor-pointer rounded-lg object-cover max-h-48 w-full" onClick={() => onSelect?.(url)} />
-      ))}
+      {urls.map((url: string, i: number) => {
+        const handleClick = () => { if (onSelect) onSelect(url) }
+        return (
+          <img key={i} src={url} alt={`Pièce jointe ${i + 1}`} className="cursor-pointer rounded-lg object-cover max-h-48 w-full" onClick={handleClick} />
+        )
+      })}
     </div>
   )
 }
 
-function ReplyForm({ postId, onReplied }: { postId: Id<'posts'>; onReplied: () => void }) {
+function ReplyForm({ postId, onReplied, onSelectImage }: { postId: Id<'posts'>; onReplied: () => void; onSelectImage?: (src: string) => void }) {
+  void onSelectImage
   const [contenu, setContenu] = useState('')
   const [emojiOpen, setEmojiOpen] = useState(false)
   const [files, setFiles] = useState<File[]>([])
@@ -330,7 +334,7 @@ function ReplyForm({ postId, onReplied }: { postId: Id<'posts'>; onReplied: () =
   )
 }
 
-function PostCard({ post, onReplied }: { post: Post; onReplied: () => void }) {
+function PostCard({ post, onReplied, onSelectImage }: { post: Post; onReplied: () => void; onSelectImage?: (src: string) => void }) {
   const reponsesQuery = useQuery("forum:getReponses" as any, { postId: post._id })
   const [showReplies, setShowReplies] = useState(false)
   const reponses: Reponse[] = reponsesQuery ?? []
@@ -351,7 +355,7 @@ function PostCard({ post, onReplied }: { post: Post; onReplied: () => void }) {
       <p className="mb-3 whitespace-pre-wrap text-sm text-slate-600 leading-relaxed">{post.contenu}</p>
       {post.images && post.images.length > 0 && (
         <div className="mb-2">
-          <ImageGallery storageIds={post.images} />
+          <ImageGallery storageIds={post.images} onSelect={onSelectImage} />
         </div>
       )}
       <div className="border-t border-slate-100 pt-2">
@@ -371,12 +375,12 @@ function PostCard({ post, onReplied }: { post: Post; onReplied: () => void }) {
                 <p className="whitespace-pre-wrap text-xs text-slate-600 leading-relaxed">{r.contenu}</p>
                 {r.images && r.images.length > 0 && (
                   <div className="mt-2">
-                    <ImageGallery storageIds={r.images} />
+                    <ImageGallery storageIds={r.images} onSelect={onSelectImage} />
                   </div>
                 )}
               </div>
             ))}
-            <ReplyForm postId={post._id} onReplied={onReplied} />
+            <ReplyForm postId={post._id} onReplied={onReplied} onSelectImage={onSelectImage} />
           </div>
         )}
       </div>
@@ -545,16 +549,21 @@ function ForumPage() {
         {epingles.length > 0 && (
           <>
             <div className="mb-3 flex items-center gap-1.5"><Pin size={14} color="#E8A020" /><h2 className="text-sm font-semibold text-slate-800">Sujets épinglés</h2></div>
-            <div key={`e-${refreshKey}`} className="space-y-4 pb-6">{epingles.map(p => <PostCard key={p._id} post={p} onReplied={() => setRefreshKey(k => k + 1)} />)}</div>
+            <div key={`e-${refreshKey}`} className="space-y-4 pb-6">{epingles.map(p =>            <PostCard key={p._id} post={p} onReplied={() => setRefreshKey(k => k + 1)} onSelectImage={setSelectedImage} />)}</div>
           </>
         )}
         <div className="mb-3 flex items-center gap-1.5"><MessageSquare size={14} color="#475569" /><h2 className="text-sm font-semibold text-slate-800">Discussions</h2></div>
         {autres.length === 0 ? (
           <div className="flex flex-col items-center gap-2 py-10 text-center text-slate-400"><MessageSquare size={32} /><p className="text-sm">Aucun sujet pour le moment. Soyez le premier à créer un sujet !</p></div>
         ) : (
-          <div key={`a-${refreshKey}`} className="space-y-4">{autres.map(p => <PostCard key={p._id} post={p} onReplied={() => setRefreshKey(k => k + 1)} />)}</div>
+          <div key={`a-${refreshKey}`} className="space-y-4">{autres.map(p =>            <PostCard key={p._id} post={p} onReplied={() => setRefreshKey(k => k + 1)} onSelectImage={setSelectedImage} />)}</div>
         )}
       </main>
+      <Lightbox
+        open={selectedImage !== null}
+        onClose={() => setSelectedImage(null)}
+        src={selectedImage ?? ''}
+      />
     </div>
   )
 }
