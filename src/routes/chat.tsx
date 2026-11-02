@@ -106,6 +106,26 @@ function insererEmoticone(
   })
 }
 
+/**
+ * Extrait l'identifiant de stockage de la réponse de Convex.
+ */
+function lireStorageId(texte: string): string {
+  let donnees: unknown
+  try {
+    donnees = JSON.parse(texte)
+  } catch {
+    throw new Error("Réponse de téléversement illisible.")
+  }
+  const storageId =
+    typeof donnees === 'object' && donnees !== null
+      ? (donnees as { storageId?: unknown }).storageId
+      : undefined
+  if (typeof storageId !== 'string' || storageId.length === 0) {
+    throw new Error("Le téléversement n'a renvoyé aucun identifiant.")
+  }
+  return storageId
+}
+
 function ChatPage() {
   const [salle, setSalle] = useState('general')
   const [message, setMessage] = useState('')
@@ -175,7 +195,7 @@ function ChatPage() {
     for (const fichier of fichiers) {
       const reponse = await fetch(url, { method: 'POST', body: fichier })
       if (!reponse.ok) throw new Error(`Échec du téléversement de ${fichier.name}.`)
-      ids.push(await reponse.text())
+      ids.push(lireStorageId(await reponse.text()))
     }
     return ids
   }
