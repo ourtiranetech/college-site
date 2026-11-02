@@ -2,7 +2,7 @@ import { createFileRoute } from '@tanstack/react-router'
 import { useQuery, useMutation } from 'convex/react'
 import { useState, useRef, useEffect } from 'react'
 import type { FormEvent } from 'react'
-import { LogIn, MessageSquare, Send, Smile, Image as ImageIcon, Loader2 } from 'lucide-react'
+import { LogIn, MessageSquare, Send, Image as ImageIcon, Loader2 } from 'lucide-react'
 import { LoginButton, useCurrentUser } from '../components/LoginButton'
 
 export const Route = createFileRoute('/chat')({
@@ -17,69 +17,7 @@ const SALLES = [
 ]
 
 /** 100 émoticônes proposées dans le chat. */
-const EMOTICONS = [
-  // Humeurs
-  '😀', '😃', '😄', '😁', '😆',
-  '😅', '😂', '🙂', '😉', '😊',
-  '😍', '😘', '😎', '🤗', '🤔',
-  '🙄', '😐', '😴', '🥳', '🤩',
-  
-  // Émotions
-  '😢', '😭', '😞', '😟', '😰',
-  '😱', '😡', '😤', '😬', '🙃',
-  // Gestes
-  '👍', '👎', '👏', '🙏', '💪',
-  '👋', '🤝', '✌️', '👌', '🤞',
-  // Réactions
-  '🎉', '🔥', '⭐', '💯', '✨',
-  '❤️', '💚', '💙', '💛', '🤍',
-  // École
-  '📚', '📝', '✏️', '📖', '📐',
-  '🔬', '🧪', '🧮', '🖊️', '📌',
-  '📎', '🗂️', '📅', '📊', '🖥️',
-  '🎓', '🏫', '🎒', '🗺️', '🌍',
-  // Sport & arts
-  '⚽', '🏀', '🏐', '🏃', '🏆',
-  '🎨', '🎵', '🎸', '🎭', '📸',
-  // Symboles
-  '✅', '❌', '💡', '⏰', '❓',
-  '❗', '🔔', '🔒', '➕', '➡️',
-  // Divers
-  '🌈', '☀️', '🌟', '🎁', '🎈',
-  '☕', '🍎', '🚌', '🏠', '💬',
 
-    // Émotions & Visages
-    "😀", "😃", "😄", "😁", "😆", "😅", "🤣", "😂", "🙂", "😉", "😊", "😇", "🥰", "😍", "🤩", "😘", 
-    "😗", "☺️", "😚", "😙", "🥲", "😏", "😋", "😛", "😜", "🤪", "😝", "🤑", "🤗", "🤭", "🫢", "🫣", 
-    "🤫", "🤔", "🫡", "🤤", "🤠", "🥳", "🥸", "😎", "🤓", "🧐", "🙃", "🫠", "🤐", "🤨", "😐", "😑", 
-    "😶", "🫥", "😶‍🌫️", "😒", "🙄", "😬", "😮‍💨", "🤥", "🫨", "🙂‍↔️", "🙂‍↕️", "😌", "😔", "😪", "😴", 
-    "🫩", "😷", "🤒", "🤕", "🤢", "🤮", "🤧", "🥵", "🥶", "🥴", "😵", "😵‍💫", "🤯", "🥱", "😕", "🫤", 
-    "😟", "🙁", "☹️", "😮", "😯", "😲", "😳", "🫪", "🥺", "🥹", "😦", "😧", "😨", "😰", "😥", "😢", 
-    "😭", "😱", "😖", "😣", "😞", "😓", "😩", "😫", "😤", "😡", "😠", "🤬", "👿", "💀", "☠️", "💩", 
-    "🤡", "👹", "👺", "👻", "👽", "👾", "🤖", "😺", "😸", "😹", "😻", "😼", "😽", "🙀", "😿", "😾", 
-    "🙈", "🙉", "🙊",
-  
-    // Vêtements & Accessoires
-    "🎀", "🎗️", "👓", "🕶️", "🥽", "🥼", "🦺", "👔", "👕", "👖", "🧣", "🧤", "🧥", "🧦", "👗", "👘", 
-    "🥻", "🩱", "🩲", "🩳", "👙", "👚", "🪭", "👛", "👜", "👝", "🛍️", "🎒", "🩴", "👞", "👟", "🥾", 
-    "🥿", "👠", "👡", "🩰", "👢", "🪮", "👑", "👒", "🎩", "🎓", "🧢", "🪖", "⛑️", "📿", "💄", "💍", 
-    "💎", "🦯", "🧿",
-  
-    // Bureautique, Livres & Heures
-    "📕", "📖", "📗", "📘", "📙", "📚", "📓", "📒", "📃", "📜", "📄", "📰", "🗞️", "📑", "🔖", "🏷️", 
-    "✉️", "📧", "📨", "📩", "📤", "📥", "📦", "📫", "📪", "📬", "📭", "📮", "🗳️", "✏️", "✒️", "🖋️", 
-    "🖊️", "🖌️", "🖍️", "📝", "💼", "📁", "📂", "🗂️", "📅", "📆", "🗒️", "🗓️", "📇", "📈", "📉", "📊", 
-    "⌛", "⏳", "⌚", "⏰", "⏱️", "⏲️", "🕰️", "🕛", "🕧", "🕐", "🕜", "🕑", "🕝", "🕒", "🕞", "🕓", 
-    "🕟", "🕔", "🕠", "🕕", "🕡", "🕖", "🕢", "🕗", "🕣", "🕘", "🕤", "🕙", "🕥", "🕚", "🕦", "🧮", 
-    "🪙", "💰", "🧳", "🌡️", "🧸", "🧶", "🪢", "🔍", "🔎", "🕯️", "💡", "🔦",
-  
-    // Outils, Clés, Armes & Objets divers
-    "🔒", "🔓", "🔏", "🔐", "🔑", "🗝️", "🔨", "🪓", "⛏️", "⚒️", "🛠️", "🗡️", "⚔️", "💣", "🪃", "🏹", 
-    "🛡️", "🪚", "🔧", "🪛", "🔩", "⚙️", "🗜️", "⚖️", "🔗", "⛓️‍💥", "⛓️", "🪝", "🧰", "🧲", "🪜", "🪏", 
-    "⚗️", "🧪", "🧫", "🔬", "🔭", "📡", "💉", "🩹", "🩼", "🩺", "🩻", "🚪", "🪞", "🪟", "🛏️", "🛋️", 
-    "🪑", "🚽", "🪠", "🚿", "🛁", "🪤", "🪒", "🧴", "🧷", "🧹", "🧺"
-  ];
-  
 
 
 
@@ -87,24 +25,6 @@ const EMOTICONS = [
  * Insère une émoticône à la position du curseur puis replace celui-ci après.
  * Même comportement que le sélecteur du forum, pour rester cohérent.
  */
-function insererEmoticone(
-  el: HTMLTextAreaElement | null,
-  emoticone: string,
-  valeur: string,
-  setValeur: (v: string) => void,
-) {
-  if (!el) {
-    setValeur(valeur + emoticone)
-    return
-  }
-  const debut = el.selectionStart
-  const fin = el.selectionEnd
-  setValeur(valeur.slice(0, debut) + emoticone + valeur.slice(fin))
-  requestAnimationFrame(() => {
-    el.selectionStart = el.selectionEnd = debut + emoticone.length
-    el.focus()
-  })
-}
 
 /**
  * Extrait l'identifiant de stockage de la réponse de Convex.
@@ -129,7 +49,6 @@ function lireStorageId(texte: string): string {
 function ChatPage() {
   const [salle, setSalle] = useState('general')
   const [message, setMessage] = useState('')
-  const [selecteurOuvert, setSelecteurOuvert] = useState(false)
 
   const identity = useCurrentUser()
   const estConnecte = identity !== null
@@ -146,15 +65,7 @@ function ChatPage() {
     chatEndRef.current?.scrollIntoView({ behavior: 'smooth' })
   }, [messages])
 
-  // Fermeture du sélecteur avec la touche Échap
-  useEffect(() => {
-    if (!selecteurOuvert) return
-    const surTouche = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') setSelecteurOuvert(false)
-    }
-    window.addEventListener('keydown', surTouche)
-    return () => window.removeEventListener('keydown', surTouche)
-  }, [selecteurOuvert])
+
 
   const handleEnvoi = async (e: FormEvent) => {
     e.preventDefault()
@@ -172,7 +83,6 @@ function ChatPage() {
       await envoyer({ contenu, salle, images })
       setMessage('')
       setFiles([])
-      setSelecteurOuvert(false)
     } catch (err) {
       alert(err instanceof Error ? err.message : "Le message n'a pas pu être envoyé.")
     } finally {
@@ -220,22 +130,11 @@ function ChatPage() {
 
   const ImageGallery = ({ storageIds }: { storageIds: string[] }) => {
     if (storageIds.length === 0) return null
-    const [urls, setUrls] = useState<string[]>([])
-    useEffect(() => {
-      const charger = async () => {
-        const resultats = await Promise.all(
-          storageIds.map(async (id) => {
-            const reponse = await fetch(`/api/messages/getImageUrl?id=${id}`)
-            return reponse.text()
-          })
-        )
-        setUrls(resultats.filter((u): u is string => u !== ''))
-      }
-      charger()
-    }, [storageIds])
+    const urls = useQuery("messages:getImageUrls" as any, { storageIds }) ?? []
+    if (urls.length === 0) return null
     return (
       <div className="flex flex-wrap gap-2 mt-4">
-        {urls.map((url, i) => (
+        {urls.map((url: string, i: number) => (
           <img key={i} src={url} alt={`Pièce jointe ${i + 1}`} className="h-24 w-24 rounded-lg object-cover" />
         ))}
       </div>
@@ -363,58 +262,6 @@ function ChatPage() {
             {/* Saisie de message */}
             <form onSubmit={handleEnvoi} className="p-4 border-t">
               <div className="relative flex items-end gap-2">
-                {/* Sélecteur d'émoticônes */}
-                <div className="relative">
-                  <button
-                    type="button"
-                    onClick={() => setSelecteurOuvert(o => !o)}
-                    className={`rounded-lg p-2 transition hover:bg-gray-100 ${
-                      selecteurOuvert ? 'text-blue-700' : 'text-gray-400'
-                    }`}
-                    aria-label="Insérer une émoticône"
-                    aria-expanded={selecteurOuvert}
-                    title="Émoticônes"
-                  >
-                    <Smile size={20} />
-                  </button>
-
-                  {selecteurOuvert && (
-                    <>
-                      {/* Ferme le sélecteur au clic à l'extérieur */}
-                      <button
-                        type="button"
-                        tabIndex={-1}
-                        aria-hidden="true"
-                        onClick={() => setSelecteurOuvert(false)}
-                        className="fixed inset-0 z-10 cursor-default"
-                      />
-                      <div
-                        className="absolute bottom-full left-0 z-20 mb-2 w-64 rounded-xl border border-gray-200 bg-white p-2 shadow-lg"
-                        role="group"
-                        aria-label="Émoticônes disponibles"
-                      >
-                        <p className="px-1 pb-1.5 text-[11px] font-medium uppercase tracking-wide text-gray-400">
-                          {EMOTICONS.length} émoticônes
-                        </p>
-                        <div className="grid max-h-44 grid-cols-10 gap-0.5 overflow-y-auto">                          {EMOTICONS.map((e, i) => (
-                            <button
-                              key={`${e}-${i}`}
-                              type="button"
-                              onClick={() => {
-                                insererEmoticone(champRef.current, e, message, setMessage)
-                              }}
-                              className="rounded p-0.5 text-lg leading-none transition hover:bg-gray-100"
-                              aria-label={`Insérer ${e}`}
-                            >
-                              {e}
-                            </button>
-                          ))}
-                        </div>
-                      </div>
-                    </>
-                  )}
-                </div>
-
                 <textarea
                   ref={champRef}
                   placeholder="Écrivez votre message..."

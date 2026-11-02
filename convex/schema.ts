@@ -28,6 +28,7 @@ export default defineSchema({
     contenu:   v.string(),
     salle:     v.string(),
     createdAt: v.number(),
+    images:    v.optional(v.array(v.string())),
   }).index("by_salle", ["salle", "createdAt"]),
 
   // ── CONTACT ─────────────────────────────────────

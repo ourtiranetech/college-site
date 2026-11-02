@@ -122,3 +122,18 @@ export const getUploadUrl = mutation({
     return await ctx.storage.generateUploadUrl();
   },
 });
+
+/**
+ * Résout des identifiants de stockage en URLs affichables.
+ */
+export const getImageUrls = query({
+  args: { storageIds: v.array(v.string()) },
+  handler: async (ctx, args) => {
+    const urls = await Promise.all(
+      args.storageIds.map((id) =>
+        ctx.storage.getUrl(id as GenericId<"_storage">),
+      ),
+    );
+    return urls.filter((url): url is string => url !== null);
+  },
+});
