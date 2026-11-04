@@ -30,7 +30,6 @@ function ContactPage() {
   const [etat, setEtat] = useState<Etat>({ type: 'repos' })
 
   const envoyer = useMutation("contact:envoyerMessage" as any)
-const notifierEmail = useMutation("contact:notifierParEmail" as any)
 
   const maj =
     (cle: keyof typeof CHAMP_VIDE) =>
@@ -226,11 +225,12 @@ const notifierEmail = useMutation("contact:notifierParEmail" as any)
                   disabled={enCours}
                   onClick={async () => {
                     try {
-                      await notifierEmail({
+                      await envoyer({
                         nom: champs.nom || 'Test',
                         prenom: champs.prenom || 'Test',
                         email: champs.email || 'test@example.com',
                         commentaire: 'Message de test pour valider l\'envoi.',
+                        siteWeb: '',
                       })
                       alert('Email envoyé vers cemazouaouamrane@gmail.com')
                     } catch (err) {
