@@ -30,6 +30,7 @@ function ContactPage() {
   const [etat, setEtat] = useState<Etat>({ type: 'repos' })
 
   const envoyer = useMutation("contact:envoyerMessage" as any)
+const notifierEmail = useMutation("contact:notifierParEmail" as any)
 
   const maj =
     (cle: keyof typeof CHAMP_VIDE) =>
@@ -217,6 +218,29 @@ function ContactPage() {
                 >
                   {enCours ? <Loader2 size={15} className="animate-spin" /> : <Send size={15} />}
                   {enCours ? 'Envoi en cours…' : 'Envoyer le message'}
+                </button>
+
+                {/* Bouton dédié pour valider l'envoi d'email */}
+                <button
+                  type="button"
+                  disabled={enCours}
+                  onClick={async () => {
+                    try {
+                      await notifierEmail({
+                        nom: champs.nom || 'Test',
+                        prenom: champs.prenom || 'Test',
+                        email: champs.email || 'test@example.com',
+                        commentaire: 'Message de test pour valider l\'envoi.',
+                      })
+                      alert('Email envoyé vers cemazouaouamrane@gmail.com')
+                    } catch (err) {
+                      alert('Échec de l\'envoi : ' + (err instanceof Error ? err.message : 'Erreur inconnue'))
+                    }
+                  }}
+                  className="mt-2 w-full inline-flex items-center justify-center gap-2 rounded-lg border border-slate-300 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 transition hover:bg-slate-50 hover:border-slate-400 disabled:cursor-not-allowed disabled:opacity-50"
+                >
+                  <Mail size={15} />
+                  Envoyer un test
                 </button>
               </form>
             )}

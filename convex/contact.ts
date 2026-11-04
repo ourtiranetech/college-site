@@ -1,5 +1,4 @@
 import { internalAction, mutation } from "./_generated/server";
-import { internal } from "./_generated/api";
 import { v } from "convex/values";
 
 // ── LIMITES ────────────────────────────────────────────────────────────────
@@ -9,8 +8,6 @@ const MAX_EMAIL = 200;
 const MAX_COMMENTAIRE = 5000;
 const MAX_MESSAGES_PAR_HEURE = 20;
 const FENETRE_MS = 60 * 60 * 1000; // 1 heure
-
-const ADRESSE_DESTINATAIRE = "ourtiranetech@gmail.com";
 
 // Volontairement permissif : on ne rejette que ce qui n'est manifestement pas
 // une adresse, pour ne pas bloquer un parent au clavier.
@@ -62,10 +59,10 @@ export const envoyerMessage = mutation({
     const depuis = Date.now() - FENETRE_MS;
     const recents = await ctx.db
       .query("contactMessages")
-      .withIndex("by_email", (q) => q.eq("email", email))
+      .withIndex("by_email", q => q.eq("email", email))
       .collect();
 
-    const dansLaFenetre = recents.filter((m) => m.createdAt >= depuis).length;
+    const dansLaFenetre = recents.filter(m => m.createdAt >= depuis).length;
     if (dansLaFenetre >= MAX_MESSAGES_PAR_HEURE) {
       throw new Error(
         "Trop de messages envoyés depuis cette adresse. Merci de réessayer dans une heure.",
@@ -81,7 +78,7 @@ export const envoyerMessage = mutation({
     });
 
     // Planifié : l'échec d'envoi ne remet pas en cause l'enregistrement.
-    await ctx.scheduler.runAfter(0, internal.contact.notifierParEmail, {
+    await ctx.scheduler.runAfter(0, "contact:notifierParEmail" as any, {
       nom,
       prenom,
       email,
@@ -93,10 +90,9 @@ export const envoyerMessage = mutation({
 });
 
 /**
- * Notifie l'établissement par email via Resend.
+ * Notifie l'établissement par email via Gmail API (OAuth2).
  *
- * Si `RESEND_API_KEY` n'est pas configurée, on se contente d'un avertissement :
- * le message reste consultable dans la table `contactMessages`.
+ * Identifiants : GMAIL_CLIENT_ID, GMAIL_CLIENT_SECRET, GMAIL_REFRESH_TOKEN.
  */
 export const notifierParEmail = internalAction({
   args: {
@@ -106,52 +102,78 @@ export const notifierParEmail = internalAction({
     commentaire: v.string(),
   },
   handler: async (_ctx, args) => {
-    // @ts-ignore : `process.env` est disponible dans le runtime Convex.
-    const cle = process.env.RESEND_API_KEY ?? "";
-    // @ts-ignore
-    const expediteur = process.env.RESEND_FROM ?? "onboarding@resend.dev";
+    const clientId = process.env.GMAIL_CLIENT_ID ?? "";
+    const clientSecret = process.env.GMAIL_CLIENT_SECRET ?? "";
+    const refreshToken = process.env.GMAIL_REFRESH_TOKEN ?? "";
 
-    if (!cle) {
-      console.warn(
-        "RESEND_API_KEY absente : message de contact enregistré mais non envoyé par email.",
-      );
-      return { envoye: false, raison: "RESEND_API_KEY manquante" };
+    if (!clientId || !clientSecret || !refreshToken) {
+      console.warn("Identifiants Gmail manquants : email non envoyé.");
+      return { envoye: false };
     }
 
     try {
-      const reponse = await fetch("https://api.resend.com/emails", {
+      // 1. Refresh token → access token frais
+      const tokenReponse = await fetch("https://oauth2.googleapis.com/token", {
         method: "POST",
-        headers: {
-          Authorization: `Bearer ${cle}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          from: expediteur,
-          to: [ADRESSE_DESTINATAIRE],
-          reply_to: args.email,
-          subject: `Contact site — ${args.prenom} ${args.nom}`,
-          text: [
-            `Nouveau message depuis le site du collège.`,
-            ``,
-            `Nom      : ${args.prenom} ${args.nom}`,
-            `Email    : ${args.email}`,
-            ``,
-            `Message :`,
-            args.commentaire,
-          ].join("\n"),
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: new URLSearchParams({
+          grant_type: "refresh_token",
+          client_id: clientId,
+          client_secret: clientSecret,
+          refresh_token: refreshToken,
         }),
       });
+      if (!tokenReponse.ok) {
+        const detail = await tokenReponse.text();
+        console.error("refresh_token échoué :", detail);
+        return { envoye: false, raison: `HTTP ${tokenReponse.status}` };
+      }
+      const { access_token } = await tokenReponse.json() as { access_token: string };
+      if (!access_token) return { envoye: false, raison: "pas de token" };
 
+      // 2. Construire l'email MIME
+      const texte = [
+        `Nouveau message depuis le site du collège.`,
+        ``,
+        `Nom      : ${args.prenom} ${args.nom}`,
+        `Email    : ${args.email}`,
+        ``,
+        `Message :`,
+        args.commentaire,
+      ].join("\n");
+      const date = new Date().toUTCString();
+      const mime = [
+        "From: cemazouaouamrane <cemazouaouamrane@gmail.com>",
+        "To: cemazouaouamrane <cemazouaouamrane@gmail.com>",
+        `Subject: Contact site — ${args.prenom} ${args.nom}`,
+        `Date: ${date}`,
+        "MIME-Version: 1.0",
+        "Content-Type: text/plain; charset=UTF-8",
+        "",
+        texte,
+      ].join("\r\n");
+      const raw = Buffer.from(mime).toString("base64url");
+
+      // 3. Envoyer via Gmail API
+      const reponse = await fetch(
+        "https://gmail.googleapis.com/gmail/v1/users/me/messages/send",
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${access_token}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ raw }),
+        },
+      );
       if (!reponse.ok) {
         const detail = await reponse.text();
-        console.error(`Resend a répondu ${reponse.status} : ${detail}`);
+        console.error(`Gmail HTTP ${reponse.status} : ${detail}`);
         return { envoye: false, raison: `HTTP ${reponse.status}` };
       }
-
       return { envoye: true };
     } catch (erreur) {
-      // Une panne d'email ne doit jamais faire échouer la soumission.
-      console.error("Échec de l'envoi Resend :", erreur);
+      console.error("Échec Gmail :", erreur);
       return { envoye: false, raison: "exception" };
     }
   },
