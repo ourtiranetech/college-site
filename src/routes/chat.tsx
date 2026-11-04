@@ -106,7 +106,7 @@ function lireStorageId(texte: string): string {
 }
 
 function ChatPage() {
-  const { t } = useLanguage()
+  const { t, isRTL } = useLanguage()
   const [salle, setSalle] = useState('general')
   const [message, setMessage] = useState('')
   const [selecteurOuvert, setSelecteurOuvert] = useState(false)
@@ -283,7 +283,7 @@ function ChatPage() {
             </div>
 
             {/* Flux de messages */}
-            <div className="flex-1 p-6 overflow-y-auto space-y-4">
+            <div dir={isRTL ? 'rtl' : 'ltr'} className="flex-1 p-6 overflow-y-auto space-y-4">
               {messages === undefined ? (
                 <div className="text-center text-gray-400 py-10">t('chat.chargement')</div>
               ) : messages.length === 0 ? (
@@ -352,6 +352,7 @@ function ChatPage() {
                       e.currentTarget.form?.requestSubmit()
                     }
                   }}
+                  dir={isRTL ? 'rtl' : 'ltr'}
                   className="flex-1 resize-y rounded-lg border px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-600"
                 />
 
