@@ -10,6 +10,7 @@ import {
   HeartPulse,
   DoorOpen,
 } from 'lucide-react'
+import { useLanguage } from '../i18n/LanguageProvider'
 
 export const Route = createFileRoute('/presentation/infrastructures')({
   component: InfrastructuresPage,
@@ -57,15 +58,17 @@ const ESPACES = [
 ]
 
 function InfrastructuresPage() {
+  const { t } = useLanguage()
+
   return (
     <main className="page-wrap px-4 py-12">
       <section className="island-shell rounded-2xl p-6 sm:p-8">
-        <p className="island-kicker mb-2">Infrastructures</p>
+        <p className="island-kicker mb-2">{t('infra.kicker')}</p>
         <h1 className="display-title mb-3 text-4xl font-bold sm:text-5xl">
-          CEM Azouaou Amrane — Tazmalt
+          {t('infra.title')}
         </h1>
         <p className="m-0 max-w-3xl text-base leading-8 text-[var(--sea-ink-soft)]">
-          Présentation de l'établissement et de ses espaces.
+          {t('infra.subtitle')}
         </p>
 
         <hr className="island-rule my-8" />
@@ -73,7 +76,7 @@ function InfrastructuresPage() {
         {/* Présentation en 20 lignes */}
         <section>
           <h2 className="display-title mb-4 text-2xl font-bold sm:text-3xl">
-            Présentation du collège
+            {t('infra.presentationTitle')}
           </h2>
           <div className="max-w-3xl space-y-3">
             {PRESENTATION.map((ligne, i) => (
@@ -86,9 +89,9 @@ function InfrastructuresPage() {
 
         {/* Espaces */}
         <section className="mt-12">
-          <p className="island-kicker mb-2">Les espaces</p>
+          <p className="island-kicker mb-2">{t('infra.kickerEspaces')}</p>
           <h2 className="display-title mb-6 text-2xl font-bold sm:text-3xl">
-            Nos équipements
+            {t('infra.equipementsTitle')}
           </h2>
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {ESPACES.map(({ icone: Icone, titre, texte }) => (
@@ -105,12 +108,12 @@ function InfrastructuresPage() {
 
         {/* Vidéo */}
         <section className="mt-12">
-          <p className="island-kicker mb-2">En images</p>
+          <p className="island-kicker mb-2">{t('infra.kickerImages')}</p>
           <h2 className="display-title mb-2 text-2xl font-bold sm:text-3xl">
-            Visite de l'établissement
+            {t('infra.visiteTitle')}
           </h2>
           <p className="mb-5 max-w-3xl text-sm leading-7 text-[var(--sea-ink-soft)]">
-            Film de présentation du CEM Azouaou Amrane — Avril 2017.
+            {t('infra.visiteDesc')}
           </p>          <div className="mx-auto max-w-4xl rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
             <video
               src="/videos/cem-azouaou-tazmal.mp4"
@@ -119,7 +122,7 @@ function InfrastructuresPage() {
               playsInline
               className="w-full rounded-lg bg-black aspect-video"
             >
-              Votre navigateur ne prend pas en charge la lecture vidéo.
+              {t('infra.videoNoSupport')}
             </video>
           </div>
         </section>

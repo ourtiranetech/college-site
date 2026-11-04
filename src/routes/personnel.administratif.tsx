@@ -1,4 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router'
+import { useLanguage } from '../i18n/LanguageProvider'
 
 export const Route = createFileRoute('/personnel/administratif')({
   component: AdministratifPage,
@@ -13,29 +14,31 @@ const ADMINISTRATIF = [
   { nom: 'Djebali', prenom: 'Fethi', fonction: 'Agent de scolarité' },
   { nom: 'Lakhdar', prenom: 'Rachid', fonction: 'Surveillant général' },
   { nom: 'Meslem', prenom: 'Ahmed', fonction: 'Responsable du budget' },
-  { nom: 'Boudjellal', prenom: 'Mourad', fonction: 'Agent d\'accueil' },
+  { nom: 'Boudjellal', prenom: 'Mourad', fonction: "Agent d'accueil" },
   { nom: 'Bezzaouache', prenom: 'Hamza', fonction: 'Documentaliste' },
 ]
 
 type Personnel = { nom: string; prenom: string; fonction: string }
 
 function AdministratifPage() {
+  const { t } = useLanguage()
+
   return (
     <main className="page-wrap px-4 py-12">
       <section className="island-shell rounded-2xl p-6 sm:p-8">
-        <p className="island-kicker mb-2">Personnel administratif</p>
+        <p className="island-kicker mb-2">{t('personnel.kicker')}</p>
         <h1 className="display-title mb-3 text-4xl font-bold text-(--sea-ink) sm:text-5xl">
-          Personnel administratif
+          {t('personnel.administratif')}
         </h1>
         <p className="m-0 max-w-3xl text-base leading-8 text-(--sea-ink-soft)">
-          Voici la liste des {ADMINISTRATIF.length} personnels administratifs de l'établissement.
+          {t('personnel.listeAdministratif', { count: ADMINISTRATIF.length })}
         </p>
 
         {/* Tableau moderne */}
         <div className="mt-8 overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
           <div className="border-b border-slate-200 bg-slate-50 px-6 py-4">
             <h2 className="text-lg font-bold text-(--sea-ink)">
-              {ADMINISTRATIF.length} membres de l'équipe administrative
+              {t('personnel.membresAdministratifs', { count: ADMINISTRATIF.length })}
             </h2>
           </div>
           <div className="overflow-x-auto">
@@ -43,13 +46,13 @@ function AdministratifPage() {
               <thead>
                 <tr className="bg-(--sea-ink) text-white">
                   <th className="px-6 py-4 text-left font-semibold text-sm">
-                    Prénom
+                    {t('personnel.prenom')}
                   </th>
                   <th className="px-6 py-4 text-left font-semibold text-sm">
-                    Nom
+                    {t('personnel.nom')}
                   </th>
                   <th className="px-6 py-4 text-left font-semibold text-sm">
-                    Fonction
+                    {t('personnel.fonction')}
                   </th>
                 </tr>
               </thead>

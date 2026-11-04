@@ -5,6 +5,7 @@ import type { FormEvent } from 'react'
 import { LogIn, MessageSquare, Send, Smile, Image as ImageIcon, Loader2 } from 'lucide-react'
 import { LoginButton, useCurrentUser } from '../components/LoginButton'
 import { Lightbox } from '../components/Lightbox'
+import { useLanguage } from '../i18n/LanguageProvider'
 
 export const Route = createFileRoute('/chat')({
   component: ChatPage,
@@ -105,6 +106,7 @@ function lireStorageId(texte: string): string {
 }
 
 function ChatPage() {
+  const { t } = useLanguage()
   const [salle, setSalle] = useState('general')
   const [message, setMessage] = useState('')
   const [selecteurOuvert, setSelecteurOuvert] = useState(false)
@@ -187,7 +189,7 @@ function ChatPage() {
       setFiles(prev => {
         const total = [...prev, ...ajoutes]
         if (total.length > 5) {
-          alert("Maximum 5 images par message.")
+          alert("t('chat.maxImages')")
           return total.slice(0, 5)
         }
         return total
@@ -221,23 +223,21 @@ function ChatPage() {
     <div className="max-w-6xl mx-auto p-6 space-y-6">
       {/* En-tête */}
       <header className="mb-6">
-        <h1 className="text-3xl font-bold text-gray-900">Chat en Direct</h1>
+        <h1 className="text-3xl font-bold text-gray-900">t('chat.title')</h1>
         <p className="text-gray-600">
-          Posez vos questions en temps réel à la communauté du collège.
+          t('chat.subtitle')
         </p>
       </header>
 
-      {/* Connexion requise : même authentification que le forum */}
+      {/* t('chat.connexionRequise') : même authentification que le forum */}
       {!estConnecte ? (
         <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm max-w-md mx-auto text-center">
           <div className="mx-auto mb-3 flex h-11 w-11 items-center justify-center rounded-full bg-primary">
             <LogIn size={18} className="text-white" aria-hidden="true" />
           </div>
-          <h2 className="text-xl font-semibold mb-2">Connexion requise</h2>
+          <h2 className="text-xl font-semibold mb-2">t('chat.connexionRequise')</h2>
           <p className="text-sm text-gray-500 mb-5">
-            Connectez-vous avec votre adresse email pour rejoindre les salons de
-            discussion. Votre nom s'affichera automatiquement auprès des autres
-            participants.
+            t('chat.connexionTexte')
           </p>
           <div className="flex justify-center">
             <LoginButton />
@@ -248,7 +248,7 @@ function ChatPage() {
           {/* Sidebar des salles */}
           <div className="bg-white p-4 rounded-xl border border-gray-200 shadow-sm space-y-2">
             <h2 className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-3">
-              Salons de discussion
+              t('chat.salons')
             </h2>
             {SALLES.map((s) => (
               <button
@@ -266,7 +266,7 @@ function ChatPage() {
             ))}
 
             <div className="pt-4 border-t mt-4 text-xs text-gray-500">
-              Connecté en tant que : <strong className="text-gray-800">{nomAffiche}</strong>
+              t('chat.connecteEnTantQue') <strong className="text-gray-800">{nomAffiche}</strong>
             </div>
           </div>
 
@@ -278,19 +278,19 @@ function ChatPage() {
                 {SALLES.find((s) => s.id === salle)?.label}
               </span>
               <span className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full font-medium">
-                En direct (Convex)
+                t('chat.enDirect')
               </span>
             </div>
 
             {/* Flux de messages */}
             <div className="flex-1 p-6 overflow-y-auto space-y-4">
               {messages === undefined ? (
-                <div className="text-center text-gray-400 py-10">Chargement des messages...</div>
+                <div className="text-center text-gray-400 py-10">t('chat.chargement')</div>
               ) : messages.length === 0 ? (
                 <div className="flex flex-col items-center gap-2 text-center text-gray-400 py-10">
                   <MessageSquare size={28} aria-hidden="true" />
                   <p className="text-sm">
-                    Aucun message dans ce salon. Soyez le premier à écrire !
+                    t('chat.aucunMessage')
                   </p>
                 </div>
               ) : (
@@ -340,7 +340,7 @@ function ChatPage() {
               <div className="relative flex items-end gap-2">
                 <textarea
                   ref={champRef}
-                  placeholder="Écrivez votre message..."
+                  placeholder="t('chat.placeholder')"
                   value={message}
                   maxLength={2000}
                   rows={1}
@@ -365,7 +365,7 @@ function ChatPage() {
                   type="button"
                   onClick={() => setSelecteurOuvert(o => !o)}
                   className={`rounded-lg p-2 transition hover:bg-gray-100 ${selecteurOuvert ? 'text-blue-700' : 'text-gray-400'}`}
-                  title="Émoticônes"
+                  title="t('chat.emoticones')"
                 >
                   <Smile size={20} />
                 </button>
@@ -382,7 +382,7 @@ function ChatPage() {
                     <div
                       className="absolute bottom-full left-0 z-20 mb-2 w-64 rounded-xl border border-gray-200 bg-white p-2 shadow-lg"
                       role="group"
-                      aria-label="Émoticônes disponibles"
+                      aria-label="t('chat.emoticones') disponibles"
                     >
                       <p className="px-1 pb-1.5 text-[11px] font-medium uppercase tracking-wide text-gray-400">
                         {EMOTICONS.length} émoticônes
@@ -412,7 +412,7 @@ function ChatPage() {
                   className="inline-flex items-center gap-1.5 bg-blue-700 text-white text-sm font-medium px-5 py-2 rounded-lg hover:bg-blue-800 transition disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {uploading ? <Loader2 size={14} className="animate-spin" /> : <Send size={14} aria-hidden="true" />}
-                  {uploading ? 'Envoi...' : 'Envoyer'}
+                  {uploading ? t('chat.envoiEnCours') : t('chat.envoyer')}
                 </button>
               </div>
 

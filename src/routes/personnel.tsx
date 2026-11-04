@@ -1,6 +1,7 @@
 import { createFileRoute,Link, Outlet } from '@tanstack/react-router'
 import { SchoolCard } from '../components/SchoolCard'
 import { SprayCan, GraduationCap } from 'lucide-react'
+import { useLanguage } from '../i18n/LanguageProvider'
 
 export const Route = createFileRoute('/personnel')({
   component: PersonnelPage,
@@ -9,31 +10,33 @@ export const Route = createFileRoute('/personnel')({
 
 const SECTIONS = [
   {
-    label: "personnel d'entretien",
+    labelKey: "personnel.entretien",
     href: '/personnel/entretien',
-    resume: "personnel d'entretien  du collège.",
-    chip: 'Entretien',
+    resumeKey: "personnel.entretienResume",
+    chipKey: 'personnel.chipEntretien',
     chipColor: 'warning' as const,
     Icon: SprayCan,
   },
   {
-    label: 'personnel pedagogique',
+    labelKey: 'personnel.pedagogique',
     href: '/personnel/pedagogique',
-    resume: 'personnel pedagogique  du collège.',
-    chip: 'Pédagogique',
+    resumeKey: 'personnel.pedagogiqueResume',
+    chipKey: 'personnel.chipPedagogique',
     chipColor: 'info' as const,
     Icon: GraduationCap,
   },  {
-    label: "personnel administratif",
+    labelKey: "personnel.administratif",
     href: '/personnel/administratif',
-    resume: "personnel administratif  du collège.",
-    chip: 'Administration',
+    resumeKey: "personnel.administratifResume",
+    chipKey: 'personnel.chipAdministration',
     chipColor: 'warning' as const,
     Icon: SprayCan,
   },
 ]
 
 function PersonnelPage() {
+  const { t } = useLanguage()
+
   return (
     <main className="page-wrap px-4 py-12">
       {/* <section className="island-shell rounded-2xl p-6 sm:p-8">
@@ -49,9 +52,9 @@ function PersonnelPage() {
         {SECTIONS.map((s) => (
           <Link key={s.href} to={s.href}>
             <SchoolCard
-              title={s.label}
-              description={s.resume}
-              chip={s.chip}
+              title={t(s.labelKey)}
+              description={t(s.resumeKey)}
+              chip={t(s.chipKey)}
               chipColor={s.chipColor}
               icon={<s.Icon size={18} className="text-[#0F2147]" />}
             />

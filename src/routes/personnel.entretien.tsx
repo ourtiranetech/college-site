@@ -1,4 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router'
+import { useLanguage } from '../i18n/LanguageProvider'
 
 export const Route = createFileRoute('/personnel/entretien')({
   component: EntretienPage,
@@ -24,22 +25,24 @@ const ENTRETIEN = [
 ]
 
 function EntretienPage() {
+  const { t } = useLanguage()
+
   return (
     <main className="page-wrap px-4 py-12">
       <section className="island-shell rounded-2xl p-6 sm:p-8">
-        <p className="island-kicker mb-2">Personnel d'entretien</p>
+        <p className="island-kicker mb-2">{t('personnel.kicker')}</p>
         <h1 className="display-title mb-3 text-4xl font-bold text-(--sea-ink) sm:text-5xl">
-          Personnel d'entretien
+          {t('personnel.entretien')}
         </h1>
         <p className="m-0 max-w-3xl text-base leading-8 text-(--sea-ink-soft)">
-          Voici la liste des 15 personnels d'entretien de l'établissement.
+          {t('personnel.listeEntretien', { count: ENTRETIEN.length })}
         </p>
 
         {/* Tableau moderne */}
         <div className="mt-8 overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
           <div className="border-b border-slate-200 bg-slate-50 px-6 py-4">
             <h2 className="text-lg font-bold text-(--sea-ink)">
-              15 membres de l'équipe d'entretien
+              {t('personnel.membresEntretien', { count: ENTRETIEN.length })}
             </h2>
           </div>
           <div className="overflow-x-auto">
@@ -47,13 +50,13 @@ function EntretienPage() {
               <thead>
                 <tr className="bg-(--sea-ink) text-white">
                   <th className="px-6 py-4 text-left font-semibold text-sm">
-                    Prénom
+                    {t('personnel.prenom')}
                   </th>
                   <th className="px-6 py-4 text-left font-semibold text-sm">
-                    Nom
+                    {t('personnel.nom')}
                   </th>
                   <th className="px-6 py-4 text-left font-semibold text-sm">
-                    Fonction
+                    {t('personnel.fonction')}
                   </th>
                 </tr>
               </thead>

@@ -1,6 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { SchoolCard } from '../components/SchoolCard'
 import { BookOpen, Landmark, Users, GraduationCap } from 'lucide-react'
+import { useLanguage } from '../i18n/LanguageProvider'
 
 export const Route = createFileRoute('/presentation/histoire')({
   component: HistoirePage,
@@ -113,28 +114,29 @@ function Section20Lignes({
 }
 
 function HistoirePage() {
+  const { t } = useLanguage()
+
   return (
     <main className="page-wrap px-4 py-12">
       <section className="island-shell rounded-2xl p-6 sm:p-8">
-        <p className="island-kicker mb-2">Histoire &amp; Mission</p>
+        <p className="island-kicker mb-2">{t('histoire.kicker')}</p>
         <h1 className="display-title mb-3 text-4xl font-bold sm:text-5xl">
-          Histoire &amp; Mission
+          {t('histoire.title')}
         </h1>
         <p className="m-0 max-w-3xl text-base leading-8 text-[var(--sea-ink-soft)]">
-          Le CEM Azouaou Amrane, situé à Tazmalt, forme ses élèves depuis 1980 dans
-          un cadre d'excellence éducative et d'épanouissement de chaque élève.
+          {t('histoire.subtitle')}
         </p>
 
         {/* Sommaire */}
         <nav className="mt-6 flex flex-wrap gap-2" aria-label="Sommaire">
           <a href="#azouaou-amrane" className="sea-link rounded-full border border-slate-200 px-3.5 py-1.5 text-xs font-medium no-underline">
-            Qui était Azouaou Amrane ?
+            {t('histoire.quiAzouaou')}
           </a>
           <a href="#fondation" className="sea-link rounded-full border border-slate-200 px-3.5 py-1.5 text-xs font-medium no-underline">
-            La création du collège
+            {t('histoire.creation')}
           </a>
           <a href="#hommage" className="sea-link rounded-full border border-slate-200 px-3.5 py-1.5 text-xs font-medium no-underline">
-            Vidéo hommage
+            {t('histoire.videoHommage')}
           </a>
         </nav>
 
@@ -142,23 +144,23 @@ function HistoirePage() {
 
         <Section20Lignes
           id="azouaou-amrane"
-          kicker="Mémoire"
-          titre="La vie d'Azouaou Amrane"
+          kicker={t('histoire.kickerMemoire')}
+          titre={t('histoire.vieAzouaou')}
           lignes={VIE_AZOUAOU_AMRANE}
         />
 
         <Section20Lignes
           id="fondation"
-          kicker="Notre établissement"
-          titre="La création du collège"
+          kicker={t('histoire.kickerEtablissement')}
+          titre={t('histoire.creationCollege')}
           lignes={FONDATION_DU_COLLEGE}
         />
 
         {/* Valeurs */}
         <section className="mt-12">
-          <p className="island-kicker mb-2">Nos valeurs</p>
+          <p className="island-kicker mb-2">{t('histoire.kickerValeurs')}</p>
           <h2 className="display-title mb-6 text-2xl font-bold sm:text-3xl">
-            Ce qui nous guide
+            {t('histoire.valeursTitle')}
           </h2>
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {VALEURS.map(({ icone: Icone, titre, texte }) => (
@@ -175,14 +177,12 @@ function HistoirePage() {
 
         {/* Vidéo hommage */}
         <section id="hommage" className="mt-12 scroll-mt-24">
-          <p className="island-kicker mb-2">Hommage</p>
+          <p className="island-kicker mb-2">{t('histoire.kickerHommage')}</p>
           <h2 className="display-title mb-2 text-2xl font-bold sm:text-3xl">
-            Hommage à nos héros
+            {t('histoire.videoTitle')}
           </h2>
           <p className="mb-5 max-w-3xl text-sm leading-7 text-[var(--sea-ink-soft)]">
-            Ce film a été réalisé en mémoire des enfants de la région tombés pour
-            l'Algérie. Il est projeté aux élèves dans le cadre des actions
-            d'éducation à la citoyenneté et au devoir de mémoire.
+            {t('histoire.videoDesc')}
           </p>
           <div className="mx-auto max-w-3xl rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
             <video
@@ -192,7 +192,7 @@ function HistoirePage() {
               playsInline
               className="w-full rounded-lg bg-black aspect-video"
             >
-              Votre navigateur ne prend pas en charge la lecture vidéo.
+              {t('histoire.videoNoSupport')}
             </video>
           </div>
         </section>

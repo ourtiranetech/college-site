@@ -1,6 +1,7 @@
 // LoginButton.tsx
 
 import { useQuery } from "convex/react";
+import { useLanguage } from "../i18n/LanguageProvider"
 import { useAuthActions } from "@convex-dev/auth/react";
 import { LogOut, ChevronDown, Loader2 } from "lucide-react";
 import { useState } from "react";
@@ -42,6 +43,7 @@ export function useIsAuthenticated() {
 }
 
 export function LoginButton() {
+  const { t } = useLanguage()
   const identity = useCurrentUser();
   const { signIn, signOut } = useAuthActions();
   const [isOpen, setIsOpen] = useState(false);
@@ -60,18 +62,18 @@ export function LoginButton() {
 
   const validate = () => {
     if (!email.includes("@") || !email.includes(".")) {
-      setError("Email invalide");
+      setError(t('auth.emailInvalide'));
       return false;
     }
 
     if (!PHONE_REGEX.test(phone.replace(/\s/g, ""))) {
-      setError("Numéro de téléphone invalide (ex: 0551234567 ou +33612345678)");
+      setError(t('auth.telephoneInvalide'));
       return false;
     }
 
     // Convex Auth default minimum password length is 8 characters
     if (password.length < 8) {
-      setError("Mot de passe trop court (min 8 caractères)");
+      setError(t('auth.motDePasseCourt'));
       return false;
     }
 
@@ -97,9 +99,9 @@ export function LoginButton() {
         err.message?.includes("not found") ||
         err.message?.includes("credentials")
       ) {
-        setError("Email ou mot de passe incorrect");
+        setError(t('auth.emailOuMotDePasseIncorrect'));
       } else {
-        setError(err.message || "Erreur de connexion");
+        setError(err.message || t('auth.erreurConnexion'));
       }
     } finally {
       setIsSubmitting(false);
@@ -110,7 +112,7 @@ export function LoginButton() {
     if (!validate()) return;
 
     if (emailAvailable === false) {
-      setError("Ce compte existe déjà.");
+      setError(t('auth.compteExiste'));
       return;
     }
 
@@ -127,7 +129,7 @@ export function LoginButton() {
       });
       setIsOpen(false);
     } catch (err: any) {
-      setError(err.message || "Erreur d'inscription");
+      setError(err.message || t('auth.erreurInscription'));
     } finally {
       setIsSubmitting(false);
     }
@@ -158,13 +160,13 @@ export function LoginButton() {
 
       // Pas de redirection et pas d'erreur : on l'explique au lieu de rester
       // silencieusement bloqué.
-      setError("Google n'a pas répondu — vérifiez la console du navigateur.");
+      setError(t('auth.googlePasReponse'));
       console.warn("[auth] signIn('google') n'a pas renvoyé de redirection :", result);
     } catch (err: any) {
       const message =
         err?.message ?? err?.data ?? err?.toString?.() ?? "erreur inconnue";
       console.error("[auth] échec de signIn('google') :", err);
-      setError(`Connexion Google impossible : ${message}`);
+      setError(t('auth.googleImpossible', { message }));
     } finally {
       setIsSubmitting(false);
     }
@@ -183,7 +185,7 @@ export function LoginButton() {
   };
 
   if (identity) {
-    const label = (identity as any).name ?? (identity as any).email ?? "Utilisateur";
+    const label = (identity as any).name ?? (identity as any).email ?? t('auth.utilisateur');
     const avatar = ((identity as any).picture ?? (identity as any).avatar ?? "") as string;
 
     return (
@@ -209,7 +211,7 @@ export function LoginButton() {
         {isOpen && (
           <div className="absolute right-0 top-full mt-1 w-48 rounded-xl border border-slate-200 bg-white shadow-lg py-1 z-50">
             <div className="px-4 py-2 border-b border-slate-100">
-              <p className="text-xs text-slate-500">Connecté en tant que</p>
+              <p className="text-xs text-slate-500">{t('auth.connecteEnTantQue')}</p>
               <p className="text-sm font-semibold text-slate-800 truncate">{label}</p>
               {(identity as any).email && <p className="text-xs text-slate-400 truncate">{(identity as any).email}</p>}
             </div>
@@ -219,7 +221,7 @@ export function LoginButton() {
               className="flex w-full items-center gap-2 px-3 py-2 text-sm text-slate-600 hover:bg-slate-50 transition disabled:opacity-50"
             >
               <LogOut size={14} />
-              Déconnexion
+              {t('auth.deconnexion')}
             </button>
           </div>
         )}
@@ -233,7 +235,7 @@ export function LoginButton() {
         onClick={() => setIsOpen(v => !v)}
         className="flex items-center gap-1.5 rounded-lg bg-primary px-3 py-1.5 text-xs font-semibold text-white hover:bg-[#0a1a33] transition shadow-sm"
       >
-        Se connecter
+        {t('auth.login')}
       </button>
       {isOpen && (
         <div className="absolute right-0 top-full mt-1 w-64 rounded-xl border border-slate-200 bg-white shadow-lg p-3 z-50">
@@ -242,21 +244,21 @@ export function LoginButton() {
               <div className="mb-3 space-y-2">
                 <input
                   type="text"
-                  placeholder="Nom"
+                  placeholder={t('auth.name')}
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-primary/10"
                 />
                 <input
                   type="email"
-                  placeholder="Email"
+                  placeholder={t('auth.email')}
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-primary/10"
                 />
                 <input
                   type="tel"
-                  placeholder="Numéro de téléphone"
+                  placeholder={t('auth.phone')}
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
                   className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-primary/10"
@@ -265,7 +267,7 @@ export function LoginButton() {
               <div className="mb-3">
                 <input
                   type="password"
-                  placeholder="Mot de passe (min 8)"
+                  placeholder={t('auth.password')}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-primary/10"
@@ -277,13 +279,13 @@ export function LoginButton() {
                 disabled={isSubmitting}
                 className="w-full rounded-lg bg-primary px-3 py-2 text-xs font-semibold text-white hover:bg-[#0a1a33] transition disabled:opacity-50"
               >
-                Créer le compte
+                {t('auth.creerCompte')}
               </button>
               <button
                 onClick={() => setShowRegister(v => !v)}
                 className="mt-2 w-full text-xs text-primary hover:text-[#0a1a33] underline"
               >
-                ← Retour connexion
+                {t('auth.backToLogin')}
               </button>
             </>
           ) : (
@@ -296,19 +298,19 @@ export function LoginButton() {
                 className="flex w-full items-center justify-center gap-2.5 rounded-lg border border-slate-300 bg-white px-3 py-2 text-xs font-semibold text-slate-700 transition hover:bg-slate-50 disabled:opacity-50"
               >
                 {isSubmitting ? <Loader2 size={14} className="animate-spin" /> : <LogoGoogle />}
-                Continuer avec Google
+                {t('auth.continuerGoogle')}
               </button>
 
               <div className="my-3 flex items-center gap-2">
                 <span className="h-px flex-1 bg-slate-200" />
-                <span className="text-[10px] uppercase tracking-wide text-slate-400">ou</span>
+                <span className="text-[10px] uppercase tracking-wide text-slate-400">{t('auth.ou')}</span>
                 <span className="h-px flex-1 bg-slate-200" />
               </div>
 
               <div className="mb-3">
                 <input
                   type="email"
-                  placeholder="Email"
+                  placeholder={t('auth.email')}
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-primary/10"
@@ -317,7 +319,7 @@ export function LoginButton() {
               <div className="mb-3">
                 <input
                   type="password"
-                  placeholder="Mot de passe (min 8)"
+                  placeholder={t('auth.password')}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-primary/10"
@@ -329,13 +331,13 @@ export function LoginButton() {
                 disabled={isSubmitting}
                 className="w-full rounded-lg bg-primary px-3 py-2 text-xs font-semibold text-white hover:bg-[#0a1a33] transition disabled:opacity-50"
               >
-                Connexion
+                {t('auth.connexion')}
               </button>
               <button
                 onClick={() => setShowRegister(v => !v)}
                 className="mt-2 w-full text-xs text-primary hover:text-[#0a1a33] underline"
               >
-                Créer un compte
+                {t('auth.register')}
               </button>
             </>
           )}

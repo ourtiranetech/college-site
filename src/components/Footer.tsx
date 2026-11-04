@@ -1,35 +1,36 @@
 import { Link } from '@tanstack/react-router'
+import { useLanguage } from '../i18n/LanguageProvider'
 
 const FOOTER_SECTIONS = [
   {
-    title: 'Établissement',
+    titleKey: 'footer.etablissement',
     links: [
-      { label: 'Histoire & Mission', href: '/presentation' },
-      { label: 'Infrastructures', href: '/presentation/infrastructures' },
-      { label: 'Galerie photos', href: '/presentation/galerie' },
-      { label: 'Équipe pédagogique', href: '/personnel/pedagogique' },
-      { label: 'Personnel d\'entretien', href: '/personnel/entretien' },
+      { labelKey: 'footer.histoireMission', href: '/presentation' },
+      { labelKey: 'footer.infrastructures', href: '/presentation/infrastructures' },
+      { labelKey: 'footer.galeriePhotos', href: '/presentation/galerie' },
+      { labelKey: 'footer.equipePedagogique', href: '/personnel/pedagogique' },
+      { labelKey: 'footer.personnelEntretien', href: '/personnel/entretien' },
     ],
   },
   {
-    title: 'Parents & Élèves',
+    titleKey: 'footer.parentsEleves',
     links: [
-      { label: 'Espace élève', href: '/parents-eleves' },
-      { label: 'Emploi du temps', href: '/parents-eleves/emploi-du-temps' },
-      { label: 'Notes & Résultats', href: '/parents-eleves/notes' },
-      { label: 'Suivi des absences', href: '/parents-eleves/absences' },
-      { label: 'Ressources pédagogiques', href: '/parents-eleves/ressources' },
-      { label: 'Inscriptions', href: '/parents-eleves/inscriptions' },
+      { labelKey: 'footer.espaceEleve', href: '/parents-eleves' },
+      { labelKey: 'footer.emploiDuTemps', href: '/parents-eleves/emploi-du-temps' },
+      { labelKey: 'footer.notesResultats', href: '/parents-eleves/notes' },
+      { labelKey: 'footer.suiviAbsences', href: '/parents-eleves/absences' },
+      { labelKey: 'footer.ressourcesPedagogiques', href: '/parents-eleves/ressources' },
+      { labelKey: 'footer.inscriptions', href: '/parents-eleves/inscriptions' },
     ],
   },
   {
-    title: 'Communauté',
+    titleKey: 'footer.communaute',
     links: [
-      { label: 'Actualités', href: '/parents-eleves/actualites' },
-      { label: 'Calendrier scolaire', href: '/parents-eleves/calendrier' },
-      { label: 'Chat en direct', href: '/chat' },
-      { label: 'Forum', href: '/forum' },
-      { label: 'Nous contacter', href: '/parents-eleves/contact' },
+      { labelKey: 'footer.actualites', href: '/parents-eleves/actualites' },
+      { labelKey: 'footer.calendrierScolaire', href: '/parents-eleves/calendrier' },
+      { labelKey: 'footer.chatDirect', href: '/chat' },
+      { labelKey: 'footer.forum', href: '/forum' },
+      { labelKey: 'footer.nousContacter', href: '/parents-eleves/contact' },
     ],
   },
 ]
@@ -99,6 +100,7 @@ const CONTACT_INFO = [
 ]
 
 export default function Footer() {
+  const { t } = useLanguage()
   const currentYear = new Date().getFullYear()
 
   return (
@@ -168,9 +170,9 @@ export default function Footer() {
 
           {/* ── Colonnes de liens ── */}
           {FOOTER_SECTIONS.map((section) => (
-            <div key={section.title}>
+            <div key={section.titleKey}>
               <h3 className="text-[11px] font-semibold text-accent uppercase tracking-widest mb-4">
-                {section.title}
+                {t(section.titleKey)}
               </h3>
               <ul className="space-y-2.5">
                 {section.links.map((link) => (
@@ -179,7 +181,7 @@ export default function Footer() {
                       to={link.href}
                       className="text-[13px] text-blue-100/70 hover:text-white transition-colors duration-150 hover:translate-x-0.5 inline-block"
                     >
-                      {link.label}
+                      {t(link.labelKey)}
                     </Link>
                   </li>
                 ))}

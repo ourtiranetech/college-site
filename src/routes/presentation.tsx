@@ -1,6 +1,7 @@
 import { createFileRoute, Link, Outlet } from '@tanstack/react-router'
 import { SchoolCard } from '../components/SchoolCard'
 import { BookOpen, Building2, Image as ImageIcon } from 'lucide-react'
+import { useLanguage } from '../i18n/LanguageProvider'
 
 export const Route = createFileRoute('/presentation')({
   component: PresentationPage,
@@ -8,43 +9,43 @@ export const Route = createFileRoute('/presentation')({
 
 const SECTIONS = [
   {
-    label: 'Histoire & Mission',
+    labelKey: 'about.histoire',
     href: '/presentation/histoire',
-    resume: "La vie d'Azouaou Amrane et la création du collège.",
-    chip: 'Héritage',
+    resumeKey: 'about.histoireResume',
+    chipKey: 'about.chipHeritage',
     chipColor: 'info' as const,
     Icon: BookOpen,
   },
   {
-    label: 'Infrastructures',
+    labelKey: 'about.infrastructures',
     href: '/presentation/infrastructures',
-    resume: 'Présentation de l\'établissement et de ses équipements.',
-    chip: 'Équipements',
+    resumeKey: 'about.infrastructuresResume',
+    chipKey: 'about.chipEquipements',
     chipColor: 'success' as const,
     Icon: Building2,
   },
   {
-    label: 'Galerie photos',
+    labelKey: 'about.galerie',
     href: '/presentation/galerie',
-    resume: 'Mosaïque des activités et de la vie du collège.',
-    chip: 'Photos',
+    resumeKey: 'about.galerieResume',
+    chipKey: 'about.chipPhotos',
     chipColor: 'warning' as const,
     Icon: ImageIcon,
   },
 ]
 
 function PresentationPage() {
+  const { t } = useLanguage()
+
   return (
     <main className="page-wrap px-4 py-12">
       <section className="island-shell rounded-2xl p-6 sm:p-8">
-        <p className="island-kicker mb-2">Présentation</p>
+        <p className="island-kicker mb-2">{t('about.title')}</p>
         <h1 className="display-title mb-3 text-4xl font-bold sm:text-5xl">
           CEM Azouaou Amrane
         </h1>
         <p className="m-0 max-w-3xl text-base leading-8 text-(--sea-ink-soft)">
-          Le CEM Azouaou Amrane, situé à Tazmalt en Algérie, forme ses élèves
-          depuis 1980 dans un cadre d'excellence éducative et d'épanouissement
-          de chaque élève.
+          {t('about.description')}
         </p>
       </section>
 
@@ -55,9 +56,9 @@ function PresentationPage() {
         {SECTIONS.map((s) => (
           <Link key={s.href} to={s.href}>
             <SchoolCard
-              title={s.label}
-              description={s.resume}
-              chip={s.chip}
+              title={t(s.labelKey)}
+              description={t(s.resumeKey)}
+              chip={t(s.chipKey)}
               chipColor={s.chipColor}
               icon={<s.Icon size={18} className="text-[#0F2147]" />}
             />

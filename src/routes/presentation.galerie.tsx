@@ -2,6 +2,7 @@ import { createFileRoute } from '@tanstack/react-router'
 import { useState, useEffect, useCallback } from 'react'
 import { ImageIcon, X, ChevronLeft, ChevronRight, Camera } from 'lucide-react'
 import { PHOTOS, NOMBRE_EMPLACEMENTS } from '../galerie/photos'
+import { useLanguage } from '../i18n/LanguageProvider'
 
 export const Route = createFileRoute('/presentation/galerie')({
   component: GaleriePage,
@@ -25,6 +26,7 @@ function classeTuile(i: number): string {
 }
 
 function GaleriePage() {
+  const { t } = useLanguage()
   const [indexOuvert, setIndexOuvert] = useState<number | null>(null)
 
   const photosDisponibles = PHOTOS.length
@@ -60,19 +62,19 @@ function GaleriePage() {
   return (
     <main className="page-wrap px-4 py-12">
       <section className="island-shell rounded-2xl p-6 sm:p-8">
-        <p className="island-kicker mb-2">Galerie photos</p>
+        <p className="island-kicker mb-2">{t('galerie.kicker')}</p>
         <h1 className="display-title mb-3 text-4xl font-bold sm:text-5xl">
-          Galerie photos
+          {t('galerie.title')}
         </h1>
         <p className="m-0 max-w-3xl text-base leading-8 text-[var(--sea-ink-soft)]">
-          Activités, événements et vie quotidienne du CEM Azouaou Amrane.
+          {t('galerie.subtitle')}
         </p>
 
         {aDesPhotos ? (
           <p className="mt-3 text-sm text-slate-500">
-            {photosDisponibles} photo{photosDisponibles > 1 ? 's' : ''} en ligne
+            {t('galerie.photosEnLigne', { count: photosDisponibles, plural: photosDisponibles > 1 ? 's' : '' })}
             {photosDisponibles < NOMBRE_EMPLACEMENTS && (
-              <> · {NOMBRE_EMPLACEMENTS - photosDisponibles} emplacement{ NOMBRE_EMPLACEMENTS - photosDisponibles > 1 ? 's' : ''} à compléter</>
+              <> · {t('galerie.emplacementACompleter', { count: NOMBRE_EMPLACEMENTS - photosDisponibles, plural: NOMBRE_EMPLACEMENTS - photosDisponibles > 1 ? 's' : '' })}</>
             )}
           </p>
         ) : (
@@ -80,12 +82,10 @@ function GaleriePage() {
             <Camera size={18} className="mt-0.5 shrink-0 text-amber-600" aria-hidden="true" />
             <div>
               <p className="text-sm font-medium text-amber-900">
-                Aucune photo n'est encore publiée
+                {t('galerie.aucunePhoto')}
               </p>
               <p className="mt-1 text-sm text-amber-800">
-                La mosaïque de {NOMBRE_EMPLACEMENTS} emplacements est prête. Déposez vos
-                photos dans <code className="rounded bg-amber-100 px-1">public/galerie/</code> puis
-                listez-les dans <code className="rounded bg-amber-100 px-1">src/galerie/photos.ts</code>.
+                {t('galerie.mosaiquePrete', { count: NOMBRE_EMPLACEMENTS })}
               </p>
             </div>
           </div>
@@ -94,7 +94,7 @@ function GaleriePage() {
         {/* Mosaïque */}
         <div
           className="mt-8 grid auto-rows-[110px] grid-cols-2 gap-3 sm:auto-rows-[130px] sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5"
-          aria-label={`Mosaïque de ${NOMBRE_EMPLACEMENTS} emplacements photo`}
+          aria-label={t('galerie.photosEnLigne', { count: NOMBRE_EMPLACEMENTS, plural: 's' })}
         >
           {EMPLACEMENTS.map(i => {
             const photo = PHOTOS[i]
@@ -107,11 +107,11 @@ function GaleriePage() {
                   type="button"
                   onClick={() => setIndexOuvert(i)}
                   className={`${classes} group border border-slate-200 bg-slate-100 shadow-sm transition hover:shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0F2147]`}
-                  aria-label={`Agrandir la photo ${i + 1}`}
+                  aria-label={t('galerie.agrandirPhoto', { n: i + 1 })}
                 >
                   <img
                     src={photo}
-                    alt={`Photo ${i + 1} du CEM Azouaou Amrane`}
+                    alt={t('galerie.photoN', { n: i + 1 })}
                     loading="lazy"
                     className="h-full w-full object-cover transition duration-300 group-hover:scale-105"
                   />
@@ -140,14 +140,14 @@ function GaleriePage() {
           className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 p-4"
           role="dialog"
           aria-modal="true"
-          aria-label={`Photo ${indexOuvert + 1} sur ${photosDisponibles}`}
+          aria-label={t('galerie.photoN', { n: indexOuvert + 1 }) + ' ' + t('galerie.sur') + ' ' + photosDisponibles}
           onClick={fermer}
         >
           <button
             type="button"
             onClick={fermer}
             className="absolute right-4 top-4 rounded-full bg-white/10 p-2 text-white transition hover:bg-white/20"
-            aria-label="Fermer"
+            aria-label={t('galerie.fermer')}
           >
             <X size={20} />
           </button>
@@ -156,14 +156,14 @@ function GaleriePage() {
             type="button"
             onClick={e => { e.stopPropagation(); precedent() }}
             className="absolute left-3 rounded-full bg-white/10 p-2 text-white transition hover:bg-white/20 sm:left-6"
-            aria-label="Photo précédente"
+            aria-label={t('galerie.precedente')}
           >
             <ChevronLeft size={22} />
           </button>
 
           <img
             src={PHOTOS[indexOuvert]}
-            alt={`Photo ${indexOuvert + 1} du CEM Azouaou Amrane`}
+            alt={t('galerie.photoN', { n: indexOuvert + 1 })}
             onClick={e => e.stopPropagation()}
             className="max-h-[85vh] max-w-full rounded-lg object-contain"
           />
@@ -172,7 +172,7 @@ function GaleriePage() {
             type="button"
             onClick={e => { e.stopPropagation(); suivant() }}
             className="absolute right-3 rounded-full bg-white/10 p-2 text-white transition hover:bg-white/20 sm:right-6"
-            aria-label="Photo suivante"
+            aria-label={t('galerie.suivante')}
           >
             <ChevronRight size={22} />
           </button>

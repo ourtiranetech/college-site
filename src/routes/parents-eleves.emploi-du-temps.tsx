@@ -1,5 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { useState } from 'react'
+import { useLanguage } from '../i18n/LanguageProvider'
 
 export const Route = createFileRoute('/parents-eleves/emploi-du-temps')({
   component: EmploiPage,
@@ -119,6 +120,7 @@ function Cell({ cell }: { cell: Cell }) {
 }
 
 function EmploiPage() {
+  const { t } = useLanguage()
   const [yearIdx, setYearIdx] = useState(0)
   const [classIdx, setClassIdx] = useState(0)
 
@@ -132,14 +134,14 @@ function EmploiPage() {
   return (
     <main className="page-wrap px-4 py-12">
       <section className="island-shell rounded-2xl p-6 sm:p-8">
-        <p className="island-kicker mb-2">Emploi du temps</p>
-        <h1 className="display-title mb-1 text-4xl font-bold text-(--sea-ink) sm:text-5xl">Emploi du temps</h1>
+        <p className="island-kicker mb-2">{t('edt.kicker')}</p>
+        <h1 className="display-title mb-1 text-4xl font-bold text-(--sea-ink) sm:text-5xl">{t('edt.title')}</h1>
         <p className="m-0 max-w-3xl text-base leading-8 text-(--sea-ink-soft)">{tab?.yearLabel} — {yearSubtitle}</p>
       </section>
 
       {/* Year selector */}
       <section className="mt-6 flex flex-wrap items-center gap-3">
-        <label htmlFor="year-select" className="text-sm font-medium text-slate-700">Année :</label>
+        <label htmlFor="year-select" className="text-sm font-medium text-slate-700">{t('edt.annee')}</label>
         <select
           id="year-select"
           value={yearIdx}
@@ -152,7 +154,7 @@ function EmploiPage() {
         </select>
 
         {/* Class selector */}
-        <label htmlFor="class-select" className="text-sm font-medium text-slate-700">Classe :</label>
+        <label htmlFor="class-select" className="text-sm font-medium text-slate-700">{t('edt.classe')}</label>
         <select
           id="class-select"
           value={classIdx}
@@ -180,7 +182,7 @@ function EmploiPage() {
             {HOURS.map((h, hi) => (
               <tr key={hi} className={h.pause ? 'bg-slate-100/60' : h.lunch ? 'bg-amber-50/50' : 'bg-white'}>
                 <td className={`px-3 py-2 text-[10px] font-medium ${h.pause ? 'text-slate-400' : h.lunch ? 'text-amber-600' : h.pm ? 'text-slate-500' : 'text-slate-700'}`}>
-                  {h.pause ? 'Pause' : h.lunch ? 'Déjeuner' : h.pm ? 'Après-midi' : h.label}
+                  {h.pause ? t('edt.pause') : h.lunch ? t('edt.dejeuner') : h.pm ? t('edt.apresMidi') : h.label}
                 </td>
                 {DAYS.map(d => {
                   const cell = tab?.days[d.key][hi]
@@ -188,7 +190,7 @@ function EmploiPage() {
                   return (
                     <td key={d.key} className="px-2 py-1 align-top">
                       {isTuePm ? (
-                        <div className="rounded-lg border border-dashed border-slate-300 bg-slate-50 p-2 text-center text-[10px] font-medium text-slate-400">Libre</div>
+                        <div className="rounded-lg border border-dashed border-slate-300 bg-slate-50 p-2 text-center text-[10px] font-medium text-slate-400">{t('edt.libre')}</div>
                       ) : (
                         <Cell cell={cell} />
                       )}
@@ -209,7 +211,7 @@ function EmploiPage() {
           </div>
         ))}
         <div className="flex items-center gap-1.5 text-[10px] font-medium text-slate-400">
-          <span className="rounded-lg border border-dashed border-slate-300 bg-slate-50 px-2 py-0.5">Libre</span>
+          <span className="rounded-lg border border-dashed border-slate-300 bg-slate-50 px-2 py-0.5">{t('edt.libre')}</span>
         </div>
       </section>
     </main>

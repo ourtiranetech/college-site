@@ -1,44 +1,45 @@
   import { Link, useRouterState } from '@tanstack/react-router'
   import { useEffect, useState } from 'react'
   import { LoginButton } from './LoginButton'
-  import { PanelLeft } from 'lucide-react'
+  import { PanelLeft, Languages } from 'lucide-react'
+  import { useLanguage } from '../i18n/LanguageProvider'
 
 const NAV_LINKS = [
   {
-    label: 'Présentation',
+    labelKey: 'nav.about',
     href: '/presentation',
     children: [
-      { label: 'Histoire & Mission', href: '/presentation/histoire' },
-      { label: 'Infrastructures', href: '/presentation/infrastructures' },
-      { label: 'Galerie photos', href: '/presentation/galerie' },
+      { labelKey: 'about.histoire', href: '/presentation/histoire' },
+      { labelKey: 'about.infrastructures', href: '/presentation/infrastructures' },
+      { labelKey: 'about.galerie', href: '/presentation/galerie' },
     ],
   },
   {
-    label: 'Personnel',
+    labelKey: 'nav.personnel',
     href: '/personnel',
     children: [
-      { label: 'Équipe pédagogique', href: '/personnel/pedagogique' },
-      { label: 'Personnel d\'entretien', href: '/personnel/entretien' },
-        { label: 'Personnel administratif', href: '/personnel/administratif' },
+      { labelKey: 'personnel.pedagogique', href: '/personnel/pedagogique' },
+      { labelKey: 'personnel.entretien', href: '/personnel/entretien' },
+        { labelKey: 'personnel.administratif', href: '/personnel/administratif' },
     ],
   },
   {
-    label: 'Parents & Élèves',
+    labelKey: 'nav.parents',
     href: '/parents-eleves',
     children: [
-      { label: 'Emploi du temps', href: '/parents-eleves/emploi-du-temps' },
-      { label: 'Notes & Résultats', href: '/parents-eleves/notes' },
-      { label: 'Absences', href: '/parents-eleves/absences' },
-      { label: 'Actualités', href: '/parents-eleves/actualites' },
-      { label: 'Calendrier', href: '/parents-eleves/calendrier' },
-      { label: 'Ressources', href: '/parents-eleves/ressources' },
-      { label: 'Inscriptions', href: '/parents-eleves/inscriptions' },
-      { label: 'Nous contacter', href: '/parents-eleves/contact' },
+      { labelKey: 'parents.edt', href: '/parents-eleves/emploi-du-temps' },
+      { labelKey: 'parents.notes', href: '/parents-eleves/notes' },
+      { labelKey: 'parents.absences', href: '/parents-eleves/absences' },
+      { labelKey: 'parents.actualites', href: '/parents-eleves/actualites' },
+      { labelKey: 'parents.calendrier', href: '/parents-eleves/calendrier' },
+      { labelKey: 'parents.ressources', href: '/parents-eleves/ressources' },
+      { labelKey: 'parents.inscriptions', href: '/parents-eleves/inscriptions' },
+      { labelKey: 'parents.contact', href: '/parents-eleves/contact' },
     ],
   },
-  { label: 'Chat en direct', href: '/chat' },
-  { label: 'Forum', href: '/forum' },
-  { label: 'Map', href: '/map' },
+  { labelKey: 'nav.chat', href: '/chat' },
+  { labelKey: 'nav.forum', href: '/forum' },
+  { labelKey: 'nav.map', href: '/map' },
 ]
 
 export default function Navbar() {
@@ -47,6 +48,7 @@ export default function Navbar() {
   const [scrolled, setScrolled] = useState(false)
   const [navVisible, setNavVisible] = useState(true)
   const routerState = useRouterState()
+  const { language, toggleLanguage, t } = useLanguage()
 
   // Ombre navbar au scroll
   useEffect(() => {
@@ -111,7 +113,7 @@ export default function Navbar() {
                           : 'text-slate-600 hover:text-primary hover:bg-slate-50',
                       ].join(' ')}
                     >
-                      {link.label}
+                      {t(link.labelKey)}
                       {link.children && (
                         <svg
                           className={`w-3.5 h-3.5 transition-transform duration-200 ${openDropdown === link.href ? 'rotate-180' : ''}`}
@@ -141,7 +143,7 @@ export default function Navbar() {
                               className="flex items-center gap-2.5 px-4 py-2.5 text-[13px] text-slate-600 hover:text-primary hover:bg-blue-100"
                             >
                               <span className="w-1 h-1 rounded-full bg-accent shrink-0" />
-                              {child.label}
+                              {t(child.labelKey)}
                             </Link>
                           ))}
                         </div>
@@ -156,6 +158,17 @@ export default function Navbar() {
                 <div className="flex justify-center w-full">
               <LoginButton />
               </div>
+
+              {/* Language toggle */}
+              <button
+                onClick={toggleLanguage}
+                className="inline-flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-xs font-semibold text-slate-600 hover:bg-slate-100 transition"
+                aria-label={language === 'fr' ? 'Switch to Arabic' : 'التبديل إلى الفرنسية'}
+                title={language === 'fr' ? 'العربية' : 'Français'}
+              >
+                <Languages size={14} />
+                <span>{language === 'fr' ? 'AR' : 'FR'}</span>
+              </button>
               </div>
 
               {/* ── Burger mobile ── */}
@@ -204,7 +217,7 @@ export default function Navbar() {
                       : 'text-slate-700 hover:bg-slate-50',
                   ].join(' ')}
                 >
-                  {link.label}
+                  {t(link.labelKey)}
                 </Link>
 
                 {link.children && (
@@ -213,9 +226,9 @@ export default function Navbar() {
                       <Link
                         key={child.href}
                         to={child.href}
-                        className="block px-2 py-2 text-[13px] text-slate-500 hover:text-primary transition-colors rounded-md hover:bg--50"
+                        className="block px-2 py-2 text-[13px] text-slate-500 hover:text-primary transition-colors rounded-md hover:bg-slate-50"
                       >
-                        {child.label}
+                        {t(child.labelKey)}
                       </Link>
                     ))}
                   </div>
@@ -225,6 +238,15 @@ export default function Navbar() {
 
             {/* Espace élève retiré du menu mobile : déjà couvert par Parents & Élèves */}
             <div className="pt-3 border-t border-slate-100" />
+
+            {/* Language toggle mobile */}
+            <button
+              onClick={toggleLanguage}
+              className="mt-2 w-full flex items-center justify-center gap-2 rounded-lg border border-slate-200 px-3 py-2 text-xs font-semibold text-slate-600 hover:bg-slate-50 transition"
+            >
+              <Languages size={14} />
+              <span>{language === 'fr' ? 'العربية' : 'Français'}</span>
+            </button>
           </nav>
         </div>
       </header>
