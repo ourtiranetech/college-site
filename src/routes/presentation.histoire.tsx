@@ -19,10 +19,10 @@ export const Route = createFileRoute('/presentation/histoire')({
    ───────────────────────────────────────────────────────────────────────────── */
 
 const VIE_AZOUAOU_AMRANE = [
-  "Azouaou Amrane est un enfant de Tazmalt, dans la wilaya de Béjaïa, dont le nom est aujourd'hui porté par notre collège.",
-  "Il grandit dans une famille algérienne attachée à la terre, au travail et à la transmission des valeurs.",
-  "Il apprend très tôt que la dignité d'un peuple passe par le savoir et par le courage de ses enfants.",
-  "Sa jeunesse se déroule dans une région marquée par une histoire longue, celle de la Kabylie des villages et des solidarités.",
+  "Azouaou Amrane est un enfant de Tazmalt, dans la wilaya de Béjaïa, dont le nom est aujourd'hui porté",
+  " par notre collège. Il grandit dans une famille algérienne attachée à la terre, au travail et à la ",
+  "transmission des valeurs. Il apprend très tôt que la dignité d'un peuple passe par le savoir et par le",
+  " courage de ses enfants.  Sa jeunesse se déroule dans une région marquée par une histoire longue, celle de la Kabylie des villages et des solidarités.",
   "Comme beaucoup de jeunes de sa génération, il choisit de servir plutôt que de se taire.",
   "Sa vie témoigne d'un engagement constant envers son pays et envers la justice.",
   "Il puise dans la culture de son village la force de rester fidèle à ses convictions.",
@@ -101,8 +101,8 @@ function Section20Lignes({
   return (
     <section id={id} className="mt-10 scroll-mt-24">
       <p className="island-kicker mb-2">{kicker}</p>
-      <h2 className="display-title mb-4 text-2xl font-bold sm:text-3xl">{titre}</h2>
-      <div className="max-w-3xl space-y-3">
+      <h2 className=" display-title mb-4 text-2xl font-bold sm:text-3xl">{titre}</h2>
+      <div className="p-5 border border-black shadow shadow-blue-800 rounded-2xl text-center bg-blue-50 max-w-3xl space-y-3">
         {lignes.map((ligne, i) => (
           <p key={i} className="m-0 text-base leading-8 text-[var(--sea-ink-soft)]">
             {ligne}

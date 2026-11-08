@@ -475,8 +475,8 @@ function ForumPage() {
       <header className="bg-primary px-6 py-10">
         <div className="mx-auto flex max-w-3xl flex-wrap items-center justify-between gap-4">
           <div>
-            <h1 className="font-serif text-2xl font-bold text-white sm:text-3xl">t('forum.title')</h1>
-            <p className="mt-1 text-sm text-white/60">t('forum.subtitle')</p>
+            <h1 className="font-serif text-2xl font-bold text-white sm:text-3xl">{t('forum.title')}</h1>
+            <p className="mt-1 text-sm text-white/60">{t('forum.subtitle')}</p>
           </div>
           {/* Compteur d'invités : visiteurs non connectés, dédupliqués par navigateur */}
           <div
@@ -496,26 +496,26 @@ function ForumPage() {
       <main className="mx-auto max-w-5xl px-4 py-8">
         {!isAuthenticated && (
           <section className="mb-8 rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
-            <h2 className="mb-3 text-sm font-semibold text-slate-800">t('forum.connexionRequise')</h2>
-            <p className="mb-4 text-sm text-slate-600">t('forum.connexionTexte')</p>
+            <h2 className="mb-3 text-sm font-semibold text-slate-800">{t('forum.connexionRequise')}</h2>
+            <p className="mb-4 text-sm text-slate-600">{t('forum.connexionTexte')}</p>
             <div className="flex justify-start">
               <LoginButton />
             </div>
           </section>
         )}
         <div className="mb-6 flex flex-wrap items-center gap-2">
-          <button onClick={() => setCatActive('/')} className={`rounded-full px-3.5 py-1.5 text-xs font-medium ${catActive === '/' ? 'bg-primary text-white' : 'bg-white text-slate-600 hover:bg-slate-100'}`}>t('forum.toutes')</button>
+          <button onClick={() => setCatActive('/')} className={`rounded-full px-3.5 py-1.5 text-xs font-medium ${catActive === '/' ? 'bg-primary text-white' : 'bg-white text-slate-600 hover:bg-slate-100'}`}>{t('forum.toutes')}</button>
           {CATEGORIES.map(c => (
             <button key={c.id} onClick={() => setCatActive(c.id)} className={`rounded-full px-3.5 py-1.5 text-xs font-medium ${catActive === c.id ? 'bg-primary text-white' : 'bg-white text-slate-600 hover:bg-slate-100'}`}>{c.label} {c.chip ? <span className="ml-1 text-[10px] opacity-75">({c.chip})</span> : null}</button>
           ))}
         </div>
         <section className="mb-8 rounded-xl border border-slate-400 bg-blue-50 p-5 shadow-sm">
-          <h2 className="mb-3 text-sm font-semibold text-slate-800">t('forum.nouveauSujet')</h2>
+          <h2 className="mb-3 text-sm font-semibold text-slate-800">{t('forum.nouveauSujet')}</h2>
           <form onSubmit={handleSubmit} className="space-y-3">
             <select value={categorie} onChange={e => setCategorie(e.target.value)} className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-primary/10">
               {CATEGORIES.map(c => <option key={c.id} value={c.id}>{c.label}</option>)}
             </select>
-            <input type="text" value={postTitle} onChange={e => setPostTitle(e.target.value)} placeholder="t('forum.titreSujet')" className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm font-medium focus:outline-none focus:ring-1 focus:ring-primary/10" />
+            <input type="text" value={postTitle} onChange={e => setPostTitle(e.target.value)} placeholder={t('forum.titreSujet')} className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm font-medium focus:outline-none focus:ring-1 focus:ring-primary/10" />
             {files.length > 0 && (
               <div className="flex flex-wrap gap-2">
                 {files.map((f, i) => (
@@ -545,20 +545,20 @@ function ForumPage() {
         </label>
               <textarea ref={mainRef} value={contenu} onChange={e => setContenu(e.target.value)} placeholder="Décrivez votre question ou sujet…" dir={isRTL ? 'rtl' : 'ltr'} rows={3} className="flex-1 resize-y rounded-lg border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-primary/10" />
               <button type="submit" disabled={!canPublish || uploading || !isAuthenticated} className="inline-flex items-center gap-1.5 rounded-lg bg-primary px-4 py-1.5 text-xs font-semibold text-accent disabled:opacity-50 disabled:cursor-not-allowed">
-                {uploading ? <Loader2 size={14} className="animate-spin" /> : <Plus size={14} />} t('forum.publier')
+                {uploading ? <Loader2 size={14} className="animate-spin" /> : <Plus size={14} />} {t('forum.publier')}
               </button>
             </div>
           </form>
         </section>
         {epingles.length > 0 && (
           <>
-            <div className="mb-3 flex items-center gap-1.5"><Pin size={14} color="#E8A020" /><h2 className="text-sm font-semibold text-slate-800">t('forum.sujetsEpingles')</h2></div>
+            <div className="mb-3 flex items-center gap-1.5"><Pin size={14} color="#E8A020" /><h2 className="text-sm font-semibold text-slate-800">{t('forum.sujetsEpingles')}</h2></div>
             <div key={`e-${refreshKey}`} className="space-y-4 pb-6">{epingles.map(p =>            <PostCard key={p._id} post={p} onReplied={() => setRefreshKey(k => k + 1)} onSelectImage={setSelectedImage} />)}</div>
           </>
         )}
-        <div className="mb-3 flex items-center gap-1.5"><MessageSquare size={14} color="#475569" /><h2 className="text-sm font-semibold text-slate-800">t('forum.discussions')</h2></div>
+        <div className="mb-3 flex items-center gap-1.5"><MessageSquare size={14} color="#475569" /><h2 className="text-sm font-semibold text-slate-800">{t('forum.discussions')}  </h2></div>
         {autres.length === 0 ? (
-          <div className="flex flex-col items-center gap-2 py-10 text-center text-slate-400"><MessageSquare size={32} /><p className="text-sm">t('forum.aucunSujet')</p></div>
+          <div className="flex flex-col items-center gap-2 py-10 text-center text-slate-400"><MessageSquare size={32} /><p className="text-sm">{t('forum.aucunSujet')}</p></div>
         ) : (
           <div key={`a-${refreshKey}`} dir={isRTL ? 'rtl' : 'ltr'} className="space-y-4">{autres.map(p =>            <PostCard key={p._id} post={p} onReplied={() => setRefreshKey(k => k + 1)} onSelectImage={setSelectedImage} />)}</div>
         )}

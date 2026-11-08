@@ -135,8 +135,8 @@ export const notifierParEmail = internalAction({
       const texte = [
         `Nouveau message depuis le site du collège.`,
         ``,
-        `Nom      : ${args.prenom} ${args.nom}`,
-        `Email    : ${args.email}`,
+        `Nom     : ${args.prenom} ${args.nom}`,
+        `Email   : ${args.email}`,
         ``,
         `Message :`,
         args.commentaire,
@@ -178,8 +178,3 @@ export const notifierParEmail = internalAction({
     }
   },
 });
-
-/** Suppression de `testerEmail` : c'était une action publique qui permettait
- * d'envoyer des emails depuis n'importe quel client, sans authentification.
- * L'envoi reste possible via le formulaire de contact, avec les protections
- * anti-bot et limite de débit existantes. */

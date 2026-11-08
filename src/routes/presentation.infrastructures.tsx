@@ -78,7 +78,7 @@ function InfrastructuresPage() {
           <h2 className="display-title mb-4 text-2xl font-bold sm:text-3xl">
             {t('infra.presentationTitle')}
           </h2>
-          <div className="max-w-3xl space-y-3">
+          <div className="p-5 border border-black shadow shadow-blue-800 rounded-2xl text-center bg-blue-50 max-w-4xl space-y-3">
             {PRESENTATION.map((ligne, i) => (
               <p key={i} className="m-0 text-base leading-8 text-[var(--sea-ink-soft)]">
                 {ligne}
