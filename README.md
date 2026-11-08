@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 Welcome to your new TanStack Start app!
 
 # Getting Started
@@ -194,3 +195,7 @@ Files prefixed with `demo` can be safely deleted. They are there to provide a st
 You can learn more about all of the offerings from TanStack in the [TanStack documentation](https://tanstack.com).
 
 For TanStack Start specific documentation, visit [TanStack Start](https://tanstack.com/start).
+=======
+# college-site
+app web presentation CEM
+>>>>>>> 363d194788710127695cd599fff9b9c243ca6211
