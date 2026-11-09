@@ -14,10 +14,10 @@ export const Route = createFileRoute('/chat')({
 
 function getSalles(t: (key: string) => string) {
   return [
-    { id: 'general', label: `💬 ${t('chat.salonGeneral')}`, desc: t('chat.salonGeneralDesc') },
-    { id: 'parents', label: `👨‍👩‍👧 ${t('chat.salonParents')}`, desc: t('chat.salonParentsDesc') },
-    { id: 'eleves', label: `🎓 ${t('chat.salonEleves')}`, desc: t('chat.salonElevesDesc') },
-    { id: 'aide', label: `🧮 ${t('chat.salonAide')}`, desc: t('chat.salonAideDesc') },
+    { id: 'general', label: t('chat.salonGeneral'), lettre: 'ع', couleur: 'bg-blue-100 text-blue-700', desc: t('chat.salonGeneralDesc') },
+    { id: 'parents', label: t('chat.salonParents'), lettre: 'أ', couleur: 'bg-amber-100 text-amber-700', desc: t('chat.salonParentsDesc') },
+    { id: 'eleves', label: t('chat.salonEleves'), lettre: 'ت', couleur: 'bg-emerald-100 text-emerald-700', desc: t('chat.salonElevesDesc') },
+    { id: 'aide', label: t('chat.salonAide'), lettre: 'م', couleur: 'bg-violet-100 text-violet-700', desc: t('chat.salonAideDesc') },
   ]
 }
 
@@ -98,6 +98,7 @@ function ChatPage() {
   const salles = getSalles(t)
   const navigate = useNavigate()
   const [salle, setSalle] = useState('general')
+  const salleCourante = salles.find((s) => s.id === salle)
   const [message, setMessage] = useState('')
   const [selecteurOuvert, setSelecteurOuvert] = useState(false)
   const [selectedImage, setSelectedImage] = useState<string | null>(null)
@@ -254,8 +255,15 @@ function ChatPage() {
                     : 'hover:bg-gray-50 text-gray-700'
                 }`}
               >
-                <div className="font-semibold">{s.label}</div>
-                <div className="text-xs text-gray-500">{s.desc}</div>
+                <div className="flex items-center gap-2.5">
+                  <span className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-sm font-bold ${s.couleur}`}>
+                    {s.lettre}
+                  </span>
+                  <div className="min-w-0">
+                    <div className="font-semibold truncate">{s.label}</div>
+                    <div className="text-xs text-gray-500">{s.desc}</div>
+                  </div>
+                </div>
               </button>
             ))}
 
@@ -268,8 +276,13 @@ function ChatPage() {
           <div className="md:col-span-3 bg-white rounded-xl border border-gray-200 shadow-sm flex flex-col h-[550px]">
             {/* Titre du salon sélectionné */}
             <div className="px-6 py-4 border-b flex justify-between items-center bg-gray-50 rounded-t-xl">
-              <span className="font-bold text-gray-800">
-                {salles.find((s) => s.id === salle)?.label}
+              <span className="flex items-center gap-2 font-bold text-gray-800">
+                {salleCourante && (
+                  <span className={`flex h-6 w-6 items-center justify-center rounded-full text-xs font-bold ${salleCourante.couleur}`}>
+                    {salleCourante.lettre}
+                  </span>
+                )}
+                {salleCourante?.label}
               </span>
               <span className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full font-medium">
                 {t('chat.enDirect')}
