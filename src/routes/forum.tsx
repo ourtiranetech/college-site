@@ -14,14 +14,16 @@ export const Route = createFileRoute('/forum')({
   component: ForumPage,
 })
 
-const CATEGORIES = [
-  { id: 'general',      label: 'Général', chip: 'Général', chipColor: 'info' as const },
-  { id: 'enseignement', label: 'Enseignement', chip: 'Études', chipColor: 'info' as const },
-  { id: 'vie-scolaire', label: 'Vie scolaire', chip: 'Vie', chipColor: 'success' as const },
-  { id: 'parents',      label: 'Parents', chip: 'Famille', chipColor: 'warning' as const },
-  { id: 'entraide',     label: 'Entraide', chip: 'Aide', chipColor: 'success' as const },
-  { id: 'tazmalt',      label: 'Tazmalt', chip: 'Local', chipColor: 'info' as const },
-]
+function getCategories(t: (key: string) => string) {
+  return [
+    { id: 'general',      label: t('forum.categorieGeneral'),      chip: t('forum.puceGeneral'),      chipColor: 'info' as const },
+    { id: 'enseignement', label: t('forum.categorieEnseignement'), chip: t('forum.puceEnseignement'), chipColor: 'info' as const },
+    { id: 'vie-scolaire', label: t('forum.categorieVieScolaire'), chip: t('forum.puceVieScolaire'), chipColor: 'success' as const },
+    { id: 'parents',      label: t('forum.categorieParents'),      chip: t('forum.puceParents'),      chipColor: 'warning' as const },
+    { id: 'entraide',     label: t('forum.categorieEntraide'),     chip: t('forum.puceEntraide'),     chipColor: 'success' as const },
+    { id: 'tazmalt',      label: t('forum.categorieTazmalt'),      chip: t('forum.puceTazmalt'),      chipColor: 'info' as const },
+  ]
+}
 
 const EMOJIS  = [
   // Humeurs
@@ -340,7 +342,8 @@ function PostCard({ post, onReplied, onSelectImage }: { post: Post; onReplied: (
   const reponsesQuery = useQuery("forum:getReponses" as any, { postId: post._id })
   const [showReplies, setShowReplies] = useState(false)
   const reponses: Reponse[] = reponsesQuery ?? []
-  const cat = CATEGORIES.find(c => c.id === post.categorie) ?? CATEGORIES[0]
+  const categories = getCategories(t)
+  const cat = categories.find(c => c.id === post.categorie) ?? categories[0]
 
   return (
     <div className="rounded-xl border border-slate-200 bg-blue-50 p-5 shadow-sm">
@@ -392,6 +395,7 @@ function PostCard({ post, onReplied, onSelectImage }: { post: Post; onReplied: (
 
 function ForumPage() {
   const { t, isRTL } = useLanguage()
+  const categories = getCategories(t)
   const [catActive, setCatActive] = useState('/')
   const [postTitle, setPostTitle] = useState('')
   const [contenu, setContenu] = useState('')
@@ -487,7 +491,7 @@ function ForumPage() {
               {nombreInvites === undefined ? '—' : nombreInvites}
             </span>
             <span className="text-xs text-white/60">
-              {nombreInvites === 1 ? 'invité' : 'invités'}
+              {nombreInvites === 1 ? t('forum.invite') : t('forum.invites')}
             </span>
           </div>
         </div>
@@ -504,7 +508,7 @@ function ForumPage() {
         )}
         <div className="mb-6 flex flex-wrap items-center gap-2">
           <button onClick={() => setCatActive('/')} className={`rounded-full px-3.5 py-1.5 text-xs font-medium ${catActive === '/' ? 'bg-primary text-white' : 'bg-white text-slate-600 hover:bg-slate-100'}`}>{t('forum.toutes')}</button>
-          {CATEGORIES.map(c => (
+          {categories.map(c => (
             <button key={c.id} onClick={() => setCatActive(c.id)} className={`rounded-full px-3.5 py-1.5 text-xs font-medium ${catActive === c.id ? 'bg-primary text-white' : 'bg-white text-slate-600 hover:bg-slate-100'}`}>{c.label} {c.chip ? <span className="ml-1 text-[10px] opacity-75">({c.chip})</span> : null}</button>
           ))}
         </div>
@@ -512,7 +516,7 @@ function ForumPage() {
           <h2 className="mb-3 text-sm font-semibold text-slate-800">{t('forum.nouveauSujet')}</h2>
           <form onSubmit={handleSubmit} className="space-y-3">
             <select value={categorie} onChange={e => setCategorie(e.target.value)} className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-primary/10">
-              {CATEGORIES.map(c => <option key={c.id} value={c.id}>{c.label}</option>)}
+              {categories.map(c => <option key={c.id} value={c.id}>{c.label}</option>)}
             </select>
             <input type="text" value={postTitle} onChange={e => setPostTitle(e.target.value)} placeholder={t('forum.titreSujet')} className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm font-medium focus:outline-none focus:ring-1 focus:ring-primary/10" />
             {files.length > 0 && (

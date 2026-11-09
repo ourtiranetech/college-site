@@ -89,7 +89,7 @@ export default function Navbar() {
                 aria-label={navVisible ? 'Masquer le menu' : 'Afficher le menu'}
               >
                 <PanelLeft size={16} />
-                {navVisible ? 'Masquer le menu' : 'Afficher le Menu'}
+                {navVisible ? 'Masquer le menu' : 'Afficher le menu'}
               </button>
 
               {/* ── Navigation desktop ── */}
@@ -259,7 +259,7 @@ export default function Navbar() {
               className="w-full text-center text-xl font-bold text-primary tracking-tight uppercase"
               aria-label="Accueil du collège"
             >
-              CEM Azouaou Amrane  TAZMALT
+              CEM Azouaou Amrane TAZMALT
             </Link>
 
             <button

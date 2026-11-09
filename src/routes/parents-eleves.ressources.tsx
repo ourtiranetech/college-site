@@ -15,7 +15,7 @@ function RessourcesPage() {
         <h1 className="display-title mb-3 text-4xl font-bold text-(--sea-ink) sm:text-5xl">
           {t('parents.ressourcesTitle')}
         </h1>
-        <p className="m-0  text-center leading-8 text-(--sea-ink-soft)">
+        <p className="m-0 text-center leading-8 text-(--sea-ink-soft)">
           {t('parents.ressourcesDesc')}
         </p>
       </section>

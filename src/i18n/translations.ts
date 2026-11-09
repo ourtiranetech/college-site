@@ -23,7 +23,7 @@ export const translations = {
     'nav.parents': 'Parents & Élèves',
     'nav.chat': 'Chat en direct',
     'nav.forum': 'Forum',
-    'nav.map': 'Map',
+    'nav.map': 'Carte',
 
     // About section
     'about.title': 'Présentation',
@@ -66,7 +66,7 @@ export const translations = {
       "Azouaou Amrane est un enfant de Tazmalt, dans la wilaya de Béjaïa, dont le nom est aujourd'hui porté",
       " par notre collège. Il grandit dans une famille algérienne attachée à la terre, au travail et à la ",
       "transmission des valeurs. Il apprend très tôt que la dignité d'un peuple passe par le savoir et par le",
-      " courage de ses enfants.  Sa jeunesse se déroule dans une région marquée par une histoire longue, celle de la Kabylie des villages et des solidarités.",
+      " courage de ses enfants. Sa jeunesse se déroule dans une région marquée par une histoire longue, celle de la Kabylie des villages et des solidarités.",
       "Comme beaucoup de jeunes de sa génération, il choisit de servir plutôt que de se taire.",
       "Sa vie témoigne d'un engagement constant envers son pays et envers la justice.",
       "Il puise dans la culture de son village la force de rester fidèle à ses convictions.",
@@ -186,9 +186,9 @@ export const translations = {
     'personnel.kicker': 'Personnel',
     'personnel.title': 'Équipe pédagogique et d\'entretien',
     'personnel.subtitle': 'Accédez aux différents services de l\'équipe de l\'établissement.',
-    'personnel.entretienResume': 'personnel d\'entretien du collège.',
-    'personnel.pedagogiqueResume': 'personnel pédagogique du collège.',
-    'personnel.administratifResume': 'personnel administratif du collège.',
+    'personnel.entretienResume': 'Personnel d\'entretien du collège.',
+    'personnel.pedagogiqueResume': 'Personnel pédagogique du collège.',
+    'personnel.administratifResume': 'Personnel administratif du collège.',
     'personnel.chipEntretien': 'Entretien',
     'personnel.chipPedagogique': 'Pédagogique',
     'personnel.chipAdministration': 'Administration',
@@ -270,6 +270,19 @@ export const translations = {
     'forum.categorieEntraide': 'Entraide',
     'forum.categorieTazmalt': 'Tazmalt',
 
+    'forum.repondre': 'Répondre',
+    'forum.maxImages': 'Maximum {max} images par message.',
+    'forum.sansTitre': '(sans titre)',
+    'forum.pasDeTexte': '(pas de texte)',
+    'forum.erreurInconnue': 'Erreur inconnue',
+
+    'forum.puceGeneral': 'Général',
+    'forum.puceEnseignement': 'Études',
+    'forum.puceVieScolaire': 'Vie',
+    'forum.puceParents': 'Famille',
+    'forum.puceEntraide': 'Aide',
+    'forum.puceTazmalt': 'Local',
+
     // Chat
     'chat.title': 'Chat en Direct',
     'chat.subtitle': 'Posez vos questions en temps réel à la communauté du collège.',
@@ -286,6 +299,23 @@ export const translations = {
     'chat.emoticones': 'Émoticônes',
     'chat.maxImages': 'Maximum 5 images par message.',
     'chat.deconnexion': 'Déconnexion',
+
+    'chat.salonGeneral': 'Général',
+    'chat.salonParents': 'Parents',
+    'chat.salonEleves': 'Élèves',
+    'chat.salonAide': 'aide',
+    'chat.salonGeneralDesc': 'Questions diverses sur le collège',
+    'chat.salonParentsDesc': 'Échanges entre parents et administration',
+    'chat.salonElevesDesc': 'Entraide devoirs et vie scolaire',
+    'chat.salonAideDesc': 'Entraide devoirs et vie scolaire',
+    'chat.connexionMessage': 'Vous devez être connecté pour envoyer un message.',
+    'chat.envoiImpossible': "Le message n'a pas pu être envoyé.",
+    'chat.utilisateur': 'Utilisateur',
+    'chat.pieceJointe': 'Pièce jointe {n}',
+    'chat.nbEmoticones': '{count} émoticônes',
+    'chat.toucheEntree': 'Entrée pour envoyer, Maj+Entrée pour un retour à la ligne',
+    'chat.image': 'Image',
+    'chat.insererEmoticone': 'Insérer {emoji}',
 
     // Map
     'map.kicker': 'Localisation',
@@ -317,7 +347,7 @@ export const translations = {
     'auth.connecteEnTantQue': 'Connecté en tant que',
     'auth.deconnexion': 'Déconnexion',
     'auth.utilisateur': 'Utilisateur',
-    'auth.erreurInconnue': 'erreur inconnue',
+    'auth.erreurInconnue': 'Erreur inconnue',
 
     // Footer
     'footer.etablissement': 'Établissement',
@@ -390,10 +420,10 @@ export const translations = {
 
     // About section
     'about.title': 'عنا',
-    'about.subtitle': 'متوسطة azimuth عمارة — تازملت',
-    'about.description': 'متوسطة azimuth عمارة، الواقعة في تازملت بالجزائر، تقوم بتكوين تلاميذها منذ 1980 في إطار التميز التربوي وتنمية كل تلميذ.',
+    'about.subtitle': 'متوسطة أزواو عمران — تازملت',
+    'about.description': 'متوسطة أزواو عمران، الواقعة في تازملت بالجزائر، تقوم بتكوين تلاميذها منذ 1980 في إطار التميز التربوي وتنمية كل تلميذ.',
     'about.histoire': 'التاريخ والرسالة',
-    'about.histoireResume': 'حياة azimuth عمارة وتأسيس الكلية.',
+    'about.histoireResume': 'حياة أزواو عمران وتأسيس المتوسطة.',
     'about.infrastructures': 'المرافق',
     'about.infrastructuresResume': 'عرض للمؤسسة ومرافقها.',
     'about.galerie': 'معرض الصور',
@@ -409,11 +439,11 @@ export const translations = {
     'histoire.kickerValeurs': 'قيمنا',
     'histoire.kickerHommage': 'تحية',
     'histoire.title': 'التاريخ والرسالة',
-    'histoire.subtitle': 'متوسطة azimuth عمارة، الواقعة في تازملت، تقوم بتكوين تلاميذها منذ 1980 في إطار التميز التربوي وتنمية كل تلميذ.',
-    'histoire.quiAzouaou': 'من كان azimuth عمارة؟',
+    'histoire.subtitle': 'متوسطة أزواو عمران، الواقعة في تازملت، تقوم بتكوين تلاميذها منذ 1980 في إطار التميز التربوي وتنمية كل تلميذ.',
+    'histoire.quiAzouaou': 'من كان أزواو عمران؟',
     'histoire.creation': 'تأسيس المتوسطة',
     'histoire.videoHommage': 'فيديو تحية',
-    'histoire.vieAzouaou': 'حياة azimuth عمارة',
+    'histoire.vieAzouaou': 'حياة أزواو عمران',
     'histoire.creationCollege': 'تأسيس المتوسطة',
     'histoire.valeursTitle': 'ما يوجهنا',
     'histoire.valeurExcellence': 'التميز',
@@ -421,7 +451,7 @@ export const translations = {
     'histoire.valeurSolidarite': 'التضامن',
     'histoire.valeurReussite': 'النجاح',
     'histoire.videoTitle': 'تحية لأبطالنا',
-    'histoire.videoDesc': 'تم إنجاز هذا الفيلم تخليداً لذكرى أطفال المنطقة الذين استشهدوا من أجل الجزائر. يعرض للتلاميذ في إطار actions التربية على المواطنة وواجب الذاكرة.',
+    'histoire.videoDesc': 'تم إنجاز هذا الفيلم تخليداً لذكرى أطفال المنطقة الذين استشهدوا من أجل الجزائر. يعرض للتلاميذ في إطار التربية على المواطنة وواجب الذاكرة.',
     'histoire.videoNoSupport': 'متصفحك لا يدعم تشغيل الفيديو.',
 
     // التاريخ — نصوص طويلة (تُعرض سطراً سطراً)
@@ -480,14 +510,14 @@ export const translations = {
 
     // Infrastructures
     'infra.kicker': 'المرافق',
-    'infra.title': 'متوسطة azimuth عمارة — تازملت',
+    'infra.title': 'متوسطة أزواو عمران — تازملت',
     'infra.subtitle': 'عرض للمؤسسة ومساحاتها.',
     'infra.presentationTitle': 'عرض المتوسطة',
     'infra.equipementsTitle': 'مرافقنا',
     'infra.kickerEspaces': 'المساحات',
     'infra.kickerImages': 'بالصور',
     'infra.visiteTitle': 'زيارة المؤسسة',
-    'infra.visiteDesc': 'فلم تقديم متوسطة azimuth عمارة — أفريل 2017.',
+    'infra.visiteDesc': 'فلم تقديم متوسطة أزواو عمران — أفريل 2017.',
     'infra.videoNoSupport': 'متصفحك لا يدعم تشغيل الفيديو.',
 
     // المرافق — نصوص طويلة (تُعرض سطراً سطراً)
@@ -533,13 +563,13 @@ export const translations = {
     // Galerie
     'galerie.kicker': 'معرض الصور',
     'galerie.title': 'معرض الصور',
-    'galerie.subtitle': 'أنشطة ومناسبات وحياة يومية لمتوسطة azimuth عمارة.',
-    'galerie.photosEnLigne': '{count} صورة',
+    'galerie.subtitle': 'أنشطة ومناسبات وحياة يومية لمتوسطة أزواو عمران.',
+    'galerie.photosEnLigne': '{count} صورة منشورة',
     'galerie.emplacementACompleter': ' · {count} مكان لاستكماله',
     'galerie.aucunePhoto': 'لم يتم نشر أي صورة بعد',
     'galerie.mosaiquePrete': 'مزيج {count} الأماكن جاهز. ضع صورك في public/galerie/ ثم أدرجها في src/galerie/photos.ts.',
     'galerie.agrandirPhoto': 'تكبير الصورة {n}',
-    'galerie.photoN': 'الصورة {n} لمتوسطة azimuth عمارة',
+    'galerie.photoN': 'الصورة {n} لمتوسطة أزواو عمران',
     'galerie.fermer': 'إغلاق',
     'galerie.precedente': 'الصورة السابقة',
     'galerie.suivante': 'الصورة التالية',
@@ -612,8 +642,8 @@ export const translations = {
 
     // Forum
     'forum.title': 'منتدى المجتمع',
-    'forum.subtitle': 'تواصل مع الأولياء والتلاميذ والطاقم لمتوسطة azimuth عمارة.',
-    'forum.invites': 'زائر',
+    'forum.subtitle': 'تواصل مع الأولياء والتلاميذ والطاقم لمتوسطة أزواو عمران.',
+    'forum.invites': 'زوار',
     'forum.invite': 'زائر',
     'forum.connexionRequise': 'تسجيل الدخول مطلوب',
     'forum.connexionTexte': 'يجب تسجيل الدخول لنشر موضوع أو الرد على المنتدى.',
@@ -627,11 +657,24 @@ export const translations = {
     'forum.reponses': '{count} رد{plural}',
     'forum.afficherReponses': 'عرض الردود',
     'forum.categorieGeneral': 'عام',
-    'forum.categorieEnseignement': 'دراسي',
+    'forum.categorieEnseignement': 'التعليم',
     'forum.categorieVieScolaire': 'الحياة المدرسية',
     'forum.categorieParents': 'الأولياء',
     'forum.categorieEntraide': 'مساعدة',
     'forum.categorieTazmalt': 'تازملت',
+
+    'forum.repondre': 'رد',
+    'forum.maxImages': 'الحد الأقصى {max} صور لكل رسالة.',
+    'forum.sansTitre': '(بلا عنوان)',
+    'forum.pasDeTexte': '(بلا نص)',
+    'forum.erreurInconnue': 'خطأ غير معروف',
+
+    'forum.puceGeneral': 'عام',
+    'forum.puceEnseignement': 'دراسي',
+    'forum.puceVieScolaire': 'الحياة',
+    'forum.puceParents': 'الأولياء',
+    'forum.puceEntraide': 'مساعدة',
+    'forum.puceTazmalt': 'تازملت',
 
     // Chat
     'chat.title': 'محادثة مباشرة',
@@ -650,9 +693,26 @@ export const translations = {
     'chat.maxImages': 'الحد الأقصى 5 صور لكل رسالة.',
     'chat.deconnexion': 'تسجيل الخروج',
 
+    'chat.salonGeneral': 'عام',
+    'chat.salonParents': 'الأولياء',
+    'chat.salonEleves': 'التلاميذ',
+    'chat.salonAide': 'مساعدة',
+    'chat.salonGeneralDesc': 'أسئلة متنوعة حول المتوسطة',
+    'chat.salonParentsDesc': 'تبادل بين الأولياء والإدارة',
+    'chat.salonElevesDesc': 'مساعدة متبادلة في الواجبات والحياة المدرسية',
+    'chat.salonAideDesc': 'مساعدة متبادلة في الواجبات والحياة المدرسية',
+    'chat.connexionMessage': 'يجب تسجيل الدخول لإرسال رسالة.',
+    'chat.envoiImpossible': 'تعذر إرسال الرسالة.',
+    'chat.utilisateur': 'مستخدم',
+    'chat.pieceJointe': 'مرفق {n}',
+    'chat.nbEmoticones': '{count} رموز تعبيرية',
+    'chat.toucheEntree': 'Enter للإرسال، Shift+Enter لسطر جديد',
+    'chat.image': 'صورة',
+    'chat.insererEmoticone': 'إدراج {emoji}',
+
     // Map
     'map.kicker': 'الموقع',
-    'map.title': 'متوسطة azimuth عمارة',
+    'map.title': 'متوسطة أزواو عمران',
     'map.subtitle': 'تازملت، بجاية — الجزائر',
 
     // Login / Auth

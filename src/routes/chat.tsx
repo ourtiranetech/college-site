@@ -12,12 +12,14 @@ export const Route = createFileRoute('/chat')({
   component: ChatPage,
 })
 
-const SALLES = [
-  { id: 'general', label: '💬 Général', desc: 'Questions diverses sur le collège', chip: 'Général', chipColor: 'info' as const },
-  { id: 'parents', label: '👨‍👩‍👧 Parents', desc: 'Échanges entre parents et administration', chip: 'Famille', chipColor: 'warning' as const },
-  { id: 'eleves', label: '🎓 Élèves', desc: 'Entraide devoirs et vie scolaire', chip: 'Élèves', chipColor: 'success' as const },
-  { id: 'aide', label: '🧮 aide', desc: 'Entraide devoirs et vie scolaire', chip: 'Aide', chipColor: 'info' as const },
-]
+function getSalles(t: (key: string) => string) {
+  return [
+    { id: 'general', label: `💬 ${t('chat.salonGeneral')}`, desc: t('chat.salonGeneralDesc') },
+    { id: 'parents', label: `👨‍👩‍👧 ${t('chat.salonParents')}`, desc: t('chat.salonParentsDesc') },
+    { id: 'eleves', label: `🎓 ${t('chat.salonEleves')}`, desc: t('chat.salonElevesDesc') },
+    { id: 'aide', label: `🧮 ${t('chat.salonAide')}`, desc: t('chat.salonAideDesc') },
+  ]
+}
 
 /** 100 émoticônes proposées dans le chat. */
 const EMOTICONS = [
@@ -93,6 +95,7 @@ function lireStorageId(texte: string): string {
 
 function ChatPage() {
   const { t, isRTL } = useLanguage()
+  const salles = getSalles(t)
   const navigate = useNavigate()
   const [salle, setSalle] = useState('general')
   const [message, setMessage] = useState('')
@@ -142,7 +145,7 @@ function ChatPage() {
     if (!contenu && !files.length) return
 
     if (!estConnecte) {
-      alert("Vous devez être connecté pour envoyer un message.")
+      alert(t('chat.connexionMessage'))
       return
     }
 
@@ -153,7 +156,7 @@ function ChatPage() {
       setMessage('')
       setFiles([])
     } catch (err) {
-      alert(err instanceof Error ? err.message : "Le message n'a pas pu être envoyé.")
+      alert(err instanceof Error ? err.message : t('chat.envoiImpossible'))
     } finally {
       setUploading(false)
     }
@@ -190,7 +193,7 @@ function ChatPage() {
     e.target.value = ''
   }
 
-  const nomAffiche = (identity?.name ?? identity?.email ?? 'Utilisateur') as string
+  const nomAffiche = (identity?.name ?? identity?.email ?? t('chat.utilisateur')) as string
 
   const ImageGallery = ({ storageIds }: { storageIds: string[] }) => {
     if (storageIds.length === 0) return null
@@ -202,7 +205,7 @@ function ChatPage() {
           <img
             key={i}
             src={url}
-            alt={`Pièce jointe ${i + 1}`}
+            alt={t('chat.pieceJointe', { n: i + 1 })}
             className="h-24 w-24 cursor-pointer rounded-lg object-cover"
             onClick={() => setSelectedImage(url)}
           />
@@ -241,7 +244,7 @@ function ChatPage() {
             <h2 className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-3">
              {t('chat.salons')}
             </h2>
-            {SALLES.map((s) => (
+            {salles.map((s) => (
               <button
                 key={s.id}
                 onClick={() => setSalle(s.id)}
@@ -266,7 +269,7 @@ function ChatPage() {
             {/* Titre du salon sélectionné */}
             <div className="px-6 py-4 border-b flex justify-between items-center bg-gray-50 rounded-t-xl">
               <span className="font-bold text-gray-800">
-                {SALLES.find((s) => s.id === salle)?.label}
+                {salles.find((s) => s.id === salle)?.label}
               </span>
               <span className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full font-medium">
                 {t('chat.enDirect')}
@@ -348,7 +351,7 @@ function ChatPage() {
                 <label className="flex cursor-pointer items-center gap-1.5 px-3 py-1.5 min-w-0 text-xs font-medium text-slate-600 rounded-lg border border-dashed border-slate-300 bg-slate-50 hover:bg-slate-100 hover:text-slate-800 transition">
                   <ImageIcon size={14} />
                   <input type="file" accept="image/*" multiple className="hidden" onChange={pickImages} />
-                  <span className="whitespace-nowrap">Image</span>
+                  <span className="whitespace-nowrap">{t('chat.image')}</span>
                 </label>
 
                 <button
@@ -375,7 +378,7 @@ function ChatPage() {
                       aria-label={t('chat.emoticones')}
                     >
                       <p className="px-1 pb-1.5 text-[11px] font-medium uppercase tracking-wide text-gray-400">
-                        {EMOTICONS.length} émoticônes
+                        {t('chat.nbEmoticones', { count: EMOTICONS.length })}
                       </p>
                       <div className="grid max-h-44 grid-cols-10 gap-0.5 overflow-y-auto">
                         {EMOTICONS.map((e, i) => (
@@ -386,7 +389,7 @@ function ChatPage() {
                               insererEmoticone(champRef.current, e, message, setMessage)
                             }}
                             className="rounded p-0.5 text-lg leading-none transition hover:bg-gray-100"
-                            aria-label={`Insérer ${e}`}
+                            aria-label={t('chat.insererEmoticone', { emoji: e })}
                           >
                             {e}
                           </button>
@@ -407,7 +410,7 @@ function ChatPage() {
               </div>
 
               <p className="mt-1.5 text-right text-[11px] text-gray-400">
-                {message.length} / 2000 · Entrée pour envoyer, Maj+Entrée pour un retour à la ligne
+                {message.length} / 2000 · {t('chat.toucheEntree')}
               </p>
             </form>
           </div>
