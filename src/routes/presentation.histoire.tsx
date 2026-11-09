@@ -18,74 +18,30 @@ export const Route = createFileRoute('/presentation/histoire')({
    L'année retenue est 1980, cohérente avec les autres pages du site.
    ───────────────────────────────────────────────────────────────────────────── */
 
-const VIE_AZOUAOU_AMRANE = [
-  "Azouaou Amrane est un enfant de Tazmalt, dans la wilaya de Béjaïa, dont le nom est aujourd'hui porté",
-  " par notre collège. Il grandit dans une famille algérienne attachée à la terre, au travail et à la ",
-  "transmission des valeurs. Il apprend très tôt que la dignité d'un peuple passe par le savoir et par le",
-  " courage de ses enfants.  Sa jeunesse se déroule dans une région marquée par une histoire longue, celle de la Kabylie des villages et des solidarités.",
-  "Comme beaucoup de jeunes de sa génération, il choisit de servir plutôt que de se taire.",
-  "Sa vie témoigne d'un engagement constant envers son pays et envers la justice.",
-  "Il puise dans la culture de son village la force de rester fidèle à ses convictions.",
-  "Sa détermination n'était pas celle d'un homme pressé, mais d'un homme patient et obstiné.",
-  "Il savait que les causes justes ne se gagnent pas en un jour, mais par la constance.",
-  "À ses proches, il laisse le souvenir d'un homme discret, respectueux et droit.",
-  "À sa région, il laisse l'exemple d'une fidélité qui ne se négocie pas.",
-  "À sa patrie, il offre ce que l'on peut donner de plus précieux : sa vie.",
-  "Le nom qu'il porte aujourd'hui sur ce collège n'est pas un simple hommage : c'est une promesse.",
-  "Il rappelle à chaque élève que l'instruction est un droit acquis au prix de sacrifices.",
-  "Il rappelle à chaque enseignant que transmettre le savoir est un acte de fidélité.",
-  "Il rappelle à chaque famille que l'école est le bien commun de toute une communauté.",
-  "Ce nom engage : il demande à chacun de se montrer digne de ce qu'il représente.",
-  "Honorer sa mémoire, c'est refuser l'indifférence et la facilité.",
-  "C'est aussi cultiver ce qui fait tenir un peuple : le travail, le respect et la solidarité.",
-  "Puisse cette mémoire continuer d'éclairer le chemin de nos élèves, aujourd'hui et demain.",
-]
-
-const FONDATION_DU_COLLEGE = [
-  "Le Collège d'Enseignement Moyen Azouaou Amrane se situe à Tazmalt, dans la wilaya de Béjaïa.",
-  "Sa fondation s'inscrit dans l'immense effort de scolarisation engagé par l'Algérie indépendante.",
-  "Au lendemain de l'indépendance, scolariser tous les enfants de toutes les communes devient une priorité nationale.",
-  "Il fallait bâtir des écoles, former des enseignants et rapprocher le savoir de chaque village.",
-  "Dans les années 1970, cette dynamique se traduit par l'ouverture de nombreux collèges à travers le pays.",
-  "L'établissement ouvre ses portes en 1980 pour accueillir les élèves de Tazmalt et des localités voisines.",
-  "Beaucoup d'enfants de la région pouvaient alors poursuivre leur scolarité sans quitter leur commune.",
-  "Le collège comble ainsi une distance qui pesait lourdement sur les familles les plus modestes.",
-  "Dès les premières années, il devient un lieu de rencontre entre les villages et les générations.",
-  "Des générations d'élèves y ont appris à lire, à écrire, à calculer et à raisonner.",
-  "Des générations d'enseignants y ont consacré leur carrière, souvent au-delà de leurs obligations.",
-  "Le bâtiment, les salles de classe et les espaces collectifs ont été entretenus et adaptés au fil des décennies.",
-  "L'établissement a suivi les réformes successives du système éducatif national.",
-  "Il a accueilli de nouveaux programmes, de nouvelles matières et de nouveaux outils pédagogiques.",
-  "Les effectifs ont grandi, à la mesure de la croissance démographique de la région.",
-  "L'établissement a obtenu des résultats dont la commune peut légitimement s'enorgueillir.",
-  "Son nom, celui d'un enfant de Tazmalt, l'ancre dans l'histoire et la mémoire locales.",
-  "Ce que nous appelons « Mission » n'est donc pas un texte abstrait.",
-  "C'est la continuation d'un engagement commencé il y a plus de quarante ans dans ces murs.",
-  "Transmettre le savoir, exiger de chacun le meilleur, et former des citoyens responsables : voilà notre mission.",
-]
-
-const VALEURS = [
-  {
-    icone: BookOpen,
-    titre: "Excellence",
-    texte: "Exigence intellectuelle et travail régulier, dans le respect du rythme de chaque élève.",
-  },
-  {
-    icone: Landmark,
-    titre: "Mémoire",
-    texte: "Porter dignement le nom d'Azouaou Amrane et transmettre l'histoire de notre région.",
-  },
-  {
-    icone: Users,
-    titre: "Solidarité",
-    texte: "Faire de l'établissement un lieu d'entraide entre élèves, familles et personnels.",
-  },
-  {
-    icone: GraduationCap,
-    titre: "Réussite",
-    texte: "Préparer chaque élève à la poursuite de ses études et à sa place dans la société.",
-  },
-]
+function getValeurs(t: (key: string) => string) {
+  return [
+    {
+      icone: BookOpen,
+      titre: t('histoire.valeurs.excellence.titre'),
+      texte: t('histoire.valeurs.excellence.texte'),
+    },
+    {
+      icone: Landmark,
+      titre: t('histoire.valeurs.memoire.titre'),
+      texte: t('histoire.valeurs.memoire.texte'),
+    },
+    {
+      icone: Users,
+      titre: t('histoire.valeurs.solidarite.titre'),
+      texte: t('histoire.valeurs.solidarite.texte'),
+    },
+    {
+      icone: GraduationCap,
+      titre: t('histoire.valeurs.reussite.titre'),
+      texte: t('histoire.valeurs.reussite.texte'),
+    },
+  ]
+}
 
 function Section20Lignes({
   id,
@@ -114,7 +70,10 @@ function Section20Lignes({
 }
 
 function HistoirePage() {
-  const { t } = useLanguage()
+  const { t, tList } = useLanguage()
+  const vieAzouaou = tList('histoire.vie')
+  const fondation = tList('histoire.fondation')
+  const valeurs = getValeurs(t)
 
   return (
     <main className="page-wrap px-4 py-12">
@@ -146,14 +105,14 @@ function HistoirePage() {
           id="azouaou-amrane"
           kicker={t('histoire.kickerMemoire')}
           titre={t('histoire.vieAzouaou')}
-          lignes={VIE_AZOUAOU_AMRANE}
+          lignes={vieAzouaou}
         />
 
         <Section20Lignes
           id="fondation"
           kicker={t('histoire.kickerEtablissement')}
           titre={t('histoire.creationCollege')}
-          lignes={FONDATION_DU_COLLEGE}
+          lignes={fondation}
         />
 
         {/* Valeurs */}
@@ -163,7 +122,7 @@ function HistoirePage() {
             {t('histoire.valeursTitle')}
           </h2>
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {VALEURS.map(({ icone: Icone, titre, texte }) => (
+            {valeurs.map(({ icone: Icone, titre, texte }) => (
               <SchoolCard
                 key={titre}
                 title={titre}

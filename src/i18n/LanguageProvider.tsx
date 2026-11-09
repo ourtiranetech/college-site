@@ -12,7 +12,6 @@ export function useLanguage() {
   const ctx = useContext(LanguageContext)
   if (!ctx) {
     // Fallback: create a translation hook directly if used outside provider
-    const { useTranslation } = require('./useTranslation')
     return useTranslation()
   }
   return ctx

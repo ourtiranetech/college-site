@@ -37,7 +37,8 @@ export function useTranslation() {
   const t = useCallback(
     (key: string, variables?: Record<string, string | number>) => {
       const dict = translations[language] ?? translations.fr
-      let text = dict[key as keyof typeof dict] ?? key
+      const raw = dict[key as keyof typeof dict]
+      let text = typeof raw === 'string' ? raw : key
       if (variables) {
         for (const [k, v] of Object.entries(variables)) {
           text = text.replace(`{${k}}`, String(v))
@@ -48,14 +49,28 @@ export function useTranslation() {
     [language],
   )
 
+  /**
+   * Récupère un bloc de texte (tableau de lignes) dans la langue courante.
+   * Retourne un tableau vide si la clé est absente ou ne pointe pas un tableau.
+   */
+  const tList = useCallback(
+    (key: string): string[] => {
+      const dict = translations[language] ?? translations.fr
+      const raw = dict[key as keyof typeof dict]
+      return Array.isArray(raw) ? raw : []
+    },
+    [language],
+  )
+
   return useMemo(
     () => ({
       language,
       changeLanguage,
       toggleLanguage,
       t,
+      tList,
       isRTL: language === 'ar',
     }),
-    [language, changeLanguage, toggleLanguage, t],
+    [language, changeLanguage, toggleLanguage, t, tList],
   )
 }
