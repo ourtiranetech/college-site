@@ -102,7 +102,7 @@ function Section20Lignes({
     <section id={id} className="mt-10 scroll-mt-24">
       <p className="island-kicker mb-2">{kicker}</p>
       <h2 className=" display-title mb-4 text-2xl font-bold sm:text-3xl">{titre}</h2>
-      <div className="p-5 border border-black shadow shadow-blue-800 rounded-2xl text-center bg-blue-50 max-w-3xl space-y-3">
+      <div className="p-5 border border-black shadow-md shadow-blue-800/20 rounded-2xl text-center bg-blue-50 max-w-3xl space-y-3">
         {lignes.map((ligne, i) => (
           <p key={i} className="m-0 text-base leading-8 text-[var(--sea-ink-soft)]">
             {ligne}

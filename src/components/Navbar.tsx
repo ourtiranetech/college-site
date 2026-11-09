@@ -153,13 +153,11 @@ export default function Navbar() {
                 ))}
               </nav>
 
-              {/* ── Bouton espace élève supprimé : Parents & Élèves est déjà dans la nav ── */}
+              {/* ── Connexion + langue (desktop) ── */}
               <div className="hidden lg:flex items-center gap-3">
-                <div className="flex justify-center w-full">
-              <LoginButton />
-              </div>
+                <LoginButton />
 
-              {/* Language toggle */}
+                {/* Language toggle */}
               <button
                 onClick={toggleLanguage}
                 className="inline-flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-xs font-semibold text-slate-600 hover:bg-slate-100 transition"

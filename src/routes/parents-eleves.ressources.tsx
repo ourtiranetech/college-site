@@ -10,7 +10,7 @@ function RessourcesPage() {
 
   return (
     <main className="page-wrap px-4 py-12">
-     <section className="bg-orange-100 shadow-2xl mb-20 shadow-yellow-200 island-shell m-auto border w-1/2 text-center rounded-2xl p-6 sm:p-8">
+     <section className="bg-orange-100 shadow-2xl mb-20 island-shell m-auto border w-1/2 text-center rounded-2xl p-6 sm:p-8">
         <p className="island-kicker text-center mb-2">{t('parents.kicker')}</p>
         <h1 className="display-title mb-3 text-4xl font-bold text-(--sea-ink) sm:text-5xl">
           {t('parents.ressourcesTitle')}

@@ -85,7 +85,6 @@ const EMOJIS  = [
     "⚗️", "🧪", "🧫", "🔬", "🔭", "📡", "💉", "🩹", "🩼", "🩺", "🩻", "🚪", "🪞", "🪟", "🛏️", "🛋️", 
     "🪑", "🚽", "🪠", "🚿", "🛁", "🪤", "🪒", "🧴", "🧷", "🧹", "🧺"
   ];
-  console.log(`Nombre total d'émojis : ${EMOJIS.length}`);
 // Limite partagée avec convex/schema.ts : une seule source de vérité.
 const MAX_IMAGES = MAX_IMAGES_PAR_MESSAGE
 
@@ -422,12 +421,12 @@ function ForumPage() {
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault()
     if (!isAuthenticated) {
-      alert("t('forum.connexionRequise')")
+      alert(t('forum.connexionRequise'))
       return
     }
     const trimmedTitle = postTitle.trim()
     const c = contenu.trim()
-    if (!t && !c && files.length === 0) return
+    if (!trimmedTitle && !c && files.length === 0) return
 
     setUploading(true)
     try {
