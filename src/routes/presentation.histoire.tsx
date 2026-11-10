@@ -2,7 +2,7 @@ import { createFileRoute } from '@tanstack/react-router'
 import { SchoolCard } from '../components/SchoolCard'
 import { BookOpen, Landmark, Users, GraduationCap } from 'lucide-react'
 import { useLanguage } from '../i18n/LanguageProvider'
-import mosart  from '../../public/font/mosart.ttf'
+
  
 
 export const Route = createFileRoute('/presentation/histoire')({

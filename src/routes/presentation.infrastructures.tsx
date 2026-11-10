@@ -1,6 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { SchoolCard } from '../components/SchoolCard'
-import mosart  from '../../public/font/mosart.ttf'
+
 import {
   Building2,
   FlaskConical,
