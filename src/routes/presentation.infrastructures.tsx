@@ -1,5 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { SchoolCard } from '../components/SchoolCard'
+import mosart  from '../../public/font/mosart.ttf'
 import {
   Building2,
   FlaskConical,
@@ -43,7 +44,7 @@ function InfrastructuresPage() {
 
   return (
     <main className="page-wrap px-4 py-12">
-      <section className="island-shell rounded-2xl p-6 sm:p-8">
+      <section className="text-center island-shell rounded-2xl p-6 sm:p-8">
         <p className="island-kicker mb-2">{t('infra.kicker')}</p>
         <h1 className="display-title mb-3 text-4xl font-bold sm:text-5xl">
           {t('infra.title')}
@@ -59,7 +60,7 @@ function InfrastructuresPage() {
           <h2 className="display-title mb-4 text-2xl font-bold sm:text-3xl">
             {t('infra.presentationTitle')}
           </h2>
-          <div className="p-5 border border-black shadow-md shadow-blue-800/20 rounded-2xl text-center bg-blue-50 max-w-4xl space-y-3">
+          <div className="p-5 m-auto border border-black shadow-md shadow-blue-800/20 rounded-2xl  font-bold font-[mosart] text-3xl text-center bg-blue-50 max-w-5xl space-y-3">
             {presentation.map((ligne, i) => (
               <p key={i} className="m-0 text-base leading-8 text-[var(--sea-ink-soft)]">
                 {ligne}

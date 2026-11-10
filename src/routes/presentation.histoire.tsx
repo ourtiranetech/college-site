@@ -2,6 +2,8 @@ import { createFileRoute } from '@tanstack/react-router'
 import { SchoolCard } from '../components/SchoolCard'
 import { BookOpen, Landmark, Users, GraduationCap } from 'lucide-react'
 import { useLanguage } from '../i18n/LanguageProvider'
+import mosart  from '../../public/font/mosart.ttf'
+ 
 
 export const Route = createFileRoute('/presentation/histoire')({
   component: HistoirePage,
@@ -57,8 +59,8 @@ function Section20Lignes({
   return (
     <section id={id} className="mt-10 scroll-mt-24">
       <p className="island-kicker mb-2">{kicker}</p>
-      <h2 className=" display-title mb-4 text-2xl font-bold sm:text-3xl">{titre}</h2>
-      <div className="p-5 border border-black shadow-md shadow-blue-800/20 rounded-2xl text-center bg-blue-50 max-w-3xl space-y-3">
+      <h2 className="  text-center mb-4 text-2xl font-bold sm:text-3xl">{titre}</h2>
+      <div className="p-5 m-auto border border-black shadow-md shadow-blue-800/20 rounded-2xl  font-bold font-[mosart] text-3xl text-center bg-blue-50 max-w-5xl space-y-3">
         {lignes.map((ligne, i) => (
           <p key={i} className="m-0 text-base leading-8 text-[var(--sea-ink-soft)]">
             {ligne}
@@ -91,7 +93,7 @@ function HistoirePage() {
           <a href="#azouaou-amrane" className="sea-link rounded-full border border-slate-200 px-3.5 py-1.5 text-xs font-medium no-underline">
             {t('histoire.quiAzouaou')}
           </a>
-          <a href="#fondation" className="sea-link rounded-full border border-slate-200 px-3.5 py-1.5 text-xs font-medium no-underline">
+          <a href="#fondation" className="sea-link rounded-full border border-slate-200 px-3.5 py-1.5 text-xs font-medium  no-underline">
             {t('histoire.creation')}
           </a>
           <a href="#hommage" className="sea-link rounded-full border border-slate-200 px-3.5 py-1.5 text-xs font-medium no-underline">
@@ -117,7 +119,7 @@ function HistoirePage() {
 
         {/* Valeurs */}
         <section className="mt-12">
-          <p className="island-kicker mb-2">{t('histoire.kickerValeurs')}</p>
+          <p className="text-center island-kicker mb-2">{t('histoire.kickerValeurs')}</p>
           <h2 className="display-title mb-6 text-2xl font-bold sm:text-3xl">
             {t('histoire.valeursTitle')}
           </h2>
