@@ -201,7 +201,7 @@ export default function Navbar() {
             'lg:hidden overflow-hidden transition-all duration-300 ease-in-out',
             mobileOpen && navVisible ? 'max-h-[80vh] opacity-100' : 'max-h-0 opacity-0',
           ].join(' ')}
-          aria-hidden={!mobileOpen || !navVisible}
+          inert={!(mobileOpen && navVisible)}
         >
           <nav className="border-t border-slate-100 px-4 py-4 space-y-1 overflow-y-auto max-h-[75vh]">
             {NAV_LINKS.map((link) => (
