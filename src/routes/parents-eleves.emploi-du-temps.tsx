@@ -13,7 +13,7 @@ type DayKey = 'dimanche' | 'lundi' | 'mardi' | 'mercredi' | 'jeudi'
 const SUBJECTS: Record<string, Subject> = {
   math:   { name: 'Mathématiques', color: 'bg-blue-50 text-blue-800 border-blue-300' },
   france: { name: 'Français', color: 'bg-green-50 text-green-800 border-green-300' },
-  arab:   { name: 'Arabique', color: 'bg-amber-50 text-amber-800 border-amber-300' },
+  arab:   { name: 'Arabe', color: 'bg-amber-50 text-amber-800 border-amber-300' },
   sci:    { name: 'Sciences', color: 'bg-purple-50 text-purple-800 border-purple-300' },
   hist:   { name: 'Histoire', color: 'bg-rose-50 text-rose-800 border-rose-300' },
   geo:    { name: 'Géographie', color: 'bg-teal-50 text-teal-800 border-teal-300' },
@@ -28,11 +28,12 @@ const HOURS = [
   { label: '8h00 – 9h00' },
   { label: '9h00 – 10h00', pause: true },
   { label: '10h00 – 11h00' },
-  { label: '11h00 – 12h00', lunch: true },
-  { label: '13h30 – 14h30', pm: true },
-  { label: '14h30 – 15h30', pm: true },
-  { label: '15h30 – 16h30', pm: true },
-  { label: '16h30 – 17h30', pm: true },
+  { label: '11h00 – 12h00' },
+  { label: '12h00 – 13h30', lunch: true },
+  { label: '13h30 – 14h30' },
+  { label: '14h30 – 15h30' },
+  { label: '15h30 – 16h30' },
+  { label: '16h30 – 17h30' },
 ]
 
 const DAYS = [
