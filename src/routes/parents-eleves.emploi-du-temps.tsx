@@ -31,7 +31,7 @@ const HOURS = [
   { label: '11h00 – 12h00' },
   { label: '12h00 – 13h30', lunch: true },
   { label: '13h30 – 14h30' },
-  { label: '14h30 – 15h30' },
+  { label: '14h30 – 15h30', pause: true },
   { label: '15h30 – 16h30' },
   { label: '16h30 – 17h30' },
 ]
