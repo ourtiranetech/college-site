@@ -14,10 +14,10 @@ export const Route = createFileRoute('/chat')({
 
 function getSalles(t: (key: string) => string) {
   return [
-    { id: 'general', label: t('chat.salonGeneral'), lettre: 'ع', couleur: 'bg-blue-100 text-blue-700', desc: t('chat.salonGeneralDesc') },
-    { id: 'parents', label: t('chat.salonParents'), lettre: 'أ', couleur: 'bg-amber-100 text-amber-700', desc: t('chat.salonParentsDesc') },
-    { id: 'eleves', label: t('chat.salonEleves'), lettre: 'ت', couleur: 'bg-emerald-100 text-emerald-700', desc: t('chat.salonElevesDesc') },
-    { id: 'aide', label: t('chat.salonAide'), lettre: 'م', couleur: 'bg-violet-100 text-violet-700', desc: t('chat.salonAideDesc') },
+    { id: 'general', label: t('chat.salonGeneral'), lettre: 'G', couleur: 'bg-blue-100 text-blue-700', desc: t('chat.salonGeneralDesc') },
+    { id: 'parents', label: t('chat.salonParents'), lettre: 'P', couleur: 'bg-amber-100 text-amber-700', desc: t('chat.salonParentsDesc') },
+    { id: 'eleves', label: t('chat.salonEleves'), lettre: 'E', couleur: 'bg-emerald-100 text-emerald-700', desc: t('chat.salonElevesDesc') },
+    { id: 'aide', label: t('chat.salonAide'), lettre: 'A', couleur: 'bg-violet-100 text-violet-700', desc: t('chat.salonAideDesc') },
   ]
 }
 
