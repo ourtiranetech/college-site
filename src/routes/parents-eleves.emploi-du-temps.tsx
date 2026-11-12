@@ -47,7 +47,7 @@ const DAYS = [
 // Base schedule per year (array of 11 cells per day: 3 morning, pause, 3 morning, lunch, 3 afternoon)
 const BASE_SCHEDULES: Record<string, Record<DayKey, (string | null)[]>> = {
   '1ère': {
-    dimanche: ['math','france','sci',null,'arab','hist','geo',null,'eps','eng','tech'],
+    dimanche: ['math','france','sci','arab',null ,'hist','geo','eps',null,'eng','tech'],
     lundi:    ['arab','math','hist',null,'france','sci','geo',null,'phys','svt','eps'],
     mardi:    ['france','arab','math',null,null,null,null,null,null,null,null],
     mercredi: ['sci','math','eng',null,'hist','geo','eps',null,'arab','svt','phys'],
