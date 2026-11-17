@@ -28,10 +28,7 @@ function getEspaces(t: (key: string) => string) {
   return [
     { icone: DoorOpen, titre: t('infra.espaces.salles.titre'), texte: t('infra.espaces.salles.texte') },
     { icone: FlaskConical, titre: t('infra.espaces.labo.titre'), texte: t('infra.espaces.labo.texte') },
-    { icone: Monitor, titre: t('infra.espaces.info.titre'), texte: t('infra.espaces.info.texte') },
-    { icone: BookMarked, titre: t('infra.espaces.biblio.titre'), texte: t('infra.espaces.biblio.texte') },
     { icone: Dumbbell, titre: t('infra.espaces.sport.titre'), texte: t('infra.espaces.sport.texte') },
-    { icone: UtensilsCrossed, titre: t('infra.espaces.cantine.titre'), texte: t('infra.espaces.cantine.texte') },
     { icone: HeartPulse, titre: t('infra.espaces.infirmerie.titre'), texte: t('infra.espaces.infirmerie.texte') },
     { icone: Building2, titre: t('infra.espaces.admin.titre'), texte: t('infra.espaces.admin.texte') },
   ]
