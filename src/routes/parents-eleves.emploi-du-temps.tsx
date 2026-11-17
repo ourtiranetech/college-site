@@ -25,17 +25,17 @@ const SUBJECTS: Record<string, Subject> = {
 }
 
 const HOURS = [
-  { label: '8h00 – 9h00' },
-  { label: '9h00 – 10h00' },
-  { label: '10h00 – 10h10', pause:true },
-  { label: '10h00 – 11h00' },
-  { label: '11h00 – 12h00' },
+  { label: '8h00 – 9h00', pm:false },
+  { label: '9h00 – 10h00', pm:false },
+  { label: '10h00 – 10h10', pm:false, pause:true },
+  { label: '10h00 – 11h00', pm:false },
+  { label: '11h00 – 12h00', pm:false },
   { label: '12h00 – 13h30', lunch: true },
-  { label: '13h30 – 14h30' },
-  { label: '14h30 – 15h30' },
-   { label: '14h30 – 14h40', pause: true },
-  { label: '15h30 – 16h30' },
-  { label: '16h30 – 17h30' },
+  { label: '13h30 – 14h30', pm:true },
+  { label: '14h30 – 15h30', pm:true },
+   { label: '14h30 – 14h40', pm:true, pause: true },
+  { label: '15h30 – 16h30', pm:true },
+  { label: '16h30 – 17h30', pm:true },
 ]
 
 const DAYS = [

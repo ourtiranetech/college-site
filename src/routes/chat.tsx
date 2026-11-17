@@ -12,12 +12,15 @@ export const Route = createFileRoute('/chat')({
   component: ChatPage,
 })
 
-function getSalles(t: (key: string) => string) {
+function getSalles(t: (key: string) => string, isRTL: boolean) {
+  const frenchLetters = { general: 'G', parents: 'P', eleves: 'E', aide: 'A' }
+  const arabicLetters = { general: 'ع', parents: 'أ', eleves: 'ت', aide: 'م' }
+
   return [
-    { id: 'general', label: t('chat.salonGeneral'), lettre: 'G', couleur: 'bg-blue-100 text-blue-700', desc: t('chat.salonGeneralDesc') },
-    { id: 'parents', label: t('chat.salonParents'), lettre: 'P', couleur: 'bg-amber-100 text-amber-700', desc: t('chat.salonParentsDesc') },
-    { id: 'eleves', label: t('chat.salonEleves'), lettre: 'E', couleur: 'bg-emerald-100 text-emerald-700', desc: t('chat.salonElevesDesc') },
-    { id: 'aide', label: t('chat.salonAide'), lettre: 'A', couleur: 'bg-violet-100 text-violet-700', desc: t('chat.salonAideDesc') },
+    { id: 'general', label: t('chat.salonGeneral'), lettre: isRTL ? arabicLetters.general : frenchLetters.general, couleur: 'bg-blue-100 text-blue-700', desc: t('chat.salonGeneralDesc') },
+    { id: 'parents', label: t('chat.salonParents'), lettre: isRTL ? arabicLetters.parents : frenchLetters.parents, couleur: 'bg-amber-100 text-amber-700', desc: t('chat.salonParentsDesc') },
+    { id: 'eleves', label: t('chat.salonEleves'), lettre: isRTL ? arabicLetters.eleves : frenchLetters.eleves, couleur: 'bg-emerald-100 text-emerald-700', desc: t('chat.salonElevesDesc') },
+    { id: 'aide', label: t('chat.salonAide'), lettre: isRTL ? arabicLetters.aide : frenchLetters.aide, couleur: 'bg-violet-100 text-violet-700', desc: t('chat.salonAideDesc') },
   ]
 }
 
@@ -28,7 +31,7 @@ const EMOTICONS = [
   '😅', '😂', '🙂', '😉', '😊',
   '😍', '😘', '😎', '🤗', '🤔',
   '🙄', '😐', '😴', '🥳', '🤩',
-  
+
   // Émotions
   '😢', '😭', '😞', '😟', '😰',
   '😱', '😡', '😤', '😬', '🙃',
@@ -95,7 +98,7 @@ function lireStorageId(texte: string): string {
 
 function ChatPage() {
   const { t, isRTL } = useLanguage()
-  const salles = getSalles(t)
+  const salles = getSalles(t, isRTL)
   const navigate = useNavigate()
   const [salle, setSalle] = useState('general')
   const salleCourante = salles.find((s) => s.id === salle)
@@ -243,7 +246,7 @@ function ChatPage() {
           {/* Sidebar des salles */}
           <div className="bg-white p-4 rounded-xl border border-gray-200 shadow-sm space-y-2">
             <h2 className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-3">
-             {t('chat.salons')}
+              {t('chat.salons')}
             </h2>
             {salles.map((s) => (
               <button
