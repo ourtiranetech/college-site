@@ -3,7 +3,7 @@ import { createFileRoute } from '@tanstack/react-router'
 import { useQuery, useMutation } from 'convex/react'
 import { useState, useRef, useEffect } from 'react'
 import type { FormEvent } from 'react'
-import { MessageSquare, Pin, Clock, Plus, ChevronRight, Smile, Image as ImageIcon, X, Loader2, Users } from 'lucide-react'
+import { MessageSquare, Pin, Clock, Plus, ChevronRight, ChevronDown, Smile, Image as ImageIcon, X, Loader2, Users } from 'lucide-react'
 import type { Id } from '../../convex/_generated/dataModel'
 import { LoginButton, useCurrentUser } from '../components/LoginButton'
 import { MAX_IMAGES_PAR_MESSAGE } from '../../convex/schema'
@@ -402,6 +402,7 @@ function ForumPage() {
   const { t, isRTL } = useLanguage()
   const categories = getCategories(t)
   const [catActive, setCatActive] = useState('/')
+  const [catOpen, setCatOpen] = useState(false)
   const [postTitle, setPostTitle] = useState('')
   const [contenu, setContenu] = useState('')
   const [categorie, setCategorie] = useState('general')
@@ -511,12 +512,24 @@ function ForumPage() {
             </div>
           </section>
         )}
-        <div className="mb-4 flex flex-wrap items-center gap-2">
-          <button onClick={() => setCatActive('/')} className={`rounded-full px-3 py-1.5 text-xs font-medium ${catActive === '/' ? 'bg-primary text-white' : 'bg-white text-slate-600 hover:bg-slate-100'}`}>{t('forum.toutes')}</button>
-          {categories.map(c => (
-            <button key={c.id} onClick={() => setCatActive(c.id)} className={`rounded-full px-3 py-1.5 text-xs font-medium ${catActive === c.id ? 'bg-primary text-white' : 'bg-white text-slate-600 hover:bg-slate-100'}`}>{c.label} {c.chip ? <span className="ml-1 text-[10px] opacity-75">({c.chip})</span> : null}</button>
-          ))}
+        <div className="mb-4 flex flex-col items-start gap-2 sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
+            <button onClick={() => setCatActive('/')} className={`rounded-full px-3 py-1.5 text-xs font-medium ${catActive === '/' ? 'bg-primary text-white' : 'bg-white text-slate-600 hover:bg-slate-100'}`}>{t('forum.toutes')}</button>
+            {categories.map(c => (
+              <button key={c.id} onClick={() => setCatActive(c.id)} className={`rounded-full px-3 py-1.5 text-xs font-medium ${catActive === c.id ? 'bg-primary text-white' : 'bg-white text-slate-600 hover:bg-slate-100'}`}>{c.label} {c.chip ? <span className="ml-1 text-[10px] opacity-75">({c.chip})</span> : null}</button>
+            ))}
+            <button onClick={() => setCatOpen(o => !o)} className={`rounded-full px-3 py-1.5 text-xs font-medium ${catOpen ? 'bg-primary text-white' : 'bg-white text-slate-600 hover:bg-slate-100'}`}>
+              <ChevronDown size={14} className={`inline ${catOpen ? 'rotate-180' : ''}`} />
+            </button>
+          </div>
         </div>
+        {catOpen && (
+          <div className="mb-4 flex flex-wrap gap-1.5 rounded-lg border border-slate-200 bg-white p-2 shadow-sm">
+            {categories.map(c => (
+              <button key={c.id} onClick={() => { setCatActive(c.id); setCatOpen(false); }} className={`rounded-full px-3 py-1 text-xs font-medium ${catActive === c.id ? 'bg-primary text-white' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'}`}>{c.label} {c.chip ? <span className="ml-1 text-[10px] opacity-75">({c.chip})</span> : null}</button>
+            ))}
+          </div>
+        )}
         <section className="mb-6 rounded-xl border border-slate-400 bg-blue-50 p-4 sm:p-5 shadow-sm">
           <h2 className="mb-2 text-xs font-semibold text-slate-800 uppercase tracking-wider">{t('forum.nouveauSujet')}</h2>
           <form onSubmit={handleSubmit} className="space-y-2">
