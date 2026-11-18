@@ -1,12 +1,12 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { useQuery, useMutation } from 'convex/react'
+import { usePaginatedQuery, useMutation, useQuery } from 'convex/react'
 import { useState, useRef, useEffect } from 'react'
-import type { SubmitEvent } from 'react'
+import type { FormEvent, ChangeEvent } from 'react'
 import { LogIn, Send, Smile, Image as ImageIcon, Loader2 } from 'lucide-react'
 import { LoginButton, useCurrentUser } from '../components/LoginButton'
 import { Lightbox } from '../components/Lightbox'
 import { useLanguage } from '../i18n/LanguageProvider'
-import { getMessages, envoyerMessage, getUploadUrl } from '../../convex/messages'
+import { api } from '../../convex/_generated/api'
 
 export const Route = createFileRoute('/chat')({
   component: ChatPage,
@@ -71,7 +71,7 @@ function lireStorageId(texte: string): string {
   try {
     donnees = JSON.parse(texte)
   } catch {
-    throw new Error("Réponse de téléversement illisible.")
+    throw new Error('Réponse de téléversement illisible.')
   }
   const storageId =
     typeof donnees === 'object' && donnees !== null
@@ -93,13 +93,13 @@ function ChatPage() {
   const [uploading, setUploading] = useState(false)
   const [selectedImage, setSelectedImage] = useState<string | null>(null)
 
-  const [page, setPage] = useState(0)
-  const [hasMore, setHasMore] = useState(true)
-  const [loading, setLoading] = useState(false)
-
-  const messagesQuery = useQuery(getMessages, { salle, take: 50, skip: page * 50 }, { initialData: [] })
-  const envoyer = useMutation(envoyerMessage)
-  const getUploadUrl = useMutation(getUploadUrl)
+  const messagesQuery = usePaginatedQuery(
+    api.messages.getMessages,
+    { salle },
+    { initialNumItems: 50 }
+  )
+  const envoyer = useMutation(api.messages.envoyerMessage)
+  const getUploadUrl = useMutation(api.messages.getUploadUrl)
 
   const identity = useCurrentUser()
   const estConnecte = identity !== null
@@ -110,7 +110,10 @@ function ChatPage() {
   const champRef = useRef<HTMLTextAreaElement>(null)
 
   useEffect(() => {
-    chatEndRef.current?.scrollIntoView({ behavior: 'smooth' })
+    if (messagesQuery.results) {
+      setMessage('')
+      chatEndRef.current?.scrollIntoView({ behavior: 'smooth' })
+    }
   }, [messagesQuery])
 
   useEffect(() => {
@@ -119,17 +122,17 @@ function ChatPage() {
 
     const observer = new IntersectionObserver(
       (entries) => {
-        if (entries[0].isIntersecting && hasMore && !loading) {
-          setPage((p) => p + 1)
+        if (entries[0].isIntersecting && messagesQuery.status === 'CanLoadMore') {
+          messagesQuery.loadMore(50)
         }
       },
       { rootMargin: '200px' }
     )
     observer.observe(el)
     return () => observer.disconnect()
-  }, [hasMore, loading])
+  }, [messagesQuery])
 
-  const handleEnvoi = async (e: SubmitEvent) => {
+  const handleEnvoi = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     const contenu = message.trim()
     if (!contenu && !files.length) return
@@ -161,16 +164,17 @@ function ChatPage() {
     const ids: string[] = []
     for (const fichier of fichiers) {
       const reponse = await fetch(url, { method: 'POST', body: fichier })
-      if (!reponse.ok) throw new Error('Echec du televersement de ' + fichier.name + '.')
+      if (!reponse.ok) throw new Error(`Échec du téléversement de ${fichier.name}.`)
       ids.push(lireStorageId(await reponse.text()))
     }
     return ids
   }
 
-  const pickImages = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const choisis = e.target.files
+  const pickImages = (e: ChangeEvent<HTMLInputElement>) => {
+    const input = e.target as HTMLInputElement
+    const choisis = input.files
     if (choisis) {
-      const ajoutes = Array.from(choisis)
+      const ajoutes: File[] = Array.from(choisis)
       setFiles(prev => {
         const total = [...prev, ...ajoutes]
         if (total.length > 5) {
@@ -180,14 +184,15 @@ function ChatPage() {
         return total
       })
     }
-    e.target.value = ''
+    input.value = ''
   }
 
   const nomAffiche = (identity?.name ?? identity?.email ?? t('chat.utilisateur')) as string
 
   const ImageGallery = ({ storageIds }: { storageIds: string[] }) => {
     if (storageIds.length === 0) return null
-    const urls = useQuery(getImageUrls, { storageIds }) ?? []
+    const urls = useQuery(api.messages.getImageUrls, { storageIds })
+    if (urls === undefined) return null
     if (urls.length === 0) return null
     return (
       <div className="flex flex-wrap gap-2 mt-4">
@@ -237,105 +242,165 @@ function ChatPage() {
                 }`}
               >
                 <div className="flex items-center gap-2.5">
-                  <div className={`w-8 h-8 rounded-full flex items-center justify-center ${s.couleur}`}>
-                    <span className="text-sm font-bold">{s.lettre}</span>
+                  <span className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-sm font-bold ${s.couleur}`}>
+                    {s.lettre}
+                  </span>
+                  <div className="min-w-0">
+                    <div className="font-semibold truncate">{s.label}</div>
+                    <div className="text-xs text-gray-500">{s.desc}</div>
                   </div>
-                  <span className="font-medium">{s.label}</span>
                 </div>
               </button>
             ))}
+            <div className="pt-4 border-t mt-4 text-xs text-gray-500">
+              {t('chat.connecteEnTantQue')} <strong className="text-gray-800">{nomAffiche}</strong>
+            </div>
           </div>
-          <div className="md:col-span-3 bg-white p-4 rounded-xl border border-gray-200 shadow-sm">
-            <div className="flex gap-4">
-              <div className="flex-1">
-                <div className="flex items-center gap-2 mb-2">
-                  <span className="font-semibold">{nomAffiche}</span>
-                  <span className="text-xs text-gray-500">{salleCourante?.label}</span>
-                </div>
-                <div className="h-64 overflow-y-auto bg-gray-50 rounded-lg p-4 space-y-2">
-                  {messagesQuery.map((msg) => (
-                    <div key={msg._id} className="text-sm bg-white p-3 rounded-lg">
-                      <div className="text-xs text-gray-500 mb-1">{msg.auteur}</div>
-                      <p className="text-gray-800">{msg.contenu}</p>
-                      {msg.images?.map((img) => (
-                        <img key={img} src={img} className="mt-2 h-32 w-32 object-cover rounded" />
-                      ))}
-                    </div>
-                  ))}
-                  {loading && <div className="text-sm text-gray-500">Chargement...</div>}
-                </div>
-                <div className="mt-4 flex gap-2">
-                  <button
-                    onClick={() => setSelecteurOuvert(!selecteurOuvert)}
-                    className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
-                  >
-                    📷
-                  </button>
-                  <button
-                    onClick={handleEnvoi}
-                    className="px-4 py-2 bg-emerald-500 text-white rounded-lg hover:bg-emerald-600"
-                  >
-                    <Send size={18} />
-                  </button>
-                </div>
-                {selecteurOuvert && (
-                  <input
-                    type="file"
-                    multiple
-                    accept="image/*"
-                    onChange={pickImages}
-                    className="mt-2"
-                  />
+
+          <div className="md:col-span-3 bg-white rounded-xl border border-gray-200 shadow-sm flex flex-col h-[550px]">
+            <div className="px-6 py-4 border-b flex justify-between items-center bg-gray-50 rounded-t-xl">
+              <span className="flex items-center gap-2 font-bold text-gray-800">
+                {salleCourante && (
+                  <span className={`flex h-6 w-6 items-center justify-center rounded-full text-xs font-bold ${salleCourante.couleur}`}>
+                    {salleCourante.lettre}
+                  </span>
                 )}
-                {uploading && <div className="mt-2 text-sm text-gray-500">Envoi...</div>}
-                {selectedImage && (
-                  <ImageGallery storageIds={[selectedImage]} />
-                )}
-              </div>
-              <div className="w-64 space-y-2">
-                <div className="text-sm text-gray-600 p-2">
-                  <strong className="block mb-1">{t('chat.suggestions')}</strong>
-                  <div className="flex flex-wrap gap-1">
-                    {EMOTICONS.map((emo) => (
-                      <span
-                        key={emo}
-                        className="text-lg cursor-pointer hover:bg-gray-100 rounded px-1"
-                        onClick={() => setMessage((m) => m + emo)}
-                      >
-                        {emo}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-                <div className="text-sm text-gray-600 p-2">
-                  <strong className="block mb-1">{t('chat.urgent')}</strong>
-                  <button className="text-left hover:underline">
-                    {t('chat.urgentTexte')}
-                  </button>
-                </div>
-              </div>
-            </div>
-            <textarea
-              ref={champRef}
-              value={message}
-              onChange={(e) => setMessage(e.target.value)}
-              placeholder={t('chat.taperMessage')}
-              className="w-full h-32 p-3 border border-gray-300 rounded-lg resize-none"
-            />
-            <div className="flex justify-between items-center mt-2">
-              <span className="text-xs text-gray-500">
-                {message.length}/2000
+                {salleCourante?.label}
               </span>
-              <button
-                onClick={() => setMessage('')}
-                className="text-xs text-gray-500 hover:underline"
-              >
-                {t('chat.effacer')}
-              </button>
+              <span className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full font-medium">
+                {t('chat.enDirect')}
+              </span>
             </div>
+
+            <div dir={isRTL ? 'rtl' : 'ltr'} className="flex-1 p-6 overflow-y-auto space-y-4">
+              {messagesQuery.status === 'LoadingFirstPage' || messagesQuery.status === 'LoadingMore' || messagesQuery.status === 'CanLoadMore' ? (
+                <div className="text-center text-gray-400 py-10">{t('chat.chargement')}</div>
+              ) : messagesQuery.results ? (
+                <>
+                  {messagesQuery.results.map((msg: any) => {
+                    const estMoi = msg.auteur === nomAffiche
+                    return (
+                      <div
+                        key={msg._id}
+                        className={`flex flex-col ${estMoi ? 'items-end' : 'items-start'}`}
+                      >
+                        <div className="flex items-center gap-2 mb-1">
+                          <span className="text-xs font-semibold text-gray-600">{msg.auteur}</span>
+                          <span className="text-[10px] text-gray-400">
+                            {new Date(msg.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                          </span>
+                        </div>
+                        <div
+                          className={`max-w-md px-4 py-2 rounded-2xl text-sm whitespace-pre-wrap break-words ${
+                            estMoi ? 'bg-blue-600 text-white rounded-br-none' : 'bg-gray-100 text-gray-800 rounded-bl-none'
+                          }`}
+                        >
+                          {msg.contenu}
+                          {msg.images && msg.images.length > 0 && <ImageGallery storageIds={msg.images} />}
+                        </div>
+                      </div>
+                    )
+                  })}
+                  {messagesQuery.results.length === 0 && (
+                    <div className="text-center text-gray-400 py-4">{t('chat.pasDeMessage')}</div>
+                  )}
+                </>
+              ) : (
+                <div className="text-center text-gray-400 py-10">{t('chat.chargement')}</div>
+              )}
+              <div ref={chatEndRef} />
+            </div>
+
+            <form onSubmit={handleEnvoi} className="p-4 border-t">
+              <div className="relative flex items-end gap-2">
+                <textarea
+                  ref={champRef}
+                  placeholder={t('chat.placeholder')}
+                  value={message}
+                  maxLength={2000}
+                  rows={1}
+                  onChange={(e) => setMessage(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' && !e.shiftKey) {
+                      e.preventDefault()
+                      e.currentTarget.form?.requestSubmit()
+                    }
+                  }}
+                  dir={isRTL ? 'rtl' : 'ltr'}
+                  className="flex-1 resize-y rounded-lg border px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-600"
+                />
+
+                <label className="flex cursor-pointer items-center gap-1.5 px-3 py-1.5 min-w-0 text-xs font-medium text-slate-600 rounded-lg border border-dashed border-slate-300 bg-slate-50 hover:bg-slate-100 hover:text-slate-800 transition">
+                  <ImageIcon size={14} />
+                  <input type="file" accept="image/*" multiple className="hidden" onChange={pickImages} />
+                  <span className="whitespace-nowrap">{t('chat.image')}</span>
+                </label>
+
+                <button
+                  type="button"
+                  onClick={() => setSelecteurOuvert(o => !o)}
+                  className={`rounded-lg p-2 transition hover:bg-gray-100 ${selecteurOuvert ? 'text-blue-700' : 'text-gray-400'}`}
+                  title={t('chat.emoticones')}
+                >
+                  <Smile size={20} />
+                </button>
+
+                {selecteurOuvert && (
+                  <>
+                    <button
+                      type="button"
+                      tabIndex={-1}
+                      aria-hidden="true"
+                      onClick={() => setSelecteurOuvert(false)}
+                      className="fixed inset-0 z-10 cursor-default"
+                    />
+                    <div
+                      className="absolute bottom-full left-0 z-20 mb-2 w-64 rounded-xl border border-gray-200 bg-white p-2 shadow-lg"
+                      role="group"
+                      aria-label={t('chat.emoticones')}
+                    >
+                      <p className="px-1 pb-1.5 text-[11px] font-medium uppercase tracking-wide text-gray-400">
+                        {t('chat.nbEmoticones', { count: EMOTICONS.length })}
+                      </p>
+                      <div className="grid max-h-44 grid-cols-10 gap-0.5 overflow-y-auto">
+                        {EMOTICONS.map((e) => (
+                          <button
+                            key={e}
+                            type="button"
+                            onClick={() => insererEmoticone(champRef.current, e, message, setMessage)}
+                            className="rounded p-0.5 text-lg leading-none transition hover:bg-gray-100"
+                            aria-label={t('chat.insererEmoticone', { emoji: e })}
+                          >
+                            {e}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  </>
+                )}
+
+                <button
+                  type="submit"
+                  disabled={(!message.trim() && !files.length) || uploading}
+                  className="inline-flex items-center gap-1.5 bg-blue-700 text-white text-sm font-medium px-5 py-2 rounded-lg hover:bg-blue-800 transition disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {uploading ? <Loader2 size={14} className="animate-spin" /> : <Send size={14} aria-hidden="true" />}
+                  {uploading ? t('chat.envoiEnCours') : t('chat.envoyer')}
+                </button>
+              </div>
+
+              <p className="mt-1.5 text-right text-[11px] text-gray-400">
+                {message.length} / 2000 · {t('chat.toucheEntree')}
+              </p>
+            </form>
           </div>
         </div>
       )}
+      <Lightbox
+        open={selectedImage !== null}
+        onClose={() => setSelectedImage(null)}
+        src={selectedImage ?? ''}
+      />
     </div>
   )
 }

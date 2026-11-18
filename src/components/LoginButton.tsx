@@ -42,7 +42,7 @@ export function useIsAuthenticated() {
   return identity !== null;
 }
 
-export function LoginButton() {
+export function LoginButton({ size = 16 }: { size?: number }) {
   const { t } = useLanguage()
   const identity = useCurrentUser();
   const { signIn, signOut } = useAuthActions();
@@ -297,7 +297,7 @@ export function LoginButton() {
                 disabled={isSubmitting}
                 className="flex w-full items-center justify-center gap-2.5 rounded-lg border border-slate-300 bg-white px-3 py-2 text-xs font-semibold text-slate-700 transition hover:bg-slate-50 disabled:opacity-50"
               >
-                {isSubmitting ? <Loader2 size={14} className="animate-spin" /> : <LogoGoogle />}
+                { isSubmitting ? <Loader2 size={size - 2} className="animate-spin" /> : <LogoGoogle size={size} /> }
                 {t('auth.continuerGoogle')}
               </button>
 

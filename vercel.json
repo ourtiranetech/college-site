@@ -1,5 +1,33 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "framework": "tanstack-start"
+  "framework": "tanstack-start",
+  "headers": [
+    {
+      "source": "/parents-eleves/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=300, s-maxage=3600, stale-while-revalidate=86400"
+        }
+      ]
+    },
+    {
+      "source": "/forum/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=300, s-maxage=3600, stale-while-revalidate=86400"
+        }
+      ]
+    },
+    {
+      "source": "/chat",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=60, s-maxage=300, stale-while-revalidate=3600"
+        }
+      ]
+    }
+  ]
 }
-  

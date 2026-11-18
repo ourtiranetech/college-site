@@ -1,20 +1,16 @@
-import { query, mutation } from "./_generated/server";
+import { query } from "./_generated/server";
+import { mutation } from "./_generated/server";
 import type { MutationCtx, QueryCtx } from "./_generated/server";
 import { getAuthUserId } from "@convex-dev/auth/server";
 import { v, type GenericId } from "convex/values";
+import { paginationOptsValidator } from "convex/server";
 
 const MAX_CONTENU = 2000;
-export const MAX_MESSAGES_AFFICHES = 100;
+export const MAX_MESSAGES_AFFICHES = 50;
 export const MAX_TAILLE_IMAGE = 5 * 1024 * 1024; // 5 Mo
 export const MAX_IMAGES_PAR_MESSAGE = 5;
 const TYPES_IMAGE_AUTORISES = ["image/jpeg", "image/png", "image/webp", "image/gif"];
 
-/**
- * Récupère l'utilisateur connecté côté serveur.
- *
- * Comme pour le forum, l'identité n'est jamais acceptée en argument : elle est
- * dérivée du jeton de session, ce qui empêche d'usurper un autre participant.
- */
 async function requireUtilisateur(ctx: QueryCtx | MutationCtx) {
   const userId = await getAuthUserId(ctx);
   if (!userId) {
@@ -34,12 +30,6 @@ async function requireUtilisateur(ctx: QueryCtx | MutationCtx) {
   return { userId, nom };
 }
 
-/**
- * Vérifie que chaque identifiant de stockage correspond bien à une image
- * réellement téléversée, dans la limite de taille et de type autorisés.
- * Aucune écriture n'a lieu avant la fin de toutes les vérifications : si une
- * seule image est invalide, rien n'est créé.
- */
 async function validerImages(
   ctx: MutationCtx,
   storageIds: string[] | undefined,
@@ -69,19 +59,22 @@ async function validerImages(
 }
 
 export const getMessages = query({
-  args: { salle: v.string() },
+  args: {
+    salle: v.string(),
+    paginationOpts: paginationOptsValidator,
+  },
   handler: async (ctx, args) => {
+    const { salle, paginationOpts } = args;
     return await ctx.db
       .query("messages")
-      .withIndex("by_salle", (q) => q.eq("salle", args.salle))
+      .withIndex("by_salle", (q) => q.eq("salle", salle))
       .order("desc")
-      .take(MAX_MESSAGES_AFFICHES);
+      .paginate(paginationOpts);
   },
 });
 
 export const envoyerMessage = mutation({
   args: {
-    // `auteur` et `auteurId` ne sont plus acceptés : ils venaient du client.
     contenu: v.string(),
     salle: v.string(),
     images: v.optional(v.array(v.string())),
@@ -112,9 +105,6 @@ export const envoyerMessage = mutation({
   },
 });
 
-/**
- * Renvoie une URL de téléversement, réservée aux utilisateurs connectés.
- */
 export const getUploadUrl = mutation({
   args: {},
   handler: async (ctx) => {
@@ -123,9 +113,6 @@ export const getUploadUrl = mutation({
   },
 });
 
-/**
- * Résout des identifiants de stockage en URLs affichables.
- */
 export const getImageUrls = query({
   args: { storageIds: v.array(v.string()) },
   handler: async (ctx, args) => {

@@ -4,10 +4,7 @@ import { SchoolCard } from '../components/SchoolCard'
 import {
   Building2,
   FlaskConical,
-  Monitor,
-  BookMarked,
   Dumbbell,
-  UtensilsCrossed,
   HeartPulse,
   DoorOpen,
 } from 'lucide-react'
