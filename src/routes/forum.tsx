@@ -16,12 +16,17 @@ export const Route = createFileRoute('/forum')({
 
 function getCategories(t: (key: string) => string) {
   return [
-    { id: 'general',      label: t('forum.categorieGeneral'),      chip: t('forum.puceGeneral'),      chipColor: 'info' as const },
-    { id: 'enseignement', label: t('forum.categorieEnseignement'), chip: t('forum.puceEnseignement'), chipColor: 'info' as const },
-    { id: 'vie-scolaire', label: t('forum.categorieVieScolaire'), chip: t('forum.puceVieScolaire'), chipColor: 'success' as const },
-    { id: 'parents',      label: t('forum.categorieParents'),      chip: t('forum.puceParents'),      chipColor: 'warning' as const },
-    { id: 'entraide',     label: t('forum.categorieEntraide'),     chip: t('forum.puceEntraide'),     chipColor: 'success' as const },
-    { id: 'tazmalt',      label: t('forum.categorieTazmalt'),      chip: t('forum.puceTazmalt'),      chipColor: 'info' as const },
+    // { id: 'personnel',           label: t('forum.categoriePersonnel'),            chip: t('forum.pucePersonnel'),            chipColor: 'primary' as const },
+    // { id: 'equipe-pedagogique',  label: t('forum.categorieEquipePedagogique'),    chip: t('forum.puceEquipePedagogique'),    chipColor: 'primary' as const },
+    // { id: 'entretien',           label: t('forum.categorieEntretien'),            chip: t('forum.puceEntretien'),            chipColor: 'primary' as const },
+    // { id: 'administratif',       label: t('forum.categorieAdministratif'),        chip: t('forum.puceAdministratif'),        chipColor: 'primary' as const },
+    // { id: 'personnel-et-eleves', label: t('forum.categoriePersonneEtEleves'),     chip: t('forum.pucePersonneEtEleves'),     chipColor: 'warning' as const },
+    { id: 'general',             label: t('forum.categorieGeneral'),              chip: t('forum.puceGeneral'),              chipColor: 'info' as const },
+    { id: 'enseignement',        label: t('forum.categorieEnseignement'),         chip: t('forum.puceEnseignement'),         chipColor: 'info' as const },
+    { id: 'vie-scolaire',        label: t('forum.categorieVieScolaire'),          chip: t('forum.puceVieScolaire'),          chipColor: 'success' as const },
+    { id: 'parents',             label: t('forum.categorieParents'),              chip: t('forum.puceParents'),              chipColor: 'warning' as const },
+    { id: 'entraide',            label: t('forum.categorieEntraide'),             chip: t('forum.puceEntraide'),             chipColor: 'success' as const },
+    { id: 'tazmalt',             label: t('forum.categorieTazmalt'),              chip: t('forum.puceTazmalt'),              chipColor: 'info' as const },
   ]
 }
 
