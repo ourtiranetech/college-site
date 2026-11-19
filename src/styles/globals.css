@@ -8,10 +8,10 @@
    ────────────────────────────────────────────────────────────────────────── */
 :root {
   --color-background: #f0fdfa;        /* Vert clair #f0fdfa */
-  --color-surface:   #ecfdf5;         /* Vert très clair #ecfdf5 */
+  --color-surface:   #82ad99;         /* Vert très clair #ecfdf5 */
   --color-text:      #134e4a;         /* Vert foncé #134e4a */
   --color-text-secondary: #4a5568;    /* Gris #4a5568 */
-  --color-primary:   #059669;         /* Vert émeraude */
+  --color-primary:   #0b996c;         /* Vert émeraude */
   --color-primary-hover: #047857;     /* Vert foncé */
   --color-accent:    #f59e0b;         /* Amber */
   --color-accent-hover: #d97706;      /* Amber foncé */
