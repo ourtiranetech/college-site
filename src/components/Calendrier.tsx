@@ -202,17 +202,17 @@ export function Calendrier() {
     <main className="page-wrap px-4 py-12">
       <section className="island-shell rounded-2xl p-6 sm:p-8">
         <p className="island-kicker mb-2">{t('parents.kicker')}</p>
-        <h1 className="display-title mb-3 text-4xl font-bold text-(--sea-ink) sm:text-5xl">
+        <h1 className="display-title mb-3 text-4xl font-bold text-(--color-text) sm:text-5xl">
           {t('parents.calendrier')}
         </h1>
-        <p className="m-0 max-w-3xl text-base leading-8 text-(--sea-ink-soft)">
+        <p className="m-0 max-w-3xl text-base leading-8 text-(--color-text-secondary)">
           Calendrier académique et événements.
         </p>
 
         {/* En-tête du calendrier */}
         <div className="mt-6 flex flex-wrap items-center justify-between gap-4">
           <div>
-            <h2 className="text-2xl font-bold text-(--sea-ink)">
+            <h2 className="text-2xl font-bold text-(--color-text)">
               {monthNames[currentMonth]}
             </h2>
             <p className="text-sm text-gray-500">

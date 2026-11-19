@@ -1,36 +1,43 @@
 @import "tailwindcss";
 
-/* ── TOKENS ────────────────────────────────────────────────────────────────
-   Palette unifiée, alignée sur le bleu marine déjà utilisé par l'en-tête du
-   forum, la page contact et le pied de page (#0F2147). Les anciennes variables
-   `--sea-*` sont conservées comme alias pour ne pas casser les pages qui les
-   référencent.
+/* ── STYLE 2 (ÉCOLO & COMMUNAUTAIRE) ──────────────────────────────────
+   Palette chaleureuse, encourage l'engagement et la communauté.
+   Couleurs : Vert émeraude (#059669), crème (#fef3c7), bleu ciel (#7dd3fc),
+              touches orange (#f59e0b) pour les alertes.
+   Bords arrondis : 12–16px. Dégradés et ombres légères. ──────────────────
    ────────────────────────────────────────────────────────────────────────── */
 :root {
-  --c-navy:      #0F2147; /* Bleu marine institutionnel */
-  --c-navy-dark: #0a1a33;
-  --c-gold:      #E8A020; /* Or — accents, filets, icônes */
-  --c-ink:       #0F2147; /* Titres */
-  --c-ink-soft:  #475569; /* Texte courant */
-  --c-surface:   #F8FAFC; /* Fond de page */
-  --c-card:      #FFFFFF;
-  --c-border:    #E2E8F0;
+  --color-background: #f0fdfa;        /* Vert clair #f0fdfa */
+  --color-surface:   #ecfdf5;         /* Vert très clair #ecfdf5 */
+  --color-text:      #134e4a;         /* Vert foncé #134e4a */
+  --color-text-secondary: #4a5568;    /* Gris #4a5568 */
+  --color-primary:   #059669;         /* Vert émeraude */
+  --color-primary-hover: #047857;     /* Vert foncé */
+  --color-accent:    #f59e0b;         /* Amber */
+  --color-accent-hover: #d97706;      /* Amber foncé */
+  --color-border:    #bbf7d0;         /* Vert très clair pour les bordures */
+  --color-card:      #ffffff;
+  --color-card-hover: #f0fdf4;
+  --border-radius:   16px;
+  --spacing-sm:      10px;
+  --spacing-md:      16px;
+  --spacing-lg:      20px;
 
-  /* Alias historiques utilisés par les pages existantes */
-  --sea-ink:      var(--c-ink);
-  --sea-ink-soft: var(--c-ink-soft);
-  --sea-surface:  var(--c-surface);
-  --sea-accent:   var(--c-gold);
-  --sea-border:   var(--c-border);
+  /* Alias historiques pour compatibilité avec les anciens fichiers */
+  --sea-ink:            var(--color-text);
+  --sea-ink-soft:       var(--color-text-secondary);
+  --sea-accent:         var(--color-accent);
+  --sea-border:         var(--color-border);
+  --sea-chip-line:      var(--color-border);
+  --sea-chip-bg:        var(--color-surface);
 }
 
 @theme {
-  /* Aligné sur la palette ci-dessus : --color-primary sert au pied de page. */
-  --color-primary:   #0F2147;
-  --color-secondary: #16A34A;
-  --color-accent:    #E8A020;
-  --color-surface:   #F8FAFC;
-  --font-display:    'Outfit', 'Inter', ui-sans-serif, system-ui, sans-serif;
+  --color-primary:   #059669;
+  --color-secondary: #10b981;
+  --color-accent:    #f59e0b;
+  --color-surface:   #ecfdf5;
+  --font-display:    'Inter', 'Noto Sans', ui-sans-serif, system-ui, sans-serif;
 }
 
 /* ── COMPOSANTS ────────────────────────────────────────────────────────────
@@ -54,10 +61,10 @@
 
   /* Carte principale */
   .island-shell {
-    border: 1px solid var(--c-border);
-    border-radius: 1rem;
-    background-color: var(--c-card);
-    box-shadow: 0 1px 2px rgb(15 33 71 / 0.04), 0 8px 24px -12px rgb(15 33 71 / 0.12);
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius);
+    background-color: var(--color-card);
+    box-shadow: 0 1px 2px rgb(5 150 105 / 0.06), 0 8px 24px -12px rgb(5 150 105 / 0.12);
   }
 
   /* Sur-titre en petites capitales espacées */
@@ -66,26 +73,26 @@
     font-weight: 600;
     letter-spacing: 0.14em;
     text-transform: uppercase;
-    color: var(--c-navy);
+    color: var(--color-text);
     opacity: 0.65;
   }
 
   /* Titre de page */
   .display-title {
     font-family: var(--font-display);
-    color: var(--c-ink);
+    color: var(--color-text);
     letter-spacing: -0.02em;
     line-height: 1.1;
   }
 
-  /* Filet décoratif or → transparent */
+  /* Filet décoratif acide → transparent */
   .island-rule {
     height: 1px;
     border: 0;
     background-image: linear-gradient(
       to right,
       transparent,
-      var(--c-gold),
+      var(--color-accent),
       transparent
     );
     opacity: 0.5;
@@ -93,12 +100,12 @@
 
   /* Lien de contenu */
   .sea-link {
-    color: var(--c-navy);
+    color: var(--color-primary);
     text-decoration: underline;
     text-underline-offset: 2px;
     transition: color 150ms ease;
   }
   .sea-link:hover {
-    color: var(--c-navy-dark);
+    color: var(--color-primary-hover);
   }
 }

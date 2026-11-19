@@ -57,7 +57,7 @@ function ParentsElevesPage() {
                 title={t(l.labelKey)}
                 chip={t(l.chipKey)}
                 chipColor={l.chipColor}
-                icon={<l.Icon size={18} className="text-[#0F2147]" />}
+                icon={<l.Icon size={18} className="text-(--sea-ink)" />}
               />
             </a>
           ) : (
@@ -66,7 +66,7 @@ function ParentsElevesPage() {
                 title={t(l.labelKey)}
                 chip={t(l.chipKey)}
                 chipColor={l.chipColor}
-                icon={<l.Icon size={18} className="text-[#0F2147]" />}
+                icon={<l.Icon size={18} className="text-(--sea-ink)" />}
               />
             </Link>
           ),
